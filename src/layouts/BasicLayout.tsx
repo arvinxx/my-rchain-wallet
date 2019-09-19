@@ -76,10 +76,10 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       });
     }
   };
-
   return (
     <div className={styles.layout}>
       <ProLayout
+        logo={circleLogo}
         menuHeaderRender={() => (
           <img className={styles.logo} src={collapsed ? circleLogo : rectLogo} alt="MRW" />
         )}
