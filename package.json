@@ -1,7 +1,10 @@
 {
+  "name": "my-rchain-wallet",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "start": "umi dev",
+    "start:no-mock": "cross-env mock=none umi dev",
     "build": "umi build",
     "test": "umi test",
     "gh-pages": "cp CNAME ./dist/ && gh-pages -d dist",
@@ -59,6 +62,5 @@
   },
   "engines": {
     "node": ">=8.0.0"
-  },
-  "version": "0.0.0"
+  }
 }

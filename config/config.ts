@@ -1,9 +1,12 @@
 import { IConfig, IPlugin } from 'umi-types';
+import { resolve } from 'path';
+
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
 import routes from './routes';
 
 import slash from 'slash2';
 import webpackPlugin from './plugin.config';
+
 const { pwa, primaryColor } = defaultSettings;
 
 const { MY_RCHAIN_WALLET_ONLINE } = process.env;
@@ -31,11 +34,11 @@ const plugins: IPlugin[] = [
       // },
       pwa: pwa
         ? {
-            workboxPluginMode: 'InjectManifest',
-            workboxOptions: {
-              importWorkboxFrom: 'local',
-            },
-          }
+          workboxPluginMode: 'InjectManifest',
+          workboxOptions: {
+            importWorkboxFrom: 'local',
+          },
+        }
         : false,
       // default close dll, because issue https://github.com/ant-design/ant-design-pro/issues/4665
       // dll features https://webpack.js.org/plugins/dll-plugin/
@@ -55,7 +58,7 @@ const plugins: IPlugin[] = [
 
 export default {
   plugins,
-
+  history: 'hash',
   hash: true,
   targets: {
     ie: 11,
@@ -66,6 +69,9 @@ export default {
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {
     'primary-color': primaryColor,
+  },
+  alias: {
+    '@ant-design/icons/lib/dist$': resolve(__dirname, '../src/icons.ts'),
   },
   treeShaking: true,
   define: {
