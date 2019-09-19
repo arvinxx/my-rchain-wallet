@@ -67,9 +67,11 @@ export default {
   // umi routes: https://umijs.org/zh/guide/router.html
   routes,
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
-  theme: {
-    'primary-color': primaryColor,
-  },
+  theme: './src/theme/theme.js',
+  //
+  //   {
+  //   'primary-color': primaryColor,
+  // },
   alias: {
     '@ant-design/icons/lib/dist$': resolve(__dirname, '../src/icons.ts'),
   },

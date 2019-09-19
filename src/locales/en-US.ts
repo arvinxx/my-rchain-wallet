@@ -5,6 +5,7 @@ import pwa from './en-US/pwa';
 import settingDrawer from './en-US/settingDrawer';
 import settings from './en-US/settings';
 import errors from './en-US/errors';
+import dashboard from './en-US/dashboard';
 
 export default {
   'navBar.lang': 'Languages',
@@ -21,4 +22,5 @@ export default {
   ...pwa,
   ...component,
   ...errors,
+  ...dashboard,
 };
