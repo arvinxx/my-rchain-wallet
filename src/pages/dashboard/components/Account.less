@@ -1,0 +1,94 @@
+.container {
+  padding: 12px;
+
+  :global {
+    .ant-card-head {
+      font-weight: 400;
+      height: 64px;
+    }
+
+    .ant-card-head-title {
+      padding: 20px 0;
+    }
+    .ant-card-body {
+      position: relative;
+    }
+  }
+}
+
+.account {
+  display: flex;
+  //justify-content: space-between;
+}
+
+.avatar {
+  height: 64px;
+  width: 64px;
+  border: 3px #e8ecef solid;
+  padding: 4px;
+
+  img {
+    border-radius: 50%;
+  }
+}
+
+.user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  //margin: 0 140px 0 60px;
+}
+
+.view {
+  background: #f2f4f6;
+  color: @tag-font-color;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  height: 32px;
+  width: 64px;
+  line-height: 32px;
+  //padding: 0;
+  margin-right: 0;
+  text-align: center;
+}
+
+.operation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  right: 32px;
+}
+
+.money {
+  text-align: center;
+  margin-bottom: 36px;
+  letter-spacing: 0.3px;
+}
+
+.balance {
+  color: @primary-color;
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: 0;
+  margin-top: 8px;
+}
+
+.send {
+  height: 48px;
+  width: 120px;
+  margin-right: 8px;
+}
+
+.receive {
+  .send;
+  background: @text-color-secondary;
+  border-color: @text-color-secondary;
+  &:hover,
+  &:focus,
+  &:active {
+    background: fade(@text-color-secondary, 65%);
+    border-color: fade(@text-color-secondary, 65%);
+  }
+}

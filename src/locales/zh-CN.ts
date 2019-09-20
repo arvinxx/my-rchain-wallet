@@ -5,7 +5,7 @@ import pwa from './zh-CN/pwa';
 import settingDrawer from './zh-CN/settingDrawer';
 import settings from './zh-CN/settings';
 import errors from './zh-CN/errors';
-import dashboard from './en-US/dashboard';
+import dashboard from './zh-CN/dashboard';
 
 export default {
   'navBar.lang': '语言',
