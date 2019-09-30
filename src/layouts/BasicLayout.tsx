@@ -41,7 +41,7 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
     children: item.children ? menuDataRender(item.children) : [],
   }));
 
-const footerRender: BasicLayoutProps['footerRender'] = () => (
+export const footerRender: BasicLayoutProps['footerRender'] = () => (
   <Footer className={styles.footer}>
     <div>© 2019 MyRChainWallet - {formatMessage({ id: 'component.footer.rights' })}</div>
     <div>{formatMessage({ id: 'component.footer.about-us' })}</div>

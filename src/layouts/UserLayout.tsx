@@ -1,4 +1,4 @@
-import { DefaultFooter, MenuDataItem, getMenuData, getPageTitle } from '@ant-design/pro-layout';
+import { MenuDataItem, getMenuData, getPageTitle, DefaultFooter } from '@ant-design/pro-layout';
 import DocumentTitle from 'react-document-title';
 import Link from 'umi/link';
 import React from 'react';
@@ -42,19 +42,28 @@ const UserLayout: React.SFC<UserLayoutProps> = props => {
         <div className={styles.lang}>
           <SelectLang />
         </div>
-        <div className={styles.content}>
+        <div className={styles.wrapper}>
           <div className={styles.top}>
             <div className={styles.header}>
               <Link to="/">
                 <img alt="logo" className={styles.logo} src={logo} />
-                <span className={styles.title}>Ant Design</span>
               </Link>
             </div>
-            <div className={styles.desc}>Ant Design 是西湖区最具影响力的 Web 设计规范</div>
+            <div className={styles.desc}>{formatMessage({ id: 'user.layout.description' })}</div>
           </div>
-          {children}
+          <div className={styles.content}>{children}</div>
         </div>
-        <DefaultFooter />
+        <DefaultFooter
+          links={[
+            {
+              key: 'about',
+              href: '/about',
+              title: 'About',
+              blankTarget: true,
+            },
+          ]}
+          copyright={`© 2019 MyRChainWallet - ${formatMessage({ id: 'component.footer.rights' })}`}
+        />
       </div>
     </DocumentTitle>
   );

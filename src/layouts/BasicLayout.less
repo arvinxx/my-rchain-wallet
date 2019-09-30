@@ -1,4 +1,6 @@
+@import '~antd/es/style/themes/index';
 @import '../theme/theme';
+
 .layout {
   :global {
     .ant-pro-sider-menu-logo {
@@ -51,6 +53,14 @@
   display: flex;
   justify-content: space-between;
   padding: 24px;
+  @media (max-width: @screen-xs-max) {
+    flex-direction: column-reverse;
+    justify-content: center;
+    > div {
+      text-align: center;
+      margin-bottom: 2px;
+    }
+  }
 }
 .footer-mobile {
   flex-direction: column;

@@ -1,3 +1,5 @@
+@import '~antd/es/style/themes/index';
+
 .container {
   padding: 12px;
 
@@ -15,10 +17,12 @@
     }
   }
 }
-
 .account {
   display: flex;
   //justify-content: space-between;
+  @media (max-width: @screen-xs-max) {
+    flex-direction: column;
+  }
 }
 
 .avatar {
@@ -59,12 +63,20 @@
   align-items: center;
   position: absolute;
   right: 32px;
+  @media (max-width: @screen-xs-max) {
+    margin-top: 16px;
+    position: unset;
+    right: 0;
+  }
 }
 
 .money {
   text-align: center;
   margin-bottom: 36px;
   letter-spacing: 0.3px;
+  @media (max-width: @screen-xs-max) {
+    margin-bottom: 12px;
+  }
 }
 
 .balance {
@@ -74,15 +86,20 @@
   letter-spacing: 0;
   margin-top: 8px;
 }
-
+.button {
+  display: flex;
+  margin: 4px;
+  justify-content: center;
+  width: 100%;
+}
 .send {
   height: 48px;
   width: 120px;
-  margin-right: 8px;
 }
 
 .receive {
   .send;
+  margin-right: 8px;
   background: @text-color-secondary;
   border-color: @text-color-secondary;
   &:hover,

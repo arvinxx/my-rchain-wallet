@@ -34,11 +34,11 @@ const plugins: IPlugin[] = [
       // },
       pwa: pwa
         ? {
-          workboxPluginMode: 'InjectManifest',
-          workboxOptions: {
-            importWorkboxFrom: 'local',
-          },
-        }
+            workboxPluginMode: 'InjectManifest',
+            workboxOptions: {
+              importWorkboxFrom: 'local',
+            },
+          }
         : false,
       // default close dll, because issue https://github.com/ant-design/ant-design-pro/issues/4665
       // dll features https://webpack.js.org/plugins/dll-plugin/
@@ -73,6 +73,7 @@ export default {
   //   'primary-color': primaryColor,
   // },
   alias: {
+    theme: resolve(__dirname, '../src/theme'), // less 全局样式文件
     '@ant-design/icons/lib/dist$': resolve(__dirname, '../src/icons.ts'),
   },
   treeShaking: true,
@@ -104,8 +105,8 @@ export default {
       const match = context.resourcePath.match(/src(.*)/);
 
       if (match && match[1]) {
-        const antdProPath = match[1].replace('.less', '');
-        const arr = slash(antdProPath)
+        const path = match[1].replace('.less', '');
+        const arr = slash(path)
           .split('/')
           .map((a: string) => a.replace(/([A-Z])/g, '-$1'))
           .map((a: string) => a.toLowerCase());

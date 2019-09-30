@@ -32,7 +32,7 @@ export default function() {
             <div className={styles.balance}>1,016,100 REV</div>
             <Text type={'secondary'}>$ 16,100 USD</Text>
           </div>
-          <div>
+          <div className={styles.button}>
             <Button type={'primary'} className={styles.receive}>
               {formatMessage({ id: 'dashboard.account.button.receive' })}
             </Button>

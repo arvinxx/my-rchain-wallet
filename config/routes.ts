@@ -2,6 +2,30 @@ import { IRoute } from 'umi-types';
 
 const routes: IRoute[] = [
   {
+    path: '/user',
+    component: '../layouts/UserLayout',
+    routes: [
+      {
+        path: '/user/',
+        redirect: '/user/login',
+      },
+      {
+        path: '/user/login',
+        name: 'login',
+        component: '../pages/user/login',
+      },
+      {
+        path: '/user/signup',
+        name: 'signup',
+        component: '../pages/user/signup',
+      },
+      {
+        component: './404',
+      },
+    ],
+  },
+
+  {
     path: '/',
     // component: '../layouts/SecurityLayout',
     routes: [
@@ -29,9 +53,6 @@ const routes: IRoute[] = [
           //   name: 'transaction',
           //   icon: 'profile',
           // },
-          {
-            component: './404',
-          },
           {
             component: './404',
           },

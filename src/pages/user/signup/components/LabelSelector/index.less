@@ -1,0 +1,44 @@
+@import '~antd/es/style/themes/default.less';
+
+.container {
+  padding-bottom: 24px;
+  user-select: none;
+
+  :global {
+    .ant-tag {
+      border-color: @border-color-split;
+      margin: 12px 8px;
+      font-size: 16px;
+      height: 32px;
+      line-height: 32px;
+      padding: 0 12px;
+    }
+
+    .ant-tag-checkable-checked {
+      border-color: transparent;
+    }
+  }
+}
+
+.display {
+  border: @border-color-split 1px solid;
+  min-height: 150px;
+  background: @background-color-base;
+  //user-select: none;
+  border-radius: 4px;
+  padding: 16px;
+  margin-top: 24px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.unselected {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tag {
+  display: flex;
+  text-align: center;
+}

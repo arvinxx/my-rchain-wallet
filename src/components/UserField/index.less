@@ -1,0 +1,34 @@
+@import '~antd/es/style/themes/default.less';
+
+.login {
+  :global {
+    .ant-tabs .ant-tabs-bar {
+      margin-bottom: 24px;
+      text-align: center;
+      border-bottom: 0;
+    }
+
+    .ant-form-item {
+      margin-bottom: 16px;
+    }
+  }
+
+  .prefixIcon {
+    color: @disabled-color;
+    font-size: @font-size-base;
+  }
+
+  .submit {
+    width: 100%;
+  }
+}
+.input {
+  input {
+    background: @background-color-light;
+    &:hover,
+    &:active,
+    &:focus {
+      background: @white;
+    }
+  }
+}
