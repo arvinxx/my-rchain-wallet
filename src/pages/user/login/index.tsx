@@ -73,12 +73,12 @@ export default class Login extends Component<LoginProps, LoginState> {
 
   render() {
     const { userLogin, submitting } = this.props;
-    const { status, type: loginType } = userLogin;
     const { type, autoLogin, password } = this.state;
-    const account = [
-      { username: 'bob', address: '0x461b3e7746a6fef7777f78a23981a799c5127b9a' },
-      { username: 'alice', address: '0x461b3e7746a6fef77dfs8a23981a799c512729b' },
-    ];
+    let account;
+    // account = [
+    //   { username: 'bob', address: '0x461b3e7746a6fef7777f78a23981a799c5127b9a' },
+    //   { username: 'alice', address: '0x7159c9177242007691a46D0106Ca77A82b177629'.toLowerCase() },
+    // ];
     return (
       <div className={styles.container}>
         {!account ? (
