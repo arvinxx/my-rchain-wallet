@@ -15,6 +15,11 @@ const routes: IRoute[] = [
         component: '../pages/user/login',
       },
       {
+        path: '/user/restore',
+        name: 'restore',
+        component: '../pages/user/restore',
+      },
+      {
         path: '/user/signup',
         name: 'signup',
         component: '../pages/user/signup',

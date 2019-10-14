@@ -5,6 +5,7 @@ import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import { Button, Typography, Checkbox, Input, Divider, message } from 'antd';
 import { Link, router } from 'umi';
 import LabelSelector from './components/LabelSelector';
+import { InputBlock } from '@/components';
 
 const { Title, Text } = Typography;
 const phrase = [
@@ -34,20 +35,6 @@ export default class SignUp extends Component<ISignUpProps> {
     confirm: '',
     step: 0,
     verified: false,
-  };
-  InputBlock = ({ value, label, type }) => {
-    return (
-      <div className={styles.block}>
-        <Input
-          className={styles.input}
-          value={value}
-          onChange={e => {
-            this.setState({ [type]: e.target.value });
-          }}
-        />
-        <label className={value ? styles.hover : null}>{formatMessage({ id: label })}</label>
-      </div>
-    );
   };
   onRegister = () => {
     this.setState({
@@ -127,9 +114,30 @@ export default class SignUp extends Component<ISignUpProps> {
         <Divider dashed className={styles.divider} />
         {step === 0 ? (
           <Fragment>
-            <this.InputBlock value={username} label={'sign-up.username'} type={'username'} />
-            <this.InputBlock value={password} label={'sign-up.password'} type={'password'} />
-            <this.InputBlock value={confirm} label={'sign-up.confirm'} type={'confirm'} />
+            <InputBlock
+              value={username}
+              label={'sign-up.username'}
+              type={'username'}
+              onChange={e => {
+                this.setState({ username: e.target.value });
+              }}
+            />
+            <InputBlock
+              value={password}
+              label={'sign-up.password'}
+              type={'password'}
+              onChange={e => {
+                this.setState({ password: e.target.value });
+              }}
+            />
+            <InputBlock
+              value={confirm}
+              label={'sign-up.confirm'}
+              type={'confirm'}
+              onChange={e => {
+                this.setState({ confirm: e.target.value });
+              }}
+            />
             <div
               className={styles.agree}
               onClick={() => {

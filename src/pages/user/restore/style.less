@@ -1,0 +1,77 @@
+@import '~antd/es/style/themes/default.less';
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 48px;
+  > * {
+    margin: 8px 0;
+  }
+}
+.description {
+  padding: 0 40px;
+  font-size: 16px;
+  text-align: center;
+}
+.divider {
+  margin: 16px 0;
+}
+.method {
+  display: flex;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  padding: 24px;
+  width: 100%;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all ease-in-out 0.3s;
+  .icon {
+    font-size: 80px;
+    color: @primary-color;
+  }
+  &:hover {
+    border-color: white;
+    //box-shadow: 0 12px 24px @shadow-color;
+    background: @primary-color;
+    //transform: translateY(-8px);
+    :global {
+      .ant-typography {
+        color: white;
+      }
+    }
+    .icon {
+      color: white;
+    }
+  }
+}
+.card {
+  width: 180px;
+}
+.phrase {
+  width: 400px;
+
+  .textArea {
+    margin: 16px 0;
+    height: 100px !important;
+  }
+}
+.private {
+  width: 400px;
+  .input {
+    margin: 16px 0;
+    height: 40px;
+    line-height: 40px;
+  }
+}
+.button {
+  width: 100%;
+  font-size: 16px;
+  height: 48px;
+}
+
+.password {
+  width: 100%;
+  > * {
+    margin: 12px 0;
+  }
+}
