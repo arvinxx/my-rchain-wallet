@@ -1,0 +1,84 @@
+@import '~antd/es/style/themes/default.less';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  > * {
+    margin: 8px 0;
+  }
+
+  :global {
+    .ant-select-lg .ant-select-selection--single {
+      height: 56px;
+    }
+    .ant-select-selection-selected-value {
+      height: 56px;
+      display: flex !important;
+      align-items: center;
+      width: 400px;
+    }
+    .ant-select-lg .ant-select-selection__rendered {
+      line-height: inherit;
+    }
+  }
+}
+
+.img {
+  height: 200px;
+  margin-bottom: 16px;
+}
+
+.newBtn {
+  width: 100%;
+  height: 64px;
+  line-height: 64px;
+  font-weight: 600;
+  font-size: 18px;
+
+  margin-top: 24px;
+}
+
+.description {
+  padding: 0 40px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.divider {
+  margin: 16px 0;
+}
+
+.account {
+  width: 100%;
+  //overflow: hidden;
+  height: 56px;
+}
+
+.option {
+  display: flex;
+  align-items: flex-start;
+}
+
+.avatar {
+  height: 40px;
+  width: 40px;
+  padding: 2px;
+  border: 2px #98a9bc solid;
+
+  border-radius: 4px;
+  margin-top: 3px;
+  margin-right: 16px;
+}
+.text {
+  width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.button {
+  height: 56px;
+  font-size: 18px;
+  margin-top: 20px;
+}

@@ -186,7 +186,6 @@ export default class SignUp extends Component<ISignUpProps> {
               values={{
                 sign: (
                   <Link
-                    target={'_blank'}
                     to={'/user/login'}
                     onClick={e => {
                       e.stopPropagation();

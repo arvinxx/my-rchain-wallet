@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Component } from 'react';
+import React, { ChangeEvent, Component, CSSProperties, StyleHTMLAttributes } from 'react';
 import styles from './style.less';
 import { Input, Icon } from 'antd';
 import { formatMessage } from 'umi-plugin-react/locale';
@@ -8,6 +8,7 @@ interface IInputBlockProps {
   value: string;
   label: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  style?: CSSProperties;
 }
 
 export default class InputBlock extends Component<IInputBlockProps> {
@@ -22,10 +23,10 @@ export default class InputBlock extends Component<IInputBlockProps> {
     });
   };
   render() {
-    const { value, type, label, onChange } = this.props;
+    const { value, type, label, onChange, style } = this.props;
     const { visible } = this.state;
     return (
-      <div className={styles.block}>
+      <div className={styles.block} style={style}>
         <Input
           className={styles.input}
           value={value}
