@@ -1,3 +1,26 @@
 export default {
-  'sign-up.title': '创建账户',
+  'sign-up.title.0': '创建账户',
+  'sign-up.title.1': '保存助记词',
+  'sign-up.title.2': '验证助记词',
+  // 'sign-up.description':
+  //   'Sign up for a free account below or <a>restore your account</a> from backup ',
+  'sign-up.description': '注册一个免费账户或者 {restore}',
+  'sign-up.description.restore': '恢复账户',
+  'sign-up.description.phrase':
+    '您必须妥善保管您的助记词，这是未来恢复您帐户非常重要的依据',
+  'sign-up.description.verify': '验证您的助记词或者 {back}',
+  'sign-up.description.verify.back': '返回上一步',
+  'sign-up.avatar': 'Choose your address avatar',
+  'sign-up.button': '注册',
+  'sign-up.sign-in': '已有账户?{sign}',
+  'sign-up.sign-in.sign': '登录',
+  'sign-up.phrase.info': '请在用纸记下这12个单词，或者',
+  'sign-up.phrase.copy': '点击复制所有',
+  'sign-up.phrase.copy.success': '助记词复制成功 🎉',
+  'sign-up.phrase.copy.error': '助记词复制失败，请手动复制助记词',
+  'sign-up.phrase.button': '验证助记词',
+  'sign-up.phrase.skip': '跳过验证',
+  'sign-up.verify.info': '请按正确的顺序选择下面的单词',
+  'sign-up.verify.button.wrong': '清除并重试',
+  'sign-up.verify.button.true': '完成',
 };

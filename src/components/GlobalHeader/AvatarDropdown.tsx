@@ -4,11 +4,13 @@ import { FormattedMessage } from 'umi-plugin-react/locale';
 import React from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
+import Identicon from 'identicon.js';
 
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { CurrentUser } from '@/models/user';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
+import { getItem } from '@/utils/utils';
 
 export interface GlobalHeaderRightProps extends ConnectProps {
   currentUser?: CurrentUser;
@@ -20,21 +22,18 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
     const { key } = event;
 
     if (key === 'logout') {
-      const { dispatch } = this.props;
-      if (dispatch) {
-        dispatch({
-          type: 'login/logout',
-        });
-      }
-
-      return;
+      localStorage.removeItem('currentUser');
     }
     router.push(`/account/${key}`);
   };
 
   render(): React.ReactNode {
-    const { currentUser = { avatar: '', name: '' }, menu } = this.props;
-
+    const { menu } = this.props;
+    const userList = getItem('userList');
+    const currentUser = getItem('currentUser');
+    const { username, address } = userList.find(user => (user.username = currentUser));
+    const data = new Identicon(address).toString();
+    const avatar = `data:image/png;base64,${data}`;
     const menuHeaderDropdown = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
         {menu && (
@@ -58,11 +57,11 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
       </Menu>
     );
 
-    return currentUser && currentUser.name ? (
+    return currentUser && username ? (
       <HeaderDropdown overlay={menuHeaderDropdown}>
         <span className={`${styles.action} ${styles.account}`}>
-          <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
-          <span className={styles.name}>{currentUser.name}</span>
+          <Avatar size="small" className={styles.avatar} src={avatar} alt="avatar" />
+          <span className={styles.name}>{username}</span>
         </span>
       </HeaderDropdown>
     ) : (

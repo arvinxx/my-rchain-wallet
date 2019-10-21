@@ -1,11 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import styles from './style.less';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
-import { IconFont, InputBlock } from '@/components';
+import { IconFont, InputBlock, CreateAccount } from '@/components';
 
 import { Typography, Button, Divider, Input } from 'antd';
 import { Link } from 'umi';
 import router from 'umi/router';
+import { setItem } from '@/utils/utils';
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;
@@ -15,20 +16,22 @@ interface IRestoreProps {}
 export default class Restore extends Component<IRestoreProps> {
   static defaultProps: IRestoreProps = {};
   state = {
+    step: 0,
     method: '',
     phrase: '',
-    step: 0,
-    password: '',
-    confirm: '',
-    username: '',
     privateKey: '',
   };
   handleStep = (method?: string) => {
-    const { step } = this.state;
+    const { step, phrase, privateKey, method: way } = this.state;
     if (method) {
       this.setState({ step: step + 1, method });
     } else {
       this.setState({ step: step + 1 });
+      if (way === 'phrase') {
+        setItem('mnemonic', phrase);
+      } else if (way === 'private') {
+        //TODO: handle private key function
+      }
     }
   };
 
@@ -44,7 +47,7 @@ export default class Restore extends Component<IRestoreProps> {
   };
 
   render() {
-    const { method, phrase, step, confirm, password, username, privateKey } = this.state;
+    const { method, phrase, step, privateKey } = this.state;
     return (
       <div className={styles.container}>
         <Title level={2} style={{ marginBottom: 0 }}>
@@ -123,34 +126,7 @@ export default class Restore extends Component<IRestoreProps> {
           )
         ) : step === 2 ? (
           <>
-            <div className={styles.password}>
-              <InputBlock
-                type={'username'}
-                label={'user-restore.password.username'}
-                value={username}
-                onChange={e => this.setState({ username: e.target.value })}
-              />
-              <InputBlock
-                type={'password'}
-                label={'user-restore.password.password'}
-                value={password}
-                onChange={e => this.setState({ password: e.target.value })}
-              />
-              <InputBlock
-                type={'confirm'}
-                label={'user-restore.password.confirm'}
-                value={confirm}
-                onChange={e => this.setState({ confirm: e.target.value })}
-              />
-              <Button
-                disabled={!(username && password && confirm)}
-                type={'primary'}
-                className={styles.button}
-                onClick={this.finish}
-              >
-                <FormattedMessage id={'user-restore.method.done'} />
-              </Button>
-            </div>
+            <CreateAccount next={this.finish} type={'restore'} />
           </>
         ) : null}
         {step === 0 ? (

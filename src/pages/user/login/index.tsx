@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Button, Select, Divider, Icon, Typography, Avatar } from 'antd';
+import { Button, Select, Divider, Typography, Avatar } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import Identicon from 'identicon.js';
 
@@ -11,22 +11,26 @@ import { InputBlock } from '@/components';
 import styles from './style.less';
 import { ReactComponent as NewAccount } from '@/assets/img/new_account.svg';
 
-import { CheckboxChangeEvent } from 'antd/es/checkbox';
-import { FormComponentProps } from 'antd/es/form';
 import { Dispatch } from 'redux';
+import { UserModelState } from '@/models/user';
+import { getItem, setItem } from '@/utils/utils';
 
 const { Text, Title } = Typography;
 const { Option } = Select;
+
 interface LoginProps {
   dispatch: Dispatch<any>;
   userLogin: StateType;
   submitting: boolean;
+  location: Location;
 }
 
 interface LoginState {
   type: string;
   autoLogin: boolean;
   password: string;
+  user?: string;
+  error: boolean;
 }
 
 export interface FormDataType {
@@ -40,8 +44,10 @@ export interface FormDataType {
   ({
     userLogin,
     loading,
+    user,
   }: {
     userLogin: StateType;
+    user: UserModelState;
     loading: {
       effects: {
         [key: string]: string;
@@ -49,39 +55,63 @@ export interface FormDataType {
     };
   }) => ({
     userLogin,
+    user,
     submitting: loading.effects['userLogin/login'],
   }),
 )
 export default class Login extends Component<LoginProps, LoginState> {
-  loginForm: FormComponentProps['form'] | undefined | null = undefined;
-
   state: LoginState = {
     type: 'account',
     autoLogin: true,
     password: '',
+    error: false,
   };
 
-  changeAutoLogin = (e: CheckboxChangeEvent) => {
+  componentDidMount(): void {
+    const userList = getItem('userList');
+
     this.setState({
-      autoLogin: e.target.checked,
+      user: userList[0].username,
     });
-  };
+  }
 
   signup = () => {
     router.push('/user/signup');
   };
+  login = () => {
+    const { password, user: username } = this.state;
+    const userList = getItem('userList');
+    const user = userList.find(user => user.username === username);
+    if (user && user.pwd === password) {
+      setItem('currentUser', username);
+
+      const { query } = this.props.location;
+      if (query && query.rediect) {
+        router.push(query.rediect);
+      } else {
+        router.push('/');
+      }
+    } else {
+      this.setState({
+        error: true,
+      });
+    }
+  };
+  chooseUser = (user: string) => {
+    this.setState({ user });
+  };
 
   render() {
-    const { userLogin, submitting } = this.props;
-    const { type, autoLogin, password } = this.state;
-    let account;
-    // account = [
-    //   { username: 'bob', address: '0x461b3e7746a6fef7777f78a23981a799c5127b9a' },
-    //   { username: 'alice', address: '0x7159c9177242007691a46D0106Ca77A82b177629'.toLowerCase() },
-    // ];
+    const { password, user, error } = this.state;
+    const userList = getItem('userList');
+
+    let isNew = userList ? userList.length === 0 : true;
+
+    // TODO: 根据 userList 解密
+
     return (
       <div className={styles.container}>
-        {!account ? (
+        {isNew ? (
           <>
             <NewAccount className={styles.img} />
             <div>
@@ -92,20 +122,6 @@ export default class Login extends Component<LoginProps, LoginState> {
             <Button className={styles.newBtn} type={'primary'} onClick={this.signup}>
               {formatMessage({ id: 'user-login.login.create-account' })}
             </Button>
-            <div style={{ marginTop: 16 }}>
-              <Text type={'secondary'}>
-                <FormattedMessage
-                  id={'user-login.login.restore'}
-                  values={{
-                    restore: (
-                      <Link to={'/user/restore'}>
-                        {formatMessage({ id: 'user-login.login.restore.restore' })}
-                      </Link>
-                    ),
-                  }}
-                />
-              </Text>
-            </div>
           </>
         ) : (
           <>
@@ -125,14 +141,19 @@ export default class Login extends Component<LoginProps, LoginState> {
               />
             </Text>
             <Divider dashed className={styles.divider} />
-            <Select defaultValue={account[0].address} size={'large'} className={styles.account}>
-              {account.map(account => {
-                const { address, username } = account;
+            <Select
+              value={user}
+              size={'large'}
+              onChange={this.chooseUser}
+              className={styles.account}
+            >
+              {userList.map(user => {
+                const { address, username } = user;
                 const data = new Identicon(address).toString();
                 const avatar = `data:image/png;base64,${data}`;
 
                 return (
-                  <Option value={address}>
+                  <Option value={username} key={address}>
                     <div className={styles.option}>
                       <Avatar src={avatar} className={styles.avatar} />
 
@@ -151,13 +172,35 @@ export default class Login extends Component<LoginProps, LoginState> {
               label={'user-login.login.input.password'}
               onChange={e => this.setState({ password: e.target.value })}
               type={'password'}
+              error={error}
+              errorMsg={'user-login.login.input.password.errorMsg'}
               value={password}
             />
-            <Button type={'primary'} size={'large'} className={styles.button} block>
+            <Button
+              type={'primary'}
+              size={'large'}
+              className={styles.button}
+              block
+              onClick={this.login}
+            >
               {formatMessage({ id: 'user-login.login.login' })}
             </Button>
           </>
-        )}
+        )}{' '}
+        <div style={{ marginTop: 16 }}>
+          <Text type={'secondary'}>
+            <FormattedMessage
+              id={'user-login.login.restore'}
+              values={{
+                restore: (
+                  <Link to={'/user/restore'}>
+                    {formatMessage({ id: 'user-login.login.restore.restore' })}
+                  </Link>
+                ),
+              }}
+            />
+          </Text>
+        </div>
       </div>
     );
   }

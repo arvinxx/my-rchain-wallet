@@ -4,6 +4,7 @@ export default {
   'menu.home': 'Home',
   'menu.login': 'Login',
   'menu.register': 'Register',
+  'menu.signup': 'Sign Up',
   'menu.register.result': 'Register Result',
   'menu.dashboard': 'Dashboard',
   'menu.dashboard.analysis': 'Analysis',

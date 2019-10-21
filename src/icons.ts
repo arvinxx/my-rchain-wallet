@@ -14,3 +14,4 @@ export { default as SearchOutline } from '@ant-design/icons-svg/lib/outline/Sear
 export { default as DownOutline } from '@ant-design/icons-svg/lib/outline/DownOutline';
 
 export { default as CheckCircleFill } from '@ant-design/icons-svg/lib/fill/CheckCircleFill';
+export { default as CloseCircleFill } from '@ant-design/icons-svg/lib/fill/CloseCircleFill';

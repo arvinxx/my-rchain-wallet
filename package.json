@@ -1,6 +1,6 @@
 {
   "name": "my-rchain-wallet",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "start": "umi dev",
@@ -14,6 +14,7 @@
   "dependencies": {
     "@ant-design/pro-layout": "^4.5.16",
     "antd": "^3.23.3",
+    "bip39": "^3.0.2",
     "classnames": "^2.2.6",
     "dva": "^2.5.0-beta.2",
     "identicon.js": "^2.3.3",
@@ -25,7 +26,8 @@
     "react-dom": "^16.7.0",
     "react-intl": "^3.3.2",
     "redux": "^4.0.1",
-    "umi-request": "^1.2.5"
+    "umi-request": "^1.2.5",
+    "web3": "^1.2.1"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.9",
@@ -35,6 +37,7 @@
     "@types/react-document-title": "^2.0.3",
     "@types/react-dom": "^16.0.11",
     "@types/react-test-renderer": "^16.0.3",
+    "@types/web3": "^1.0.20",
     "babel-eslint": "^9.0.0",
     "cross-env": "^6.0.0",
     "eslint": "^5.4.0",

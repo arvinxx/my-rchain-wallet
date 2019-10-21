@@ -4,69 +4,76 @@ import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 
 import { Button, Typography, Checkbox, Input, Divider, message } from 'antd';
 import { Link, router } from 'umi';
-import LabelSelector from './components/LabelSelector';
-import { InputBlock } from '@/components';
+import { LabelSelector } from './components';
+import { CreateAccount } from '@/components';
+import { copyToClipboard, getItem, setItem } from '@/utils/utils';
 
 const { Title, Text } = Typography;
-const phrase = [
-  'absurd',
-  'state',
-  'pet',
-  'another',
-  'rack',
-  'valve',
-  'marble',
-  'bullet',
-  'garlic',
-  'lion',
-  'plunge',
-  'custom',
-];
 
 interface ISignUpProps {}
 
 export default class SignUp extends Component<ISignUpProps> {
   static defaultProps: ISignUpProps = {};
   state = {
-    agree: false,
-    username: '',
-    password: '',
     clear: false,
-    confirm: '',
     step: 0,
     verified: false,
   };
-  onRegister = () => {
+
+  goNext = () => {
+    const { step } = this.state;
     this.setState({
-      step: 1,
+      step: step + 1,
     });
   };
-
   copy = () => {
-    message.success(formatMessage({ id: 'sign-up.phrase.copy.success' }), 0.3);
+    const mnemonic = getItem('mnemonic');
+    let string = '';
+    mnemonic.forEach((word: string) => {
+      string += word + ' ';
+    });
+    const flag = copyToClipboard(string);
+    if (flag) {
+      message.success(formatMessage({ id: 'sign-up.phrase.copy.success' }), 0.3);
+    } else {
+      message.error(formatMessage({ id: 'sign-up.phrase.copy.error' }));
+    }
   };
+
   verify = () => {
     const { verified, clear } = this.state;
     if (verified) {
-      router.push('/');
+      this.finish();
     } else {
       this.setState({
         clear: !clear,
       });
     }
   };
+
   onContinue = () => {
     this.setState({
       step: 2,
     });
   };
+
   verified = () => {
     console.log(this.state.verified);
+
     this.setState({ verified: true });
   };
 
+  finish = () => {
+    localStorage.removeItem('mnemonic');
+    const userList = getItem('userList');
+    const { username } = userList[userList.length - 1];
+    setItem('currentUser', username);
+    router.push('/');
+  };
+
   render() {
-    const { agree, username, password, step, verified, confirm, clear } = this.state;
+    const { step, verified, clear } = this.state;
+    const phrase = getItem('mnemonic');
     return (
       <div className={styles.container}>
         <Title level={2} style={{ marginBottom: 0 }}>
@@ -113,74 +120,8 @@ export default class SignUp extends Component<ISignUpProps> {
         </Text>
         <Divider dashed className={styles.divider} />
         {step === 0 ? (
-          <Fragment>
-            <InputBlock
-              value={username}
-              label={'sign-up.username'}
-              type={'username'}
-              onChange={e => {
-                this.setState({ username: e.target.value });
-              }}
-            />
-            <InputBlock
-              value={password}
-              label={'sign-up.password'}
-              type={'password'}
-              onChange={e => {
-                this.setState({ password: e.target.value });
-              }}
-            />
-            <InputBlock
-              value={confirm}
-              label={'sign-up.confirm'}
-              type={'confirm'}
-              onChange={e => {
-                this.setState({ confirm: e.target.value });
-              }}
-            />
-            <div
-              className={styles.agree}
-              onClick={() => {
-                console.log(agree);
-                this.setState({
-                  agree: !agree,
-                });
-              }}
-            >
-              <Checkbox
-                checked={agree}
-                onChange={agree => {
-                  this.setState({
-                    agree,
-                  });
-                }}
-                style={{ marginRight: 4 }}
-              />
-              <FormattedMessage
-                id={'sign-up.agreement'}
-                values={{
-                  service: (
-                    <Link
-                      target={'_blank'}
-                      to={'/service'}
-                      onClick={e => {
-                        e.stopPropagation();
-                      }}
-                    >
-                      {formatMessage({ id: 'sign-up.agreement.service' })}
-                    </Link>
-                  ),
-                }}
-              />
-            </div>
-            <Button
-              type={'primary'}
-              disabled={!agree}
-              className={styles.btn}
-              onClick={this.onRegister}
-            >
-              {formatMessage({ id: 'sign-up.button' })}
-            </Button>
+          <>
+            <CreateAccount type={'signup'} next={this.goNext} />
             <FormattedMessage
               id={'sign-up.sign-in'}
               values={{
@@ -196,7 +137,7 @@ export default class SignUp extends Component<ISignUpProps> {
                 ),
               }}
             />
-          </Fragment>
+          </>
         ) : (
           <Fragment>
             <FormattedMessage id={step === 1 ? 'sign-up.phrase.info' : 'sign-up.verify.info'} />
@@ -206,8 +147,10 @@ export default class SignUp extends Component<ISignUpProps> {
                   <FormattedMessage id={'sign-up.phrase.copy'} />
                 </Button>
                 <div className={styles.phrase}>
-                  {phrase.map(item => (
-                    <span className={styles.word}>{item}</span>
+                  {phrase.map((item: string) => (
+                    <span key={item} className={styles.word}>
+                      {item}
+                    </span>
                   ))}
                 </div>
                 <Button type={'primary'} className={styles.btn} onClick={this.onContinue}>
@@ -225,9 +168,9 @@ export default class SignUp extends Component<ISignUpProps> {
               </Fragment>
             )}
 
-            <Link to={'/'}>
+            <Button type={'link'} onClick={this.finish}>
               <FormattedMessage id={'sign-up.phrase.skip'} />
-            </Link>
+            </Button>
           </Fragment>
         )}
       </div>

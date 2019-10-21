@@ -5,20 +5,35 @@ const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(
 
 export const isUrl = (path: string): boolean => reg.test(path);
 
-export const isAntDesignPro = (): boolean => {
-  if (MY_RCHAIN_WALLET_ONLINE === 'site') {
-    return true;
-  }
-  return window.location.hostname === 'preview.pro.ant.design';
-};
-
-// 给官方演示站点用，用于关闭真实开发环境不需要使用的特性
-export const isAntDesignProOrDev = (): boolean => {
-  const { NODE_ENV } = process.env;
-  if (NODE_ENV === 'development') {
-    return true;
-  }
-  return isAntDesignPro();
-};
-
 export const getPageQuery = () => parse(window.location.href.split('?')[1]);
+
+type ILocalData = 'currentUser' | 'userList';
+
+export const setItem = (key: ILocalData, value: any) => {
+  localStorage.setItem(key, JSON.stringify(value));
+};
+export const getItem = (key: ILocalData) => {
+  const res = localStorage.getItem(key);
+  if (res) {
+    return JSON.parse(res);
+  }
+};
+
+export const copyToClipboard = (string: string): boolean => {
+  const tempInput = document.createElement('input'); //create temp input
+  document.body.appendChild(tempInput); // add tempInput to DOM
+  tempInput.value = string;
+  tempInput.focus();
+  // get selection
+  if (tempInput.setSelectionRange) tempInput.setSelectionRange(0, tempInput.value.length);
+  else tempInput.select();
+  let flag;
+  try {
+    flag = document.execCommand('copy'); // Exec Copy
+  } catch (e) {
+    flag = false;
+  }
+  document.body.removeChild(tempInput); // Delete TempInput
+
+  return flag;
+};

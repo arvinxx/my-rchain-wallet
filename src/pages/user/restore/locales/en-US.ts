@@ -17,8 +17,4 @@ export default {
   'user-restore.method.return': 'Go Back',
   'user-restore.method.continue': 'Continue',
   'user-restore.method.password.description': 'Please set your account information',
-  'user-restore.password.username': 'Username',
-  'user-restore.password.password': 'Password',
-  'user-restore.password.confirm': 'Confirm',
-  'user-restore.method.done': 'Done!',
 };

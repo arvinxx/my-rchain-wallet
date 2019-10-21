@@ -29,10 +29,9 @@ const routes: IRoute[] = [
       },
     ],
   },
-
   {
     path: '/',
-    // component: '../layouts/SecurityLayout',
+    component: '../layouts/SecurityLayout',
     routes: [
       {
         path: '/',
