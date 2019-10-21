@@ -69,10 +69,11 @@ export default class Login extends Component<LoginProps, LoginState> {
 
   componentDidMount(): void {
     const userList = getItem('userList');
-
-    this.setState({
-      user: userList[0].username,
-    });
+    if (userList) {
+      this.setState({
+        user: userList[0].username,
+      });
+    }
   }
 
   signup = () => {
