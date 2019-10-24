@@ -11,3 +11,7 @@ export async function queryCurrent(): Promise<any> {
 export async function queryNotices(): Promise<any> {
   return request('/api/notices');
 }
+
+export const transfer = async () => {
+  //TODO: make the rev transfer
+};

@@ -6,7 +6,8 @@ import { IconFont, InputBlock, CreateAccount } from '@/components';
 import { Typography, Button, Divider, Input } from 'antd';
 import { Link } from 'umi';
 import router from 'umi/router';
-import { setItem } from '@/utils/utils';
+import { getItem, setItem } from '@/utils/utils';
+import { getPublicKeyFromPrivateKey } from '@/utils/blockchain';
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;
@@ -27,10 +28,11 @@ export default class Restore extends Component<IRestoreProps> {
       this.setState({ step: step + 1, method });
     } else {
       this.setState({ step: step + 1 });
+      setItem('restore', way);
       if (way === 'phrase') {
         setItem('mnemonic', phrase);
       } else if (way === 'private') {
-        //TODO: handle private key function
+        setItem('privateKey', privateKey);
       }
     }
   };

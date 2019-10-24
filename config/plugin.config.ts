@@ -26,10 +26,7 @@ function getModulePackageName(module: { context: string }) {
 
 export default (config: any) => {
   // preview.pro.ant.design only do not use in your production;
-  if (
-    process.env.MY_RCHAIN_WALLET_ONLINE === 'site' ||
-    process.env.NODE_ENV !== 'production'
-  ) {
+  if (process.env.MY_RCHAIN_WALLET_ONLINE === 'site' || process.env.NODE_ENV !== 'production') {
     config.plugin('webpack-theme-color-replacer').use(ThemeColorReplacer, [
       {
         fileName: 'css/theme-colors-[contenthash:8].css',

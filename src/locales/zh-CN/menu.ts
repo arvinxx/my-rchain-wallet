@@ -6,6 +6,7 @@ export default {
   'menu.login': '登录',
   'menu.signup': '注册',
   'menu.register': '注册',
+  'menu.restore': '恢复账户',
   'menu.register.result': '注册结果',
   'menu.dashboard': '总览',
   'menu.dashboard.analysis': '分析页',

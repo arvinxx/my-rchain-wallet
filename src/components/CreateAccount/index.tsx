@@ -3,11 +3,16 @@ import styles from './style.less';
 import { InputBlock } from '@/components';
 import { Button, Checkbox } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
-import web3 from 'web3';
-import { generateMnemonic } from 'bip39';
 
 import { Link } from 'umi';
 import { getItem, setItem } from '@/utils/utils';
+import {
+  getMnemonic,
+  getKeyPairFromMnemonic,
+  getRevAddressFromPublicKey,
+  getPublicKeyFromPrivateKey,
+} from '@/utils/blockchain';
+import { getAccountFromMnemonic, getAccountFromPrivateKey } from '@/services/account';
 
 type Type = 'username' | 'password' | 'confirm';
 
@@ -102,28 +107,61 @@ export default class CreateAccount extends Component<ICreateAccountProps, ICreat
   onRegister = () => {
     const { next, type } = this.props;
     const { password, username } = this.state;
+    let account;
     if (type === 'signup') {
-      const mnemonic = generateMnemonic().split(' ');
-
-      const userList = getItem('userList') || [];
+      const mnemonic = getMnemonic();
+      const { ethAddr, revAddr, privateKey } = getAccountFromMnemonic(mnemonic);
 
       // TODO: 优化用户数据保存方式
-      setItem(
-        'userList',
-        userList.concat({
-          username,
-          pwd: password,
-          address: '0x461b3e7746a6fef7777f78a23981a799c5127b' + (100 * Math.random()).toFixed(0),
-        }),
-      );
+      account = {
+        username,
+        pwd: password,
+        address: revAddr,
+        ethAddr,
+        privateKey,
+        mnemonic,
+      };
 
-      setItem('mnemonic', mnemonic);
+      setItem('mnemonic', mnemonic.split(' '));
     }
+
     if (type === 'restore') {
       // TODO: 完成基于私钥或者账户恢复的功能
-
-      setItem('currentUser', username);
+      const restoreType = getItem('restore');
+      if (restoreType === 'private') {
+        const privateKey = getItem('privateKey');
+        const res = getAccountFromPrivateKey(privateKey);
+        if (res) {
+          const { address, ethAddr } = res;
+          account = {
+            username,
+            pwd: password,
+            address,
+            ethAddr,
+            privateKey,
+          };
+        }
+        localStorage.removeItem('privateKey');
+      }
+      if (restoreType === 'phrase') {
+        const mnemonic = getItem('mnemonic');
+        const { ethAddr, revAddr, privateKey } = getAccountFromMnemonic(mnemonic);
+        account = {
+          username,
+          pwd: password,
+          address: revAddr,
+          ethAddr,
+          privateKey,
+          mnemonic,
+        };
+        localStorage.removeItem('mnemonic');
+      }
+      localStorage.removeItem('restore');
     }
+    const userList = getItem('userList') || [];
+    setItem('currentUser', username);
+    setItem('userList', userList.concat(account));
+    console.log(account);
     next();
   };
 
