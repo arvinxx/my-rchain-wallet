@@ -3,16 +3,31 @@ import { Card, Typography, Tag, Button, Avatar } from 'antd';
 import styles from './Account.less';
 import identicon from 'identicon.js';
 import { formatMessage } from 'umi-plugin-locale';
-
-const data = new identicon('d3b07384d113123edec492eaa6238ad5ff00').toString();
-const avatar = `data:image/png;base64,${data}`;
+import { IAccount } from '@/services/account';
+import { getDecryptedItem, getItem } from '@/utils/utils';
 
 const { Text } = Typography;
 
 export default function() {
+  const userList: IAccount[] = getDecryptedItem('userList');
+  const currentUser = getItem('currentUser');
+  const { username, address } = userList.find(user => (user.username = currentUser));
+
+  const data = new identicon(address);
+  const avatar = `data:image/png;base64,${data}`;
+
   return (
     <Card
-      title={formatMessage({ id: 'dashboard.account.title' })}
+      title={
+        <div className={styles.title}>
+          <div>{formatMessage({ id: 'dashboard.account.title' })}</div>
+          <div>
+            <Text type={'secondary'} className={styles.address}>
+              {address}
+            </Text>
+          </div>
+        </div>
+      }
       bordered={false}
       style={{ maxWidth: 550 }}
     >
@@ -20,9 +35,9 @@ export default function() {
         <div className={styles.user}>
           <Avatar src={avatar} className={styles.avatar} />
 
-          <Text style={{ fontSize: 16, marginTop: 8 }}>name</Text>
+          <Text style={{ fontSize: 16, marginTop: 8 }}>{username}</Text>
           <Text type={'secondary'} style={{ marginTop: 4, marginBottom: 16 }}>
-            Address
+            {address.slice(0, 16)}...
           </Text>
           <Tag className={styles.view}>{formatMessage({ id: 'dashboard.account.view' })}</Tag>
         </div>
