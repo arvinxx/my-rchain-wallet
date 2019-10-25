@@ -10,7 +10,7 @@ import { ConnectProps, ConnectState } from '@/models/connect';
 import { CurrentUser } from '@/models/user';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
-import { getItem } from '@/utils/utils';
+import { getDecryptedItem, getItem } from '@/utils/utils';
 
 export interface GlobalHeaderRightProps extends ConnectProps {
   currentUser?: CurrentUser;
@@ -29,7 +29,7 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
 
   render(): React.ReactNode {
     const { menu } = this.props;
-    const userList = getItem('userList');
+    const userList = getDecryptedItem('userList');
     const currentUser = getItem('currentUser');
     const { username, address } = userList.find(user => (user.username = currentUser));
     const data = new Identicon(address).toString();

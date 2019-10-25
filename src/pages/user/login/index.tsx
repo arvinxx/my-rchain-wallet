@@ -13,7 +13,8 @@ import { ReactComponent as NewAccount } from '@/assets/img/new_account.svg';
 
 import { Dispatch } from 'redux';
 import { UserModelState } from '@/models/user';
-import { getItem, setItem } from '@/utils/utils';
+import { getDecryptedItem, getItem, setItem } from '@/utils/utils';
+import { IAccount } from '@/services/account';
 
 const { Text, Title } = Typography;
 const { Option } = Select;
@@ -68,7 +69,7 @@ export default class Login extends Component<LoginProps, LoginState> {
   };
 
   componentDidMount(): void {
-    const userList = getItem('userList');
+    const userList = getDecryptedItem('userList');
     if (userList) {
       this.setState({
         user: userList[0].username,
@@ -81,14 +82,14 @@ export default class Login extends Component<LoginProps, LoginState> {
   };
   login = () => {
     const { password, user: username } = this.state;
-    const userList = getItem('userList');
+    const userList: IAccount[] = getDecryptedItem('userList');
     const user = userList.find(user => user.username === username);
     if (user && user.pwd === password) {
       setItem('currentUser', username);
 
       const { query } = this.props.location;
-      if (query && query.rediect) {
-        router.push(query.rediect);
+      if (query && query.redirect) {
+        window.location.href = query.redirect;
       } else {
         router.push('/');
       }
@@ -104,7 +105,7 @@ export default class Login extends Component<LoginProps, LoginState> {
 
   render() {
     const { password, user, error } = this.state;
-    const userList = getItem('userList');
+    const userList: IAccount[] = getDecryptedItem('userList');
 
     let isNew = userList ? userList.length === 0 : true;
 

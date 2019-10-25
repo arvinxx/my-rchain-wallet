@@ -6,7 +6,7 @@ import { Button, Typography, Checkbox, Input, Divider, message } from 'antd';
 import { Link, router } from 'umi';
 import { LabelSelector } from './components';
 import { CreateAccount } from '@/components';
-import { copyToClipboard, getItem, setItem } from '@/utils/utils';
+import { copyToClipboard, getDecryptedItem, setItem } from '@/utils/utils';
 
 const { Title, Text } = Typography;
 
@@ -27,7 +27,7 @@ export default class SignUp extends Component<ISignUpProps> {
     });
   };
   copy = () => {
-    const mnemonic = getItem('mnemonic');
+    const mnemonic = getDecryptedItem('mnemonic');
     let string = '';
     mnemonic.forEach((word: string) => {
       string += word + ' ';
@@ -65,7 +65,7 @@ export default class SignUp extends Component<ISignUpProps> {
 
   finish = () => {
     localStorage.removeItem('mnemonic');
-    const userList = getItem('userList');
+    const userList = getDecryptedItem('userList');
     const { username } = userList[userList.length - 1];
     setItem('currentUser', username);
     router.push('/');
@@ -73,7 +73,7 @@ export default class SignUp extends Component<ISignUpProps> {
 
   render() {
     const { step, verified, clear } = this.state;
-    const phrase = getItem('mnemonic');
+    const phrase = getDecryptedItem('mnemonic');
     return (
       <div className={styles.container}>
         <Title level={2} style={{ marginBottom: 0 }}>

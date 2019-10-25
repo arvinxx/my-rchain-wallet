@@ -6,6 +6,14 @@ import {
 } from '@/utils/blockchain';
 import { getAddrFromPublicKey } from '@/utils/rnode';
 
+export interface IAccount {
+  address: string;
+  ethAddr: string;
+  privateKey: string;
+  pwd: string;
+  username: string;
+  mnemonic?: string;
+}
 export const getAccountFromPrivateKey = (privateKey: string) => {
   const publicKey = getPublicKeyFromPrivateKey(privateKey);
   const res = getAddrFromPublicKey(publicKey);

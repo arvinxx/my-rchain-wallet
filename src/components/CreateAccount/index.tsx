@@ -5,14 +5,9 @@ import { Button, Checkbox } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 
 import { Link } from 'umi';
-import { getItem, setItem } from '@/utils/utils';
-import {
-  getMnemonic,
-  getKeyPairFromMnemonic,
-  getRevAddressFromPublicKey,
-  getPublicKeyFromPrivateKey,
-} from '@/utils/blockchain';
-import { getAccountFromMnemonic, getAccountFromPrivateKey } from '@/services/account';
+import { getDecryptedItem, getItem, setEncryptedItem, setItem } from '@/utils/utils';
+import { getMnemonic } from '@/utils/blockchain';
+import { getAccountFromMnemonic, getAccountFromPrivateKey, IAccount } from '@/services/account';
 
 type Type = 'username' | 'password' | 'confirm';
 
@@ -67,7 +62,7 @@ export default class CreateAccount extends Component<ICreateAccountProps, ICreat
       isValid = false;
     }
     let repeat = false;
-    const userList = getItem('userList');
+    const userList = getDecryptedItem('userList');
     if (userList) {
       userList.forEach(user => {
         if (user.username === username) {
@@ -107,7 +102,7 @@ export default class CreateAccount extends Component<ICreateAccountProps, ICreat
   onRegister = () => {
     const { next, type } = this.props;
     const { password, username } = this.state;
-    let account;
+    let account: IAccount;
     if (type === 'signup') {
       const mnemonic = getMnemonic();
       const { ethAddr, revAddr, privateKey } = getAccountFromMnemonic(mnemonic);
@@ -122,14 +117,14 @@ export default class CreateAccount extends Component<ICreateAccountProps, ICreat
         mnemonic,
       };
 
-      setItem('mnemonic', mnemonic.split(' '));
+      setEncryptedItem('mnemonic', mnemonic.split(' '));
     }
 
     if (type === 'restore') {
       // TODO: 完成基于私钥或者账户恢复的功能
       const restoreType = getItem('restore');
       if (restoreType === 'private') {
-        const privateKey = getItem('privateKey');
+        const privateKey = getDecryptedItem('privateKey');
         const res = getAccountFromPrivateKey(privateKey);
         if (res) {
           const { address, ethAddr } = res;
@@ -144,7 +139,7 @@ export default class CreateAccount extends Component<ICreateAccountProps, ICreat
         localStorage.removeItem('privateKey');
       }
       if (restoreType === 'phrase') {
-        const mnemonic = getItem('mnemonic');
+        const mnemonic = getDecryptedItem('mnemonic');
         const { ethAddr, revAddr, privateKey } = getAccountFromMnemonic(mnemonic);
         account = {
           username,
@@ -158,9 +153,9 @@ export default class CreateAccount extends Component<ICreateAccountProps, ICreat
       }
       localStorage.removeItem('restore');
     }
-    const userList = getItem('userList') || [];
+    const userList = getDecryptedItem('userList') || [];
     setItem('currentUser', username);
-    setItem('userList', userList.concat(account));
+    setEncryptedItem('userList', userList.concat(account));
     console.log(account);
     next();
   };
