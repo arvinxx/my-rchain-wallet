@@ -29,9 +29,9 @@ export const setEncryptedItem = (key: IEncryptedData, value: any) => {
 
 export const getDecryptedItem = (key: IEncryptedData) => {
   const res = localStorage.getItem(key) as string;
-  const des = decrypt(res);
-  if (res && des) {
-    return JSON.parse(des);
+  if (res) {
+    const des = decrypt(res);
+    return des ? JSON.parse(des) : undefined;
   }
 };
 export const copyToClipboard = (string: string): boolean => {
