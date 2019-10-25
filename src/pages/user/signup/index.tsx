@@ -85,16 +85,10 @@ export default class SignUp extends Component<ISignUpProps> {
               id={'sign-up.description'}
               values={{
                 restore: (
-                  <Link target={'_blank'} to={'/user/restore'}>
+                  <Link to={'/user/restore'}>
                     {formatMessage({ id: 'sign-up.description.restore' })}
                   </Link>
                 ),
-                // TODO: wait for umi-locale update react-intl to 3.x
-                // a: msg => (
-                //   <Link target={'_blank'} to={'/user/restore'}>
-                //     {msg}
-                //   </Link>
-                // ),
               }}
             />
           ) : step === 1 ? (
