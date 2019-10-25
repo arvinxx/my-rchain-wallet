@@ -26,8 +26,10 @@
 }
 
 .img {
-  height: 200px;
-  margin-bottom: 16px;
+  height: 280px;
+  @media (max-width: @screen-sm-max) {
+    height: 200px;
+  }
 }
 
 .newBtn {
@@ -38,6 +40,13 @@
   font-size: 18px;
 
   margin-top: 24px;
+  @media (max-width: @screen-sm-max) {
+    margin-top: 12px;
+    height: 48px;
+    line-height: 48px;
+    font-size: 16px;
+
+  }
 }
 
 .description {

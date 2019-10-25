@@ -1,5 +1,5 @@
 export default {
-  'user-login.login.none-account': 'The browser cannot find any account for current domain',
+  'user-login.login.none-account': 'It seems you are a new user?',
   'user-login.login.create-account': 'Create New Account',
   'user-login.login.password': 'password',
   'user-login.login.title': 'Sign In',
