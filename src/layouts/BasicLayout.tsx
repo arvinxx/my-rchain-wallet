@@ -56,19 +56,21 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   /**
    * constructor
    */
-
-  window.onfocus = () => {
+  const checkLocked = () => {
     const lastLogin = localStorage.getItem('lastLogin') as string;
     const dueTime = 30 * 60 * 1000;
     const duration = new Date().valueOf() - lastLogin;
+
     if (duration > dueTime) {
       dispatch({
         type: 'global/save',
         payload: { locked: true },
       });
-    } else {
-      console.log('解锁');
     }
+  };
+
+  window.onfocus = () => {
+    checkLocked();
   };
 
   /**
@@ -84,12 +86,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   };
 
   useEffect(() => {
-    if (dispatch) {
-      dispatch({
-        type: 'global/save',
-        payload: { locked: true },
-      });
-    }
+    checkLocked();
   }, []);
 
   return (
