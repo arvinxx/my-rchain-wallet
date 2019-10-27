@@ -110,8 +110,6 @@ export default class Login extends Component<LoginProps, LoginState> {
 
     let isNew = userList ? userList.length === 0 : true;
 
-    // TODO: 根据 userList 解密
-
     return (
       <div className={styles.container}>
         {isNew ? (

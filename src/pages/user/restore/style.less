@@ -9,6 +9,11 @@
   > * {
     margin: 8px 0;
   }
+
+  @media (max-width: @screen-sm-max) {
+    width: auto;
+    padding: 0;
+  }
 }
 .description {
   padding: 0 40px;
@@ -28,6 +33,9 @@
   justify-content: space-between;
   cursor: pointer;
   transition: all ease-in-out 0.3s;
+  @media (max-width: @screen-xs-min) {
+    min-width: auto;
+  }
   .icon {
     font-size: 80px;
     color: @primary-color;
@@ -49,6 +57,10 @@
 }
 .card {
   width: 180px;
+  @media (max-width: @screen-xs-min) {
+    width: auto;
+    margin-left: 16px;
+  }
 }
 .phrase {
   width: 400px;
@@ -57,6 +69,9 @@
     margin: 16px 0;
     height: 100px !important;
   }
+  @media (max-width: @screen-xs-min) {
+    width: auto;
+  }
 }
 .private {
   width: 400px;
@@ -64,6 +79,9 @@
     margin: 16px 0;
     height: 40px;
     line-height: 40px;
+  }
+  @media (max-width: @screen-xs-min) {
+    width: auto;
   }
 }
 .button {

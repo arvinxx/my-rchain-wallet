@@ -1,5 +1,5 @@
 export default {
-  'user-login.login.none-account': '浏览器找不到用户信息',
+  'user-login.login.none-account': '您似乎是新用户',
   'user-login.login.create-account': '立即创建账户',
   'user-login.login.title': '登录',
   'user-login.login.title.description': '登录或者 {create}',
