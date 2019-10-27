@@ -8,7 +8,7 @@ export const isUrl = (path: string): boolean => reg.test(path);
 
 export const getPageQuery = () => parse(window.location.href.split('?')[1]);
 
-type ILocalData = 'currentUser' | 'restore';
+type ILocalData = 'currentUser' | 'restore' | 'lastLogin';
 type IEncryptedData = 'userList' | 'mnemonic' | 'privateKey';
 
 export const setItem = (key: ILocalData, value: any) => {

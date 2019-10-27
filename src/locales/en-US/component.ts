@@ -19,4 +19,8 @@ export default {
   'component.create-account.agreement.service': 'Terms of Service',
   'component.create-account.button.signup': 'Register',
   'component.create-account.button.restore': 'Done!',
+  'component.unlock.title': 'Welcome Back',
+  'component.unlock.desc': 'Please type in your password to unlock',
+  'component.unlock.password': 'Type in your password',
+  'component.unlock.error': 'Password is valid, please try it again.',
 };

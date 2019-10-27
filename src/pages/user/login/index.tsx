@@ -86,6 +86,7 @@ export default class Login extends Component<LoginProps, LoginState> {
     const user = userList.find(user => user.username === username);
     if (user && user.pwd === password) {
       setItem('currentUser', username);
+      setItem('lastLogin', new Date().valueOf());
 
       const { query } = this.props.location;
       if (query && query.redirect) {

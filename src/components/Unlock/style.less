@@ -1,0 +1,60 @@
+@import '~antd/es/style/themes/default.less';
+
+.container {
+  padding: 0;
+  :global {
+    .ant-modal-body {
+      padding: 0;
+    }
+    .ant-modal-content {
+      overflow: hidden;
+    }
+  }
+}
+
+.bg {
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f6e5ea;
+}
+.illustration {
+  //margin-bottom: 6px;
+  height: 110px;
+}
+.input {
+  margin-top: 16px;
+  line-height: 40px;
+  height: 40px;
+  font-size: 16px;
+  :global {
+    .ant-input {
+      border-radius: 20px;
+      &:not(:first-child) {
+        padding-left: 36px;
+      }
+    }
+  }
+}
+
+.icon {
+  color: @text-color-secondary;
+  font-size: 16px;
+  margin-right: 4px;
+}
+
+.button {
+  background-color: @border-color-base;
+  border-color: @border-color-base;
+  border-radius: 20px !important;
+}
+
+.content {
+  padding: 24px;
+  text-align: center;
+}
+
+.error {
+  margin-top: 8px;
+}

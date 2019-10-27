@@ -13,6 +13,7 @@ export interface NoticeItem extends NoticeIconData {
 
 export interface GlobalModelState {
   collapsed: boolean;
+  locked: boolean;
   notices: NoticeItem[];
 }
 
@@ -25,6 +26,7 @@ export interface GlobalModelType {
     changeNoticeReadState: Effect;
   };
   reducers: {
+    save: Reducer<GlobalModelState>;
     changeLayoutCollapsed: Reducer<GlobalModelState>;
     saveNotices: Reducer<GlobalModelState>;
     saveClearedNotices: Reducer<GlobalModelState>;
@@ -37,6 +39,7 @@ const GlobalModel: GlobalModelType = {
 
   state: {
     collapsed: false,
+    locked: false,
     notices: [],
   },
 
@@ -102,6 +105,9 @@ const GlobalModel: GlobalModelType = {
   },
 
   reducers: {
+    save(state, { payload }) {
+      return { ...state, ...payload };
+    },
     changeLayoutCollapsed(state = { notices: [], collapsed: true }, { payload }): GlobalModelState {
       return {
         ...state,
@@ -110,8 +116,8 @@ const GlobalModel: GlobalModelType = {
     },
     saveNotices(state, { payload }): GlobalModelState {
       return {
-        collapsed: false,
         ...state,
+        collapsed: false,
         notices: payload,
       };
     },
@@ -127,11 +133,13 @@ const GlobalModel: GlobalModelType = {
   subscriptions: {
     setup({ history }): void {
       // Subscribe history(url) change, trigger `load` action if pathname is `/`
-      history.listen(({ pathname, search }): void => {
-        if (typeof window.ga !== 'undefined') {
-          window.ga('send', 'pageview', pathname + search);
-        }
-      });
+      history.listen(
+        ({ pathname, search }): void => {
+          if (typeof window.ga !== 'undefined') {
+            window.ga('send', 'pageview', pathname + search);
+          }
+        },
+      );
     },
   },
 };

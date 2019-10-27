@@ -18,4 +18,8 @@ export default {
   'component.create-account.agreement.service': '服务条款',
   'component.create-account.button.signup': '注册',
   'component.create-account.button.restore': '完成',
+  'component.unlock.title': '欢迎回来',
+  'component.unlock.desc': '请输入密码进行解锁',
+  'component.unlock.password': '请输入密码',
+  'component.unlock.error': '密码输入有误，请重试',
 };

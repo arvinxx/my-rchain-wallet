@@ -12,6 +12,8 @@ export { default as MenuUnfoldOutline } from '@ant-design/icons-svg/lib/outline/
 export { default as GlobalOutline } from '@ant-design/icons-svg/lib/outline/GlobalOutline';
 export { default as SearchOutline } from '@ant-design/icons-svg/lib/outline/SearchOutline';
 export { default as DownOutline } from '@ant-design/icons-svg/lib/outline/DownOutline';
+export { default as LockOutline } from '@ant-design/icons-svg/lib/outline/LockOutline';
+export { default as ArrowRightOutline } from '@ant-design/icons-svg/lib/outline/ArrowRightOutline';
 
 export { default as CheckCircleFill } from '@ant-design/icons-svg/lib/fill/CheckCircleFill';
 export { default as CloseCircleFill } from '@ant-design/icons-svg/lib/fill/CloseCircleFill';

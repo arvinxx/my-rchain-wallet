@@ -8,6 +8,7 @@ import Link from 'umi/link';
 import { Dispatch } from 'redux';
 import { connect } from 'dva';
 import { Layout } from 'antd';
+
 import { formatMessage } from 'umi-plugin-react/locale';
 
 import RightContent from '@/components/GlobalHeader/RightContent';
@@ -16,6 +17,7 @@ import styles from './BasicLayout.less';
 
 import rectLogo from '../assets/logo-long.svg';
 import circleLogo from '../assets/logo-circle.svg';
+import { Unlock } from '@/components';
 
 const { Footer } = Layout;
 
@@ -24,6 +26,7 @@ export interface BasicLayoutProps extends ProLayoutProps {
     [path: string]: MenuDataItem;
   };
   settings: Settings;
+  locked: boolean;
   dispatch: Dispatch;
 }
 export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
@@ -49,21 +52,24 @@ export const footerRender: BasicLayoutProps['footerRender'] = () => (
 );
 
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
-  const { dispatch, collapsed, children, settings } = props;
+  const { dispatch, collapsed, children, settings, locked } = props;
   /**
    * constructor
    */
 
-  useEffect(() => {
-    // if (dispatch) {
-    //   dispatch({
-    //     type: 'user/fetchCurrent',
-    //   });
-    //   dispatch({
-    //     type: 'settings/getSetting',
-    //   });
-    // }
-  }, []);
+  window.onfocus = () => {
+    const lastLogin = localStorage.getItem('lastLogin') as string;
+    const dueTime = 30 * 60 * 1000;
+    const duration = new Date().valueOf() - lastLogin;
+    if (duration > dueTime) {
+      dispatch({
+        type: 'global/save',
+        payload: { locked: true },
+      });
+    } else {
+      console.log('解锁');
+    }
+  };
 
   /**
    * init variables
@@ -76,52 +82,65 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       });
     }
   };
+
+  useEffect(() => {
+    if (dispatch) {
+      dispatch({
+        type: 'global/save',
+        payload: { locked: true },
+      });
+    }
+  }, []);
+
   return (
-    <div className={styles.layout}>
-      <ProLayout
-        logo={circleLogo}
-        menuHeaderRender={() => (
-          <img className={styles.logo} src={collapsed ? circleLogo : rectLogo} alt="MRW" />
-        )}
-        onCollapse={handleMenuCollapse}
-        menuItemRender={(menuItemProps, defaultDom) => {
-          if (menuItemProps.isUrl) {
-            return defaultDom;
-          }
-          return <Link to={menuItemProps.path}>{defaultDom}</Link>;
-        }}
-        breadcrumbRender={(routers = []) => [
-          {
-            path: '/',
-            breadcrumbName: formatMessage({
-              id: 'menu.home',
-              defaultMessage: 'Home',
-            }),
-          },
-          ...routers,
-        ]}
-        itemRender={(route, params, routes, paths) => {
-          const first = routes.indexOf(route) === 0;
-          return first ? (
-            <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
-          ) : (
-            <span>{route.breadcrumbName}</span>
-          );
-        }}
-        footerRender={footerRender}
-        menuDataRender={menuDataRender}
-        formatMessage={formatMessage}
-        rightContentRender={rightProps => <RightContent {...rightProps} />}
-        {...props}
-        {...settings}
-      >
-        {children}
-      </ProLayout>
+    <div className={`${styles.layout} ${locked ? styles.blur : ''}`}>
+      <Unlock>
+        <ProLayout
+          logo={circleLogo}
+          menuHeaderRender={() => (
+            <img className={styles.logo} src={collapsed ? circleLogo : rectLogo} alt="MRW" />
+          )}
+          onCollapse={handleMenuCollapse}
+          menuItemRender={(menuItemProps, defaultDom) => {
+            if (menuItemProps.isUrl) {
+              return defaultDom;
+            }
+            return <Link to={menuItemProps.path}>{defaultDom}</Link>;
+          }}
+          breadcrumbRender={(routers = []) => [
+            {
+              path: '/',
+              breadcrumbName: formatMessage({
+                id: 'menu.home',
+                defaultMessage: 'Home',
+              }),
+            },
+            ...routers,
+          ]}
+          itemRender={(route, params, routes, paths) => {
+            const first = routes.indexOf(route) === 0;
+            return first ? (
+              <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
+            ) : (
+              <span>{route.breadcrumbName}</span>
+            );
+          }}
+          footerRender={footerRender}
+          menuDataRender={menuDataRender}
+          formatMessage={formatMessage}
+          rightContentRender={rightProps => <RightContent {...rightProps} />}
+          {...props}
+          {...settings}
+        >
+          {children}
+        </ProLayout>
+      </Unlock>
     </div>
   );
 };
 
 export default connect(({ global, settings }: ConnectState) => ({
   collapsed: global.collapsed,
+  locked: global.locked,
   settings,
 }))(BasicLayout);
