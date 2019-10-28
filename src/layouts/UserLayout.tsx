@@ -62,7 +62,7 @@ const UserLayout: React.SFC<UserLayoutProps> = props => {
               blankTarget: true,
             },
           ]}
-          copyright={`© 2019 MyRChainWallet - ${formatMessage({ id: 'component.footer.rights' })}`}
+          copyright={` 2019 MyRChainWallet - ${formatMessage({ id: 'component.footer.rights' })}`}
         />
       </div>
     </DocumentTitle>
