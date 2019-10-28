@@ -15,6 +15,7 @@ import { Dispatch } from 'redux';
 import { UserModelState } from '@/models/user';
 import { getDecryptedItem, getItem, setItem } from '@/utils/utils';
 import { IAccount } from '@/services/account';
+import { showHiddenAddress } from '@/utils/blockchain';
 
 const { Text, Title } = Typography;
 const { Option } = Select;
@@ -161,7 +162,7 @@ export default class Login extends Component<LoginProps, LoginState> {
                       <div className={styles.text}>
                         <div>{username}</div>
                         <Text type={'secondary'} style={{ fontSize: 12 }}>
-                          {address}
+                          {showHiddenAddress(address, 8)}
                         </Text>
                       </div>
                     </div>
