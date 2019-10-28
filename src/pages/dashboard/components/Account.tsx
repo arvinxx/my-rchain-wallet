@@ -5,6 +5,7 @@ import identicon from 'identicon.js';
 import { formatMessage } from 'umi-plugin-locale';
 import { IAccount } from '@/services/account';
 import { getDecryptedItem, getItem } from '@/utils/utils';
+import { showHiddenAddress } from '@/utils/blockchain';
 
 const { Text } = Typography;
 
@@ -23,7 +24,7 @@ export default function() {
           <div>{formatMessage({ id: 'dashboard.account.title' })}</div>
           <div>
             <Text type={'secondary'} className={styles.address}>
-              {address}
+              {showHiddenAddress(address)}
             </Text>
           </div>
         </div>
@@ -37,7 +38,7 @@ export default function() {
 
           <Text style={{ fontSize: 16, marginTop: 8 }}>{username}</Text>
           <Text type={'secondary'} style={{ marginTop: 4, marginBottom: 16 }}>
-            {address.slice(0, 16)}...
+            {showHiddenAddress(address)}
           </Text>
           <Tag className={styles.view}>{formatMessage({ id: 'dashboard.account.view' })}</Tag>
         </div>

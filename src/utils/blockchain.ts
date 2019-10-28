@@ -40,3 +40,13 @@ export const getPublicKeyFromPrivateKey = (privateKey: string) => {
   const wallet = fromPrivateKey(toBuffer(privateKey));
   return wallet.getPublicKeyString();
 };
+/**
+ * transfer address to a hidden address
+ * @param address
+ * @param count charterer lengths of start and end
+*/
+export const showHiddenAddress = (address: string, count: number = 5) => {
+  const prefix = address.slice(0, count);
+  const suffix = address.slice(-count);
+  return prefix + '*****' + suffix;
+};

@@ -208,10 +208,7 @@ export default class CreateAccount extends Component<ICreateAccountProps, ICreat
         <div
           className={styles.agree}
           onClick={() => {
-            console.log(agree);
-            this.setState({
-              agree: !agree,
-            });
+            this.setState({ agree: !agree });
           }}
         >
           <Checkbox
