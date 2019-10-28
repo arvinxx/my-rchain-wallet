@@ -6,6 +6,7 @@ export default {
   'menu.register': 'Register',
   'menu.signup': 'Sign Up',
   'menu.register.result': 'Register Result',
+  'menu.restore': 'Restore Account',
   'menu.dashboard': 'Dashboard',
   'menu.dashboard.analysis': 'Analysis',
   'menu.dashboard.monitor': 'Monitor',

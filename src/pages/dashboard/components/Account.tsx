@@ -12,7 +12,7 @@ const { Text } = Typography;
 export default function() {
   const userList: IAccount[] = getDecryptedItem('userList');
   const currentUser = getItem('currentUser');
-  const { username, address } = userList.find(user => (user.username = currentUser));
+  const { username, address } = userList.find(user => user.username === currentUser);
 
   const data = new identicon(address);
   const avatar = `data:image/png;base64,${data}`;

@@ -7,7 +7,7 @@ import { Typography, Button, Divider, Input } from 'antd';
 import { Link } from 'umi';
 import router from 'umi/router';
 import { getItem, setEncryptedItem, setItem } from '@/utils/utils';
-import { getPublicKeyFromPrivateKey } from '@/utils/blockchain';
+import { isValidMnemonic, isValidPrivateKey } from '@/utils/blockchain';
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;
@@ -27,12 +27,29 @@ export default class Restore extends Component<IRestoreProps> {
     if (method) {
       this.setState({ step: step + 1, method });
     } else {
-      this.setState({ step: step + 1 });
       setItem('restore', way);
-      if (way === 'phrase') {
-        setEncryptedItem('mnemonic', phrase);
+      if (way === 'mnemonic') {
+        const cleanPhrase = phrase.replace(/(^\s*)|(\s*$)/g, '');
+        const valid = isValidMnemonic(cleanPhrase);
+        if (valid) {
+          setEncryptedItem('mnemonic', cleanPhrase);
+          this.setState({ step: step + 1 });
+        } else {
+          this.setState({
+            error: 'mnemonic',
+          });
+        }
       } else if (way === 'private') {
-        setEncryptedItem('privateKey', privateKey);
+        const validPrivateKey = isValidPrivateKey(privateKey);
+        if (validPrivateKey !== '') {
+          this.setState({ step: step + 1 });
+          console.log(validPrivateKey);
+          setEncryptedItem('privateKey', validPrivateKey);
+        } else {
+          this.setState({
+            error: 'private',
+          });
+        }
       }
     }
   };
@@ -42,14 +59,11 @@ export default class Restore extends Component<IRestoreProps> {
     this.setState({ step: step - 1 });
   };
   finish = () => {
-    //TODO: real function
-
-    // Check data validity
     router.push('/');
   };
 
   render() {
-    const { method, phrase, step, privateKey } = this.state;
+    const { method, phrase, step, privateKey, error } = this.state;
     return (
       <div className={styles.container}>
         <Title level={2} style={{ marginBottom: 0 }}>
@@ -69,26 +83,33 @@ export default class Restore extends Component<IRestoreProps> {
         <Divider dashed className={styles.divider} />
 
         {step === 1 ? (
-          method === 'phrase' ? (
+          method === 'mnemonic' ? (
             <div className={styles.phrase}>
               <div>
-                <FormattedMessage id={'user-restore.method.phrase.input.info'} />
+                <FormattedMessage id={'user-restore.method.mnemonic.input.info'} />
               </div>
               <Text type={'secondary'} style={{ fontSize: 12 }}>
-                <FormattedMessage id={'user-restore.method.phrase.input.description'} />
+                <FormattedMessage id={'user-restore.method.mnemonic.input.description'} />
               </Text>
-              <TextArea
-                className={styles.textArea}
-                value={phrase}
-                onChange={e => {
-                  this.setState({
-                    phrase: e.target.value,
-                  });
-                }}
-                placeholder={formatMessage({
-                  id: 'user-restore.method.phrase.input.placeholder',
-                })}
-              />
+              <div className={styles.inputWrapper}>
+                <TextArea
+                  className={styles.textArea}
+                  value={phrase}
+                  onChange={e => {
+                    this.setState({
+                      phrase: e.target.value,
+                    });
+                  }}
+                  placeholder={formatMessage({
+                    id: 'user-restore.method.mnemonic.input.placeholder',
+                  })}
+                />
+                {error === 'mnemonic' ? (
+                  <Text type={'danger'} className={styles.error}>
+                    <FormattedMessage id={'user-restore.method.mnemonic.error'} />
+                  </Text>
+                ) : null}
+              </div>
               <Button
                 disabled={!phrase}
                 type={'primary'}
@@ -104,18 +125,25 @@ export default class Restore extends Component<IRestoreProps> {
                 <FormattedMessage id={'user-restore.method.private.input.info'} />
               </div>
 
-              <Input
-                value={privateKey}
-                className={styles.input}
-                onChange={e => {
-                  this.setState({
-                    privateKey: e.target.value,
-                  });
-                }}
-                placeholder={formatMessage({
-                  id: 'user-restore.method.private.input.placeholder',
-                })}
-              />
+              <div className={styles.inputWrapper}>
+                <Input
+                  value={privateKey}
+                  className={styles.input}
+                  onChange={e => {
+                    this.setState({
+                      privateKey: e.target.value,
+                    });
+                  }}
+                  placeholder={formatMessage({
+                    id: 'user-restore.method.private.input.placeholder',
+                  })}
+                />
+                {error === 'private' ? (
+                  <Text type={'danger'} className={styles.error}>
+                    <FormattedMessage id={'user-restore.method.private.input.error'} />
+                  </Text>
+                ) : null}
+              </div>
               <Button
                 disabled={!privateKey}
                 type={'primary'}
@@ -144,14 +172,14 @@ export default class Restore extends Component<IRestoreProps> {
                 </Text>
               </div>
             </div>
-            <div className={styles.method} onClick={() => this.handleStep('phrase')}>
+            <div className={styles.method} onClick={() => this.handleStep('mnemonic')}>
               <IconFont className={styles.icon} type={'mrw-brain'} />
               <div className={styles.card}>
                 <Title level={4}>
-                  <FormattedMessage id={'user-restore.method.phrase'} />
+                  <FormattedMessage id={'user-restore.method.mnemonic'} />
                 </Title>
                 <Text type={'secondary'}>
-                  <FormattedMessage id={'user-restore.method.phrase.description'} />
+                  <FormattedMessage id={'user-restore.method.mnemonic.description'} />
                 </Text>
               </div>
             </div>

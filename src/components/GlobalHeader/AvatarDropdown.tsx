@@ -24,6 +24,8 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
 
     if (key === 'logout') {
       localStorage.removeItem('currentUser');
+      router.push('/');
+      return;
     }
     router.push(`/account/${key}`);
   };

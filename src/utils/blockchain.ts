@@ -1,5 +1,12 @@
-import { generateMnemonic, mnemonicToSeedSync } from 'bip39';
-import { bufferToHex, toBuffer, pubToAddress, toChecksumAddress } from 'ethereumjs-util';
+import { generateMnemonic, mnemonicToSeedSync, validateMnemonic } from 'bip39';
+import {
+  bufferToHex,
+  toBuffer,
+  pubToAddress,
+  isValidPrivate,
+  toChecksumAddress,
+  addHexPrefix,
+} from 'ethereumjs-util';
 import hdkey from 'ethereumjs-wallet/hdkey';
 import { fromPrivateKey } from 'ethereumjs-wallet';
 
@@ -40,11 +47,32 @@ export const getPublicKeyFromPrivateKey = (privateKey: string) => {
   const wallet = fromPrivateKey(toBuffer(privateKey));
   return wallet.getPublicKeyString();
 };
+
+/**
+ * Check validate of private key typed in
+ * @param privateKey private key
+ */
+export const isValidPrivateKey = (privateKey: string): string => {
+  let valid = isValidPrivate(toBuffer(privateKey));
+  if (valid) {
+    return privateKey;
+  }
+  const addHexPrivateKey = addHexPrefix(privateKey);
+  valid = isValidPrivate(toBuffer(addHexPrivateKey));
+  if (valid) {
+    return addHexPrivateKey;
+  }
+  return '';
+};
+
+export const isValidMnemonic = (phrase: string) => {
+  return validateMnemonic(phrase);
+};
 /**
  * transfer address to a hidden address
  * @param address
  * @param count charterer lengths of start and end
-*/
+ */
 export const showHiddenAddress = (address: string, count: number = 5) => {
   const prefix = address.slice(0, count);
   const suffix = address.slice(-count);

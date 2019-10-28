@@ -108,7 +108,6 @@ export default class CreateAccount extends Component<ICreateAccountProps, ICreat
       const mnemonic = getMnemonic();
       const { ethAddr, revAddr, privateKey } = getAccountFromMnemonic(mnemonic);
 
-      // TODO: 优化用户数据保存方式
       account = {
         username,
         pwd: password,
@@ -122,7 +121,6 @@ export default class CreateAccount extends Component<ICreateAccountProps, ICreat
     }
 
     if (type === 'restore') {
-      // TODO: 完成基于私钥或者账户恢复的功能
       const restoreType = getItem('restore');
       if (restoreType === 'private') {
         const privateKey = getDecryptedItem('privateKey');
@@ -139,7 +137,7 @@ export default class CreateAccount extends Component<ICreateAccountProps, ICreat
         }
         localStorage.removeItem('privateKey');
       }
-      if (restoreType === 'phrase') {
+      if (restoreType === 'mnemonic') {
         const mnemonic = getDecryptedItem('mnemonic');
         const { ethAddr, revAddr, privateKey } = getAccountFromMnemonic(mnemonic);
         account = {
