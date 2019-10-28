@@ -48,7 +48,14 @@ class Unlock extends Component<IUnlockProps> {
     const { password, error } = this.state;
     return (
       <>
-        <Modal className={styles.container} centered visible={visible} footer={null} width={320}>
+        <Modal
+          className={styles.container}
+          closable={false}
+          centered
+          visible={visible}
+          footer={null}
+          width={320}
+        >
           <div className={styles.bg}>
             <UnlockIcon className={styles.illustration} />
           </div>
