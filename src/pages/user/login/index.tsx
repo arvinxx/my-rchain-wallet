@@ -15,6 +15,7 @@ import { Dispatch } from 'redux';
 import { UserModelState } from '@/models/user';
 import { getDecryptedItem, getItem, setItem } from '@/utils/utils';
 import { IAccount } from '@/services/account';
+import { accountLogin } from '@/services/login';
 import { showHiddenAddress } from '@/utils/blockchain';
 
 const { Text, Title } = Typography;
@@ -86,8 +87,7 @@ export default class Login extends Component<LoginProps, LoginState> {
     const userList: IAccount[] = getDecryptedItem('userList');
     const user = userList.find(user => user.username === username);
     if (user && user.pwd === password) {
-      setItem('currentUser', username);
-      setItem('lastLogin', new Date().valueOf());
+      accountLogin(username);
 
       const { query } = this.props.location;
       if (query && query.redirect) {

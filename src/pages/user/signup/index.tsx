@@ -7,6 +7,7 @@ import { Link, router } from 'umi';
 import { LabelSelector } from './components';
 import { CreateAccount } from '@/components';
 import { copyToClipboard, getDecryptedItem, setItem } from '@/utils/utils';
+import { accountLogin } from '@/services/login';
 
 const { Title, Text } = Typography;
 
@@ -67,7 +68,7 @@ export default class SignUp extends Component<ISignUpProps> {
     localStorage.removeItem('mnemonic');
     const userList = getDecryptedItem('userList');
     const { username } = userList[userList.length - 1];
-    setItem('currentUser', username);
+    accountLogin(username);
     router.push('/');
   };
 

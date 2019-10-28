@@ -53,9 +53,7 @@ export const footerRender: BasicLayoutProps['footerRender'] = () => (
 
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const { dispatch, collapsed, children, settings, locked } = props;
-  /**
-   * constructor
-   */
+
   const checkLocked = () => {
     const lastLogin = localStorage.getItem('lastLogin') as string;
     const dueTime = 30 * 60 * 1000;

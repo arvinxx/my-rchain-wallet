@@ -8,6 +8,7 @@ import { Link } from 'umi';
 import { getDecryptedItem, getItem, setEncryptedItem, setItem } from '@/utils/utils';
 import { getMnemonic } from '@/utils/blockchain';
 import { getAccountFromMnemonic, getAccountFromPrivateKey, IAccount } from '@/services/account';
+import { accountLogin } from '@/services/login';
 
 type Type = 'username' | 'password' | 'confirm';
 
@@ -154,9 +155,8 @@ export default class CreateAccount extends Component<ICreateAccountProps, ICreat
       localStorage.removeItem('restore');
     }
     const userList = getDecryptedItem('userList') || [];
-    setItem('currentUser', username);
+    accountLogin(username);
     setEncryptedItem('userList', userList.concat(account));
-    console.log(account);
     next();
   };
 

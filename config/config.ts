@@ -54,8 +54,15 @@ const plugins: IPlugin[] = [
       code: 'UA-148135393-1',
     },
   ],
+  [
+    'umi-plugin-auto-externals',
+    {
+      packages: ['antd', 'moment'],
+      urlTemplate: 'https://unpkg.com/{{ library }}@{{ version }}/{{ path }}',
+      checkOnline: false,
+    },
+  ],
 ];
-
 export default {
   plugins,
   history: 'hash',

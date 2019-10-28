@@ -1,4 +1,4 @@
-import request from 'umi-request';
+import { setItem } from '@/utils/utils';
 
 export interface LoginParamsType {
   userName: string;
@@ -7,13 +7,7 @@ export interface LoginParamsType {
   captcha: string;
 }
 
-export async function fakeAccountLogin(params: LoginParamsType) {
-  return request('/api/login/account', {
-    method: 'POST',
-    data: params,
-  });
-}
-
-export async function getFakeCaptcha(mobile: string) {
-  return request(`/api/login/captcha?mobile=${mobile}`);
-}
+export const accountLogin = (username: string) => {
+  setItem('currentUser', username);
+  setItem('lastLogin', new Date().valueOf());
+};
