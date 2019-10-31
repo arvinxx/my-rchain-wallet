@@ -6,109 +6,76 @@ import Identicon from 'identicon.js';
 import Link from 'umi/link';
 import { router } from 'umi';
 import { connect } from 'dva';
-import { StateType } from './model';
+import { LoginModelState } from './model';
 import { InputBlock } from '@/components';
 import styles from './style.less';
 import { ReactComponent as NewAccount } from '@/assets/img/new_account.svg';
 
-import { Dispatch } from 'redux';
 import { UserModelState } from '@/models/user';
-import { getDecryptedItem, getItem, setItem } from '@/utils/utils';
-import { IAccount } from '@/services/account';
-import { accountLogin } from '@/services/login';
 import { showHiddenAddress } from '@/utils/blockchain';
+import { ConnectState, DispatchProps } from '@/models/connect';
 
 const { Text, Title } = Typography;
 const { Option } = Select;
 
-interface LoginProps {
-  dispatch: Dispatch<any>;
-  userLogin: StateType;
+interface LoginProps extends DispatchProps {
+  login: LoginModelState;
+  user: UserModelState;
   submitting: boolean;
   location: Location;
 }
 
 interface LoginState {
-  type: string;
   autoLogin: boolean;
   password: string;
   user?: string;
-  error: boolean;
 }
 
-export interface FormDataType {
-  userName: string;
-  password: string;
-  mobile: string;
-  captcha: string;
-}
-
-@connect(
-  ({
-    userLogin,
-    loading,
-    user,
-  }: {
-    userLogin: StateType;
-    user: UserModelState;
-    loading: {
-      effects: {
-        [key: string]: string;
-      };
-    };
-  }) => ({
-    userLogin,
-    user,
-    submitting: loading.effects['userLogin/login'],
-  }),
-)
+@connect(({ login, loading, user }: ConnectState) => ({
+  login,
+  user,
+  submitting: loading.effects['login/login'],
+}))
 export default class Login extends Component<LoginProps, LoginState> {
   state: LoginState = {
-    type: 'account',
     autoLogin: true,
     password: '',
-    error: false,
   };
 
   componentDidMount(): void {
-    const userList = getDecryptedItem('userList');
-    if (userList) {
-      this.setState({
-        user: userList[0].username,
-      });
-    }
+    this.props.dispatch({ type: 'user/fetch' });
   }
 
   signup = () => {
     router.push('/user/signup');
   };
   login = () => {
-    const { password, user: username } = this.state;
-    const userList: IAccount[] = getDecryptedItem('userList');
-    const user = userList.find(user => user.username === username);
-    if (user && user.pwd === password) {
-      accountLogin(username);
-
-      const { query } = this.props.location;
-      if (query && query.redirect) {
-        window.location.href = query.redirect;
-      } else {
-        router.push('/');
-      }
-    } else {
-      this.setState({
-        error: true,
-      });
+    const {
+      user: { userList },
+    } = this.props;
+    const { password, user } = this.state;
+    let username = user;
+    if (!user) {
+      username = userList[0].username;
     }
+    this.props.dispatch({
+      type: 'login/login',
+      payload: { username, password },
+    });
   };
   chooseUser = (user: string) => {
     this.setState({ user });
+    console.log(user);
   };
 
   render() {
-    const { password, user, error } = this.state;
-    const userList: IAccount[] = getDecryptedItem('userList');
+    const { password } = this.state;
+    const {
+      login,
+      user: { userList },
+    } = this.props;
 
+    const { status } = login;
     let isNew = userList ? userList.length === 0 : true;
 
     return (
@@ -144,7 +111,7 @@ export default class Login extends Component<LoginProps, LoginState> {
             </Text>
             <Divider dashed className={styles.divider} />
             <Select
-              value={user}
+              defaultValue={userList[0].username}
               size={'large'}
               onChange={this.chooseUser}
               className={styles.account}
@@ -174,7 +141,7 @@ export default class Login extends Component<LoginProps, LoginState> {
               label={'user-login.login.input.password'}
               onChange={e => this.setState({ password: e.target.value })}
               type={'password'}
-              error={error}
+              error={status === 'error'}
               errorMsg={'user-login.login.input.password.errorMsg'}
               value={password}
             />
@@ -188,7 +155,7 @@ export default class Login extends Component<LoginProps, LoginState> {
               {formatMessage({ id: 'user-login.login.login' })}
             </Button>
           </>
-        )}{' '}
+        )}
         <div style={{ marginTop: 16 }}>
           <Text type={'secondary'}>
             <FormattedMessage

@@ -1,12 +1,20 @@
 import request from '@/utils/request';
+import { getDecryptedItem, getItem } from '@/utils/utils';
+import { IAccount } from '@/services/account';
 
-export async function query(): Promise<any> {
-  return request('/api/users');
-}
+export const query = (): IAccount[] => {
+  return getDecryptedItem('userList');
+};
 
-export async function queryCurrent(): Promise<any> {
-  return request('/api/currentUser');
-}
+export const queryCurrent = (): IAccount | undefined => {
+  const currentUser = getItem('currentUser');
+  if (!currentUser) {
+    return;
+  }
+  getDecryptedItem('userList');
+  const userList: IAccount[] = getDecryptedItem('userList');
+  return userList.find(user => user.username === currentUser);
+};
 
 export async function queryNotices(): Promise<any> {
   return request('/api/notices');

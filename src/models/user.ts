@@ -2,10 +2,10 @@ import { Effect } from 'dva';
 import { Reducer } from 'redux';
 
 import { queryCurrent, query as queryUsers } from '@/services/user';
+import { IAccount } from '@/services/account';
 
-export interface CurrentUser {
+export interface CurrentUser extends IAccount {
   avatar?: string;
-  name?: string;
   title?: string;
   group?: string;
   signature?: string;
@@ -19,10 +19,10 @@ export interface CurrentUser {
 
 export interface UserModelState {
   currentUser?: CurrentUser;
-  userList: string[];
+  userList: IAccount[];
 }
 
-export interface UserModelType {
+export interface UserModelStore {
   state: UserModelState;
   effects: {
     fetch: Effect;
@@ -33,9 +33,8 @@ export interface UserModelType {
   };
 }
 
-const UserModel: UserModelType = {
+const UserModel: UserModelStore = {
   state: {
-    currentUser: {},
     userList: [],
   },
   reducers: {
@@ -48,18 +47,20 @@ const UserModel: UserModelType = {
   },
 
   effects: {
-    *fetch(_, { call, put }) {
-      const response = yield call(queryUsers);
+    *fetch(_, { put }) {
+      const userList = queryUsers();
+      console.log(userList);
       yield put({
         type: 'save',
-        payload: response,
+        payload: { userList },
       });
     },
-    *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
+    *fetchCurrent(_, { put }) {
+      const currentUser = queryCurrent();
+      console.log(currentUser);
       yield put({
-        type: 'saveCurrentUser',
-        payload: response,
+        type: 'save',
+        payload: { currentUser },
       });
     },
   },
