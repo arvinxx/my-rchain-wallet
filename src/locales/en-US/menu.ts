@@ -8,6 +8,7 @@ export default {
   'menu.register.result': 'Register Result',
   'menu.restore': 'Restore Account',
   'menu.dashboard': 'Dashboard',
+  'menu.account': 'Account',
   'menu.dashboard.analysis': 'Analysis',
   'menu.dashboard.monitor': 'Monitor',
   'menu.dashboard.workplace': 'Workplace',

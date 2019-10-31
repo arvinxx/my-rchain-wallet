@@ -52,11 +52,12 @@ const routes: IRoute[] = [
             name: 'transfer',
             icon: 'transaction',
           },
-          // {
-          //   path: '/transaction',
-          //   name: 'transaction',
-          //   icon: 'profile',
-          // },
+          {
+            path: '/account',
+            name: 'account',
+            icon: 'user',
+            component: '../pages/account',
+          },
           {
             component: './404',
           },

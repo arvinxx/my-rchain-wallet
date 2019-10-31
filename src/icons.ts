@@ -14,6 +14,12 @@ export { default as SearchOutline } from '@ant-design/icons-svg/lib/outline/Sear
 export { default as DownOutline } from '@ant-design/icons-svg/lib/outline/DownOutline';
 export { default as LockOutline } from '@ant-design/icons-svg/lib/outline/LockOutline';
 export { default as ArrowRightOutline } from '@ant-design/icons-svg/lib/outline/ArrowRightOutline';
+export { default as UserOutline } from '@ant-design/icons-svg/lib/outline/UserOutline';
+export { default as CopyOutline } from '@ant-design/icons-svg/lib/outline/CopyOutline';
+export { default as DownloadOutline } from '@ant-design/icons-svg/lib/outline/DownloadOutline';
 
 export { default as CheckCircleFill } from '@ant-design/icons-svg/lib/fill/CheckCircleFill';
 export { default as CloseCircleFill } from '@ant-design/icons-svg/lib/fill/CloseCircleFill';
+export {
+  default as ExclamationCircleFill,
+} from '@ant-design/icons-svg/lib/fill/ExclamationCircleFill';

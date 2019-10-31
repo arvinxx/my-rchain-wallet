@@ -22,4 +22,5 @@ export default {
   'component.unlock.desc': '请输入密码进行解锁',
   'component.unlock.password': '请输入密码',
   'component.unlock.error': '密码输入有误，请重试',
+  'component.phrase-box.copy.success': '助记词复制成功 🎉',
 };

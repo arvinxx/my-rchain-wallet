@@ -5,16 +5,18 @@ import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import { Button, Typography, Checkbox, Input, Divider, message } from 'antd';
 import { Link, router } from 'umi';
 import { LabelSelector } from './components';
-import { CreateAccount } from '@/components';
+import { CreateAccount, PhraseBox } from '@/components';
 import { copyToClipboard, getDecryptedItem, setItem } from '@/utils/utils';
 import { accountLogin } from '@/services/login';
+import { connect } from 'dva';
+import { DispatchProps } from '@/models/connect';
 
 const { Title, Text } = Typography;
 
-interface ISignUpProps {}
-
+interface ISignUpProps extends DispatchProps {}
+@connect()
 export default class SignUp extends Component<ISignUpProps> {
-  static defaultProps: ISignUpProps = {};
+  static defaultProps: ISignUpProps;
   state = {
     clear: false,
     step: 0,
@@ -34,8 +36,17 @@ export default class SignUp extends Component<ISignUpProps> {
       string += word + ' ';
     });
     const flag = copyToClipboard(string);
+    this.props.dispatch({
+      type: 'analytics',
+      meta: {
+        mixpanel: {
+          event: '复制助记词',
+        },
+      },
+    });
+
     if (flag) {
-      message.success(formatMessage({ id: 'sign-up.phrase.copy.success' }), 0.3);
+      message.success(formatMessage({ id: 'component.phrase-box.copy.success' }), 0.3);
     } else {
       message.error(formatMessage({ id: 'sign-up.phrase.copy.error' }));
     }
@@ -141,13 +152,7 @@ export default class SignUp extends Component<ISignUpProps> {
                 <Button type={'link'} onClick={this.copy}>
                   <FormattedMessage id={'sign-up.phrase.copy'} />
                 </Button>
-                <div className={styles.phrase}>
-                  {phrase.map((item: string) => (
-                    <span key={item} className={styles.word}>
-                      {item}
-                    </span>
-                  ))}
-                </div>
+                <PhraseBox phrase={phrase} />
                 <Button type={'primary'} className={styles.btn} onClick={this.onContinue}>
                   {formatMessage({ id: 'sign-up.phrase.button' })}
                 </Button>

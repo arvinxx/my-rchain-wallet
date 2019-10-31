@@ -16,7 +16,6 @@ export default {
   'sign-up.sign-in.sign': '登录',
   'sign-up.phrase.info': '请在用纸记下这12个单词，或者',
   'sign-up.phrase.copy': '点击复制所有',
-  'sign-up.phrase.copy.success': '助记词复制成功 🎉',
   'sign-up.phrase.copy.error': '助记词复制失败，请手动复制助记词',
   'sign-up.phrase.button': '验证助记词',
   'sign-up.phrase.skip': '跳过验证',

@@ -14,6 +14,8 @@ export interface NoticeItem extends NoticeIconData {
 export interface GlobalModelState {
   collapsed: boolean;
   locked: boolean;
+  analytics: boolean;
+  exports: boolean;
   notices: NoticeItem[];
 }
 
@@ -40,6 +42,8 @@ const GlobalModel: GlobalModelType = {
   state: {
     collapsed: false,
     locked: false,
+    exports: false,
+    analytics: true,
     notices: [],
   },
 
@@ -133,13 +137,11 @@ const GlobalModel: GlobalModelType = {
   subscriptions: {
     setup({ history }): void {
       // Subscribe history(url) change, trigger `load` action if pathname is `/`
-      history.listen(
-        ({ pathname, search }): void => {
-          if (typeof window.ga !== 'undefined') {
-            window.ga('send', 'pageview', pathname + search);
-          }
-        },
-      );
+      history.listen(({ pathname, search }): void => {
+        if (typeof window.ga !== 'undefined') {
+          window.ga('send', 'pageview', pathname + search);
+        }
+      });
     },
   },
 };

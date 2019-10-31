@@ -16,7 +16,6 @@ export default {
   'sign-up.sign-in.sign': 'log in',
   'sign-up.phrase.info': 'Please write these 12 words down in order or ',
   'sign-up.phrase.copy': 'copy them',
-  'sign-up.phrase.copy.success': 'phrase successful copied',
   'sign-up.phrase.copy.error': 'phrase failed to copy.Please copy them manually',
   'sign-up.phrase.button': 'Continue to confirm',
   'sign-up.phrase.skip': 'skip this step',
