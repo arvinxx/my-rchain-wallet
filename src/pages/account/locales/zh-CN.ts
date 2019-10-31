@@ -4,6 +4,7 @@ export default {
   'account.tabs.network': '网络',
   'account.components.private.mnemonic': '导出助记词',
   'account.components.private.mnemonic.button': '导出助记词',
+  'account.components.private.mnemonic.disabled': '该账户通过私钥恢复，不存在助记词',
   'account.components.private.mnemonic.desc':
     '如果您更换浏览器或计算机，则需要使用此功能导出助记词，请将注意它们保存在安全秘密的地方。',
   'account.components.private.analytics': '加入 MRW Analytics',

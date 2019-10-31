@@ -9,6 +9,7 @@ const { Text, Title } = Typography;
 
 export interface PrivateProps extends DispatchProps {
   analytics: boolean;
+  disabled: boolean;
 }
 export default class Private extends Component<PrivateProps> {
   switchAnalytics = (analytics: boolean) => {
@@ -35,7 +36,7 @@ export default class Private extends Component<PrivateProps> {
   };
 
   render() {
-    const { analytics } = this.props;
+    const { analytics, disabled } = this.props;
     return (
       <div className={styles.container}>
         <div className={styles.block}>
@@ -43,11 +44,18 @@ export default class Private extends Component<PrivateProps> {
             <Title level={3}>
               <FormattedMessage id={'account.components.private.mnemonic'} />
             </Title>
-            <Text type={'secondary'}>
-              <FormattedMessage id={'account.components.private.mnemonic.desc'} />
+            <Text type={disabled ? 'danger' : 'secondary'}>
+              <FormattedMessage
+                id={`account.components.private.mnemonic.${disabled ? 'disabled' : 'desc'}`}
+              />
             </Text>
           </div>
-          <Button className={styles.phraseButton} type={'default'} onClick={this.showExport}>
+          <Button
+            disabled={disabled}
+            className={styles.phraseButton}
+            type={'default'}
+            onClick={this.showExport}
+          >
             <FormattedMessage id={'account.components.private.mnemonic.button'} />
           </Button>
         </div>

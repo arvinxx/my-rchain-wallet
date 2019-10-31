@@ -4,6 +4,8 @@ export default {
   'account.tabs.network': 'Network',
   'account.components.private.mnemonic': 'Export Mnemonic Phrase',
   'account.components.private.mnemonic.button': 'Export',
+  'account.components.private.mnemonic.disabled':
+    'The account was restored by private key, no mnemonic phrase exists',
   'account.components.private.mnemonic.desc':
     'If you change your browser or computer, you need to use export mnemonic phrase. Please keep them in a safe place.',
   'account.components.private.analytics': 'Join MRW Analytics',

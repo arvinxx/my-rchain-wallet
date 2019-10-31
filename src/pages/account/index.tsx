@@ -8,21 +8,23 @@ import Private from './components/Private';
 import Export from './components/Export';
 import styles from './style.less';
 import { GlobalModelState } from '@/models/global';
-import { ConnectState, DispatchProps } from '@/models/connect';
+import { ConnectState, DispatchProps, UserModelState } from '@/models/connect';
 
 const { TabPane } = Tabs;
 interface IAccountInnerProps extends DispatchProps {
   global: GlobalModelState;
+  user: UserModelState;
 }
 
 interface IAccountProps extends IAccountInnerProps {}
-@connect(({ global }: ConnectState) => ({ global }))
+@connect(({ global, user }: ConnectState) => ({ global, user }))
 export default class Account extends Component<IAccountProps> {
   static defaultProps: IAccountInnerProps;
 
   render() {
-    const { global, dispatch } = this.props;
+    const { global, dispatch, user } = this.props;
     const { analytics, exports } = global;
+    const { currentUser } = user;
     return (
       <div className={styles.container}>
         <Card bordered={false}>
@@ -34,8 +36,12 @@ export default class Account extends Component<IAccountProps> {
               network
             </TabPane>
             <TabPane key={'private'} tab={<FormattedMessage id={'account.tabs.private'} />}>
-              <Private analytics={analytics} dispatch={dispatch} />
-              <Export visible={exports} />
+              <Private
+                disabled={currentUser ? !currentUser.mnemonic : true}
+                analytics={analytics}
+                dispatch={dispatch}
+              />
+              {exports ? <Export visible={exports} /> : null}
             </TabPane>
           </Tabs>
         </Card>

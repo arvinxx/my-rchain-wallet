@@ -6,19 +6,27 @@ import { formatMessage, FormattedMessage } from 'umi-plugin-locale';
 
 import { copyToClipboard, getDecryptedItem } from '@/utils/utils';
 import { connect } from 'dva';
-import { DispatchProps } from '@/models/connect';
+import { ConnectProps, ConnectState, DispatchProps, UserModelState } from '@/models/connect';
 
 const { Title, Text } = Typography;
 
-interface IExportInnerProps extends DispatchProps {}
+interface IExportInnerProps extends DispatchProps {
+  user: UserModelState;
+}
 
 interface IExportProps extends IExportInnerProps {
   visible: boolean;
 }
 
-@connect()
+@connect(({ user }: ConnectState) => ({ user }))
 export default class Export extends Component<IExportProps> {
-  static defaultProps: IExportInnerProps;
+  static defaultProps: Partial<IExportInnerProps> = {
+    user: {
+      currentUser: {
+        mnemonic: '',
+      },
+    },
+  };
   close = () => {
     this.props.dispatch({
       type: 'global/save',
@@ -78,9 +86,11 @@ export default class Export extends Component<IExportProps> {
   };
 
   render() {
-    const { visible } = this.props;
-    const phrase = getDecryptedItem('mnemonic');
-
+    const { visible, user } = this.props;
+    const {
+      currentUser: { mnemonic },
+    } = user;
+    const phrase = mnemonic ? mnemonic.split(' ') : [];
     return (
       <Modal
         title={

@@ -65,7 +65,6 @@ export default class Login extends Component<LoginProps, LoginState> {
   };
   chooseUser = (user: string) => {
     this.setState({ user });
-    console.log(user);
   };
 
   render() {
@@ -141,6 +140,7 @@ export default class Login extends Component<LoginProps, LoginState> {
               label={'user-login.login.input.password'}
               onChange={e => this.setState({ password: e.target.value })}
               type={'password'}
+              onPressEnter={this.login}
               error={status === 'error'}
               errorMsg={'user-login.login.input.password.errorMsg'}
               value={password}

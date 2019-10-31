@@ -12,6 +12,7 @@ interface IInputBlockProps {
   placeholder: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onBlur: (event: ChangeEvent<HTMLInputElement>) => void;
+  onPressEnter: () => void;
   error?: boolean;
   errorMsg?: string;
   style?: CSSProperties;
@@ -40,7 +41,17 @@ export default class InputBlock extends Component<IInputBlockProps> {
   };
 
   render() {
-    const { value, type, label, onChange, placeholder, style, error, errorMsg } = this.props;
+    const {
+      value,
+      type,
+      label,
+      onChange,
+      onPressEnter,
+      placeholder,
+      style,
+      error,
+      errorMsg,
+    } = this.props;
     const { visible, focused } = this.state;
     return (
       <div className={styles.block} style={style}>
@@ -64,6 +75,7 @@ export default class InputBlock extends Component<IInputBlockProps> {
           placeholder={focused && !value ? placeholder : undefined}
           type={type === 'username' || visible ? undefined : 'password'}
           onChange={onChange}
+          onPressEnter={onPressEnter}
           onBlur={this.onBlur}
         />
         <label style={{ userSelect: 'none' }} className={focused || value ? styles.hover : null}>

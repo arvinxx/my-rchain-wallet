@@ -85,6 +85,9 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
 
   useEffect(() => {
     checkLocked();
+    dispatch({
+      type: 'user/fetchCurrent',
+    });
   }, []);
 
   return (

@@ -18,8 +18,8 @@ export interface CurrentUser extends IAccount {
 }
 
 export interface UserModelState {
-  currentUser?: CurrentUser;
-  userList: IAccount[];
+  currentUser: CurrentUser;
+  userList?: IAccount[];
 }
 
 export interface UserModelStore {
@@ -35,6 +35,9 @@ export interface UserModelStore {
 
 const UserModel: UserModelStore = {
   state: {
+    currentUser: {
+      mnemonic: '',
+    },
     userList: [],
   },
   reducers: {
@@ -49,7 +52,6 @@ const UserModel: UserModelStore = {
   effects: {
     *fetch(_, { put }) {
       const userList = queryUsers();
-      console.log(userList);
       yield put({
         type: 'save',
         payload: { userList },
@@ -57,7 +59,6 @@ const UserModel: UserModelStore = {
     },
     *fetchCurrent(_, { put }) {
       const currentUser = queryCurrent();
-      console.log(currentUser);
       yield put({
         type: 'save',
         payload: { currentUser },
