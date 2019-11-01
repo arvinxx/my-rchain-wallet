@@ -21,6 +21,7 @@ const UserLayout: React.SFC<UserLayoutProps> = props => {
     route = {
       routes: [],
     },
+    dispatch,
   } = props;
   const { routes = [] } = route;
   const {
@@ -32,7 +33,10 @@ const UserLayout: React.SFC<UserLayoutProps> = props => {
   const { breadcrumb } = getMenuData(routes);
   const clean = () => {
     localStorage.removeItem('userList');
-    page.reload();
+    dispatch({
+      type: 'user/save',
+      payload: { userList: [] },
+    });
   };
   return (
     <DocumentTitle

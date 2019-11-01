@@ -34,7 +34,7 @@ export default class Dashboard extends Component<IAccountDetailProps> {
     const { currentUser } = user;
     return (
       <div className={styles.container}>
-        <Account open={this.open} />
+        <Account open={this.open} currentUser={currentUser} />
         <AccountDetail
           dispatch={dispatch}
           close={this.close}
