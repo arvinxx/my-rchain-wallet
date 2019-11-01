@@ -3,16 +3,10 @@ import styles from './style.less';
 import { InputBlock } from '@/components';
 import { Button, Checkbox } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
+import mixpanel, { Mixpanel } from 'mixpanel-browser';
 
 import { Link } from 'umi';
-import {
-  generateAvatar,
-  getDecryptedItem,
-  getItem,
-  getUID,
-  setEncryptedItem,
-  setItem,
-} from '@/utils/utils';
+import { generateAvatar, getDecryptedItem, getItem, getUID, setEncryptedItem } from '@/utils/utils';
 import { getMnemonic } from '@/utils/blockchain';
 import { getAccountFromMnemonic, getAccountFromPrivateKey, IAccount } from '@/services/account';
 import { accountLogin } from '@/services/login';
@@ -162,9 +156,18 @@ export default class CreateAccount extends Component<ICreateAccountProps, ICreat
     const userList = getDecryptedItem('userList') || [];
     const uid = getUID();
     accountLogin(uid);
-    const { address } = account;
+    const { address, ethAddr } = account;
     const avatar = generateAvatar(address);
     const finalAccount = { ...account, avatar, uid };
+    mixpanel.people.set({
+      $created: new Date(),
+      $last_login: new Date(),
+      userId: uid,
+      username,
+      address,
+      ethAddr,
+      deviceId: localStorage.getItem('deviceId'),
+    });
     setEncryptedItem('userList', userList.concat(finalAccount));
     next();
   };
