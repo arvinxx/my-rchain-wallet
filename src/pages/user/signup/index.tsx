@@ -48,7 +48,7 @@ export default class SignUp extends Component<ISignUpProps> {
     if (flag) {
       message.success(formatMessage({ id: 'component.phrase-box.copy.success' }), 0.3);
     } else {
-      message.error(formatMessage({ id: 'sign-up.phrase.copy.error' }));
+      message.error(formatMessage({ id: 'component.phrase-box.copy.error' }));
     }
   };
 

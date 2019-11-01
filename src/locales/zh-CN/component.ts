@@ -23,4 +23,9 @@ export default {
   'component.unlock.password': '请输入密码',
   'component.unlock.error': '密码输入有误，请重试',
   'component.phrase-box.copy.success': '助记词复制成功 🎉',
+  'component.phrase-box.copy.error': '复制出错，请重试',
+  'component.phrase-box.export.error': '导出出错，请重试',
+  'component.check-password.password': '请输入密码',
+  'component.check-password.password.error': '密码输入有误，请重试',
+  'component.check-password.next': '下一步',
 };

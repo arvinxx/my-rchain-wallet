@@ -28,7 +28,7 @@ export default class Account extends Component<IAccountProps> {
     return (
       <div className={styles.container}>
         <Card bordered={false}>
-          <Tabs tabPosition={'left'} defaultActiveKey={'private'} tabBarStyle={{ border: 'none' }}>
+          <Tabs tabPosition={'left'} defaultActiveKey={'general'} tabBarStyle={{ border: 'none' }}>
             <TabPane key={'general'} tab={<FormattedMessage id={'account.tabs.general'} />}>
               general
             </TabPane>

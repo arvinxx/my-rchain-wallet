@@ -23,5 +23,10 @@ export default {
   'component.unlock.desc': 'Please type in your password to unlock',
   'component.unlock.password': 'Type in your password',
   'component.unlock.error': 'Password is valid, please try it again.',
-  'component.phrase-box.copy.success': 'phrase successful copied 🎉',
+  'component.phrase-box.copy.success': 'Phrase successful copied 🎉',
+  'component.phrase-box.copy.error': 'Copy error，Please try it again',
+  'component.phrase-box.export.error': 'Export error，Please try it again',
+  'component.check-password.password': 'Please type in your password',
+  'component.check-password.password.error': 'Password is valid, please try it again.',
+  'component.check-password.next': 'Next',
 };
