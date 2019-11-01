@@ -6,7 +6,7 @@ import { Button, Typography, Checkbox, Input, Divider, message } from 'antd';
 import { Link, router } from 'umi';
 import { LabelSelector } from './components';
 import { CreateAccount, PhraseBox } from '@/components';
-import { copyToClipboard, getDecryptedItem, setItem } from '@/utils/utils';
+import { copyToClipboard, getDecryptedItem, getItem, getUID, setItem } from '@/utils/utils';
 import { accountLogin } from '@/services/login';
 import { connect } from 'dva';
 import { DispatchProps } from '@/models/connect';
@@ -78,8 +78,11 @@ export default class SignUp extends Component<ISignUpProps> {
   finish = () => {
     localStorage.removeItem('mnemonic');
     const userList = getDecryptedItem('userList');
-    const { username } = userList[userList.length - 1];
-    accountLogin(username);
+    const { uid } = userList[userList.length - 1];
+    this.props.dispatch({
+      type: 'user/register',
+      payload: { uid },
+    });
     router.push('/');
   };
 

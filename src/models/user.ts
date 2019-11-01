@@ -1,9 +1,9 @@
 import { Effect } from 'dva';
 import { Reducer } from 'redux';
-import { slice } from 'lodash';
 
-import { queryCurrent, query as queryUsers, updateUserInfo, updateUserList } from '@/services/user';
+import { queryCurrent, query as queryUsers, updateUserList } from '@/services/user';
 import { IAccount } from '@/services/account';
+import { accountLogin } from '@/services/login';
 
 export interface CurrentUser extends IAccount {
   title?: string;
@@ -27,9 +27,11 @@ export interface UserModelStore {
   effects: {
     fetch: Effect;
     fetchCurrent: Effect;
+    register: Effect;
   };
   reducers: {
     save: Reducer<UserModelState>;
+    changeName: Reducer<UserModelState>;
   };
 }
 
@@ -43,26 +45,29 @@ const UserModel: UserModelStore = {
       ethAddr: '',
       privateKey: '',
       pwd: '',
+      uid: '',
     },
     userList: [],
   },
   reducers: {
     save(state, { payload }) {
-      const { currentUser } = state;
-      if (currentUser && currentUser.username) {
-        const { username } = currentUser;
-        const userList = queryUsers();
-        const index = userList.findIndex(user => user.username === username);
-        const { currentUser: NextUser } = payload;
-        if (NextUser && NextUser.username !== username) {
-          const user = { ...userList[index], username: NextUser.username };
-          userList.splice(index, 1, user);
-          updateUserList(userList);
-        }
-      }
       return {
         ...state,
         ...payload,
+      };
+    },
+    changeName(state, { payload: newName }) {
+      const { currentUser } = state;
+      const { username } = currentUser;
+      const userList = queryUsers();
+      const index = userList.findIndex(user => user.username === username);
+
+      const user = { ...userList[index], username: newName };
+      userList.splice(index, 1, user);
+      updateUserList(userList);
+      return {
+        ...state,
+        currentUser: { ...currentUser, username: newName },
       };
     },
   },
@@ -81,6 +86,10 @@ const UserModel: UserModelStore = {
         type: 'save',
         payload: { currentUser },
       });
+    },
+    *register({ payload }, { put }) {
+      const { uid } = payload;
+      accountLogin(uid);
     },
   },
 };

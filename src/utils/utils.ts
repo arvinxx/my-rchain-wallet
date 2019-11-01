@@ -7,10 +7,6 @@ const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(
 
 export const isUrl = (path: string): boolean => reg.test(path);
 export const getUID = () => {
-  const uid = localStorage.getItem('uid');
-  if (uid) {
-    return uid;
-  }
   const s = [];
   const hexDigits = '0123456789abcdef';
   for (var i = 0; i < 36; i++) {

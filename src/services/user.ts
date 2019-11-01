@@ -24,7 +24,6 @@ export const transfer = async () => {
 };
 
 export const updateUserList = (userList: IAccount[]) => {
-  console.log(userList);
   if (!userList) {
     return;
   }

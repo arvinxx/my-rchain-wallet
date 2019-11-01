@@ -37,6 +37,7 @@ const LoginModel: LoginModelStore = {
     *login({ payload }, { select, put }) {
       const { username, password } = payload;
       const userList = query();
+      console.log(username, userList);
       const user = userList.find(user => user.username === username);
 
       // Login successfully

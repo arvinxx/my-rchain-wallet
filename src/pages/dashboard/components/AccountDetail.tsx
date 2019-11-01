@@ -66,10 +66,8 @@ export default class AccountDetail extends Component<IAccountDetailProps> {
     });
     if (value) {
       this.props.dispatch({
-        type: 'user/save',
-        payload: {
-          currentUser: { ...currentUser, username: value },
-        },
+        type: 'user/changeName',
+        payload: value,
       });
     }
   };

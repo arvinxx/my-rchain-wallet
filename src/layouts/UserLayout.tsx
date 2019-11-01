@@ -1,6 +1,8 @@
 import { MenuDataItem, getMenuData, getPageTitle, DefaultFooter } from '@ant-design/pro-layout';
 import DocumentTitle from 'react-document-title';
 import Link from 'umi/link';
+import { Icon, Popconfirm } from 'antd';
+
 import React from 'react';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
@@ -9,7 +11,7 @@ import SelectLang from '@/components/SelectLang';
 import { ConnectProps, ConnectState } from '@/models/connect';
 import logo from '../assets/logo-long.svg';
 import styles from './UserLayout.less';
-
+const page = location;
 export interface UserLayoutProps extends ConnectProps {
   breadcrumbNameMap: { [path: string]: MenuDataItem };
 }
@@ -28,7 +30,10 @@ const UserLayout: React.SFC<UserLayoutProps> = props => {
     },
   } = props;
   const { breadcrumb } = getMenuData(routes);
-
+  const clean = () => {
+    localStorage.removeItem('userList');
+    page.reload();
+  };
   return (
     <DocumentTitle
       title={getPageTitle({
@@ -40,6 +45,13 @@ const UserLayout: React.SFC<UserLayoutProps> = props => {
     >
       <div className={styles.container}>
         <div className={styles.lang}>
+          <Popconfirm
+            title={formatMessage({ id: 'layout.user.clean' })}
+            placement={'bottomLeft'}
+            onConfirm={clean}
+          >
+            <Icon type="delete" className={styles.clean} />
+          </Popconfirm>
           <SelectLang />
         </div>
         <div className={styles.wrapper}>
