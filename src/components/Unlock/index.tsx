@@ -26,7 +26,7 @@ class Unlock extends Component<IUnlockProps> {
     const { password } = this.state;
     const userList: IAccount[] = getDecryptedItem('userList');
     const username = getItem('currentUser');
-    const user = userList.find(user => user.username === username);
+    const user = userList.find(user => user.uid === username);
     if (user && user.pwd === password) {
       setItem('lastLogin', new Date().valueOf());
       this.props.dispatch({

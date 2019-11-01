@@ -41,7 +41,7 @@ const LoginModel: LoginModelStore = {
 
       // Login successfully
       if (user && user.pwd === password) {
-        accountLogin(username);
+        accountLogin(user.uid);
         yield put({
           type: 'save',
           payload: { status: 'ok' },

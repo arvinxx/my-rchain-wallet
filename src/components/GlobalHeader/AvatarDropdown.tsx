@@ -4,14 +4,11 @@ import { FormattedMessage } from 'umi-plugin-react/locale';
 import React from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
-import Identicon from 'identicon.js';
 
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { CurrentUser } from '@/models/user';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
-import { getDecryptedItem, getItem } from '@/utils/utils';
-import { IAccount } from '@/services/account';
 
 export interface GlobalHeaderRightProps extends ConnectProps {
   currentUser?: CurrentUser;
@@ -24,19 +21,19 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
 
     if (key === 'logout') {
       localStorage.removeItem('currentUser');
-      router.push('/');
+      router.push('/user/login');
       return;
     }
     router.push(`/account/${key}`);
   };
 
   render(): React.ReactNode {
-    const { menu } = this.props;
-    const userList: IAccount[] = getDecryptedItem('userList');
-    const currentUser = getItem('currentUser');
-    const { username, address } = userList.find(user => (user.username = currentUser));
-    const data = new Identicon(address).toString();
-    const avatar = `data:image/png;base64,${data}`;
+    const { menu, currentUser } = this.props;
+    if (!currentUser) {
+      return <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />;
+    }
+    const { username, avatar } = currentUser;
+
     const menuHeaderDropdown = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
         {menu && (
@@ -60,7 +57,7 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
       </Menu>
     );
 
-    return currentUser && username ? (
+    return username ? (
       <HeaderDropdown overlay={menuHeaderDropdown}>
         <span className={`${styles.action} ${styles.account}`}>
           <Avatar size="small" className={styles.avatar} src={avatar} alt="avatar" />

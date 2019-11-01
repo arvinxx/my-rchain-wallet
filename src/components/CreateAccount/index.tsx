@@ -5,7 +5,14 @@ import { Button, Checkbox } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 
 import { Link } from 'umi';
-import { getDecryptedItem, getItem, setEncryptedItem, setItem } from '@/utils/utils';
+import {
+  generateAvatar,
+  getDecryptedItem,
+  getItem,
+  getUID,
+  setEncryptedItem,
+  setItem,
+} from '@/utils/utils';
 import { getMnemonic } from '@/utils/blockchain';
 import { getAccountFromMnemonic, getAccountFromPrivateKey, IAccount } from '@/services/account';
 import { accountLogin } from '@/services/login';
@@ -103,7 +110,7 @@ export default class CreateAccount extends Component<ICreateAccountProps, ICreat
   onRegister = () => {
     const { next, type } = this.props;
     const { password, username } = this.state;
-    let account: IAccount;
+    let account: Partial<IAccount> = {};
     if (type === 'signup') {
       const mnemonic = getMnemonic();
       const { ethAddr, revAddr, privateKey } = getAccountFromMnemonic(mnemonic);
@@ -153,8 +160,12 @@ export default class CreateAccount extends Component<ICreateAccountProps, ICreat
       localStorage.removeItem('restore');
     }
     const userList = getDecryptedItem('userList') || [];
-    accountLogin(username);
-    setEncryptedItem('userList', userList.concat(account));
+    const uid = getUID();
+    accountLogin(uid);
+    const { address } = account;
+    const avatar = generateAvatar(address);
+    const finalAccount = { ...account, avatar, uid };
+    setEncryptedItem('userList', userList.concat(finalAccount));
     next();
   };
 

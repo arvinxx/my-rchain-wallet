@@ -46,6 +46,7 @@ export default class CheckPassword extends Component<ICheckPasswordProps> {
           error={error}
           errorMsg={'component.check-password.password.error'}
           onChange={this.onChange}
+          onPressEnter={this.check}
           type={'password'}
         />
         <Button

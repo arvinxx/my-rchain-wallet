@@ -28,6 +28,7 @@
     "mixpanel-browser": "^2.29.1",
     "moment": "^2.22.2",
     "omit.js": "^1.0.2",
+    "qrcode.react": "^0.9.3",
     "qs": "^6.7.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",

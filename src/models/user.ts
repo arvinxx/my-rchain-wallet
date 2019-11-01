@@ -1,11 +1,11 @@
 import { Effect } from 'dva';
 import { Reducer } from 'redux';
+import { slice } from 'lodash';
 
-import { queryCurrent, query as queryUsers } from '@/services/user';
+import { queryCurrent, query as queryUsers, updateUserInfo, updateUserList } from '@/services/user';
 import { IAccount } from '@/services/account';
 
 export interface CurrentUser extends IAccount {
-  avatar?: string;
   title?: string;
   group?: string;
   signature?: string;
@@ -37,11 +37,29 @@ const UserModel: UserModelStore = {
   state: {
     currentUser: {
       mnemonic: '',
+      address: '',
+      username: '',
+      avatar: '',
+      ethAddr: '',
+      privateKey: '',
+      pwd: '',
     },
     userList: [],
   },
   reducers: {
     save(state, { payload }) {
+      const { currentUser } = state;
+      if (currentUser && currentUser.username) {
+        const { username } = currentUser;
+        const userList = queryUsers();
+        const index = userList.findIndex(user => user.username === username);
+        const { currentUser: NextUser } = payload;
+        if (NextUser && NextUser.username !== username) {
+          const user = { ...userList[index], username: NextUser.username };
+          userList.splice(index, 1, user);
+          updateUserList(userList);
+        }
+      }
       return {
         ...state,
         ...payload,

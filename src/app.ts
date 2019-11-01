@@ -1,8 +1,13 @@
 import mixpanel, { Mixpanel } from 'mixpanel-browser';
 import { Store } from 'redux';
 import { Action, ConnectState } from '@/models/connect';
+import { getUID } from '@/utils/utils';
+
+const uid = getUID();
+localStorage.setItem('uid', uid);
 
 mixpanel.init('97dfca5378a4329fafbdd455e04f8fb3');
+mixpanel.identify(uid);
 
 const MixpanelMiddleware = (mixpanel: Mixpanel) => {
   if (!mixpanel || !mixpanel.track) {

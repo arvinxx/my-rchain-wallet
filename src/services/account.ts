@@ -11,8 +11,10 @@ export interface IAccount {
   ethAddr: string;
   privateKey: string;
   pwd: string;
+  uid: string;
   username: string;
   mnemonic?: string;
+  avatar: string;
 }
 export const getAccountFromPrivateKey = (privateKey: string) => {
   const publicKey = getPublicKeyFromPrivateKey(privateKey);

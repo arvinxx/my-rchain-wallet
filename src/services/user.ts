@@ -1,5 +1,5 @@
 import request from '@/utils/request';
-import { getDecryptedItem, getItem } from '@/utils/utils';
+import { getDecryptedItem, getItem, setEncryptedItem } from '@/utils/utils';
 import { IAccount } from '@/services/account';
 
 export const query = (): IAccount[] => {
@@ -11,9 +11,8 @@ export const queryCurrent = (): IAccount | undefined => {
   if (!currentUser) {
     return;
   }
-  getDecryptedItem('userList');
   const userList: IAccount[] = getDecryptedItem('userList');
-  return userList.find(user => user.username === currentUser);
+  return userList.find(user => user.uid === currentUser);
 };
 
 export async function queryNotices(): Promise<any> {
@@ -22,4 +21,12 @@ export async function queryNotices(): Promise<any> {
 
 export const transfer = async () => {
   //TODO: make the rev transfer
+};
+
+export const updateUserList = (userList: IAccount[]) => {
+  console.log(userList);
+  if (!userList) {
+    return;
+  }
+  setEncryptedItem('userList', userList);
 };

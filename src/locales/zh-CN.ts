@@ -5,7 +5,6 @@ import pwa from './zh-CN/pwa';
 import settingDrawer from './zh-CN/settingDrawer';
 import settings from './zh-CN/settings';
 import errors from './zh-CN/errors';
-import dashboard from './zh-CN/dashboard';
 import user from './zh-CN/user';
 
 export default {
@@ -24,5 +23,4 @@ export default {
   ...user,
   ...component,
   ...errors,
-  ...dashboard,
 };

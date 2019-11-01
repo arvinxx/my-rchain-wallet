@@ -22,7 +22,16 @@
   justify-content: space-between;
 }
 .address {
-  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 12px;
+  border-radius: 4px;
+  transition: all @ease-in-out @animation-duration-fast;
+  &:hover {
+    background: @background-color-base;
+  }
+}
+.icon {
+  color: @text-color-secondary;
 }
 .account {
   display: flex;

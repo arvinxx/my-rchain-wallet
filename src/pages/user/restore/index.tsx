@@ -43,7 +43,6 @@ export default class Restore extends Component<IRestoreProps> {
         const validPrivateKey = isValidPrivateKey(privateKey);
         if (validPrivateKey !== '') {
           this.setState({ step: step + 1 });
-          console.log(validPrivateKey);
           setEncryptedItem('privateKey', validPrivateKey);
         } else {
           this.setState({

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Select, Divider, Typography, Avatar } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
-import Identicon from 'identicon.js';
 
 import Link from 'umi/link';
 import { router } from 'umi';
@@ -116,9 +115,7 @@ export default class Login extends Component<LoginProps, LoginState> {
               className={styles.account}
             >
               {userList.map(user => {
-                const { address, username } = user;
-                const data = new Identicon(address).toString();
-                const avatar = `data:image/png;base64,${data}`;
+                const { address, username, avatar } = user;
 
                 return (
                   <Option value={username} key={address}>
