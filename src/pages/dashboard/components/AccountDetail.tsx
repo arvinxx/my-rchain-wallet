@@ -36,6 +36,15 @@ export default class AccountDetail extends Component<IAccountDetailProps> {
     value: '',
     checked: false,
   };
+
+  close = () => {
+    const { close } = this.props;
+    close();
+    this.setState({
+      exports: false,
+      checked: false,
+    });
+  };
   edit = () => {
     const { editable } = this.state;
     this.setState({
@@ -132,7 +141,7 @@ export default class AccountDetail extends Component<IAccountDetailProps> {
     }
     const { avatar, username, address, pwd, privateKey } = currentUser;
     return (
-      <Modal onCancel={close} centered visible={visible} footer={null} width={400}>
+      <Modal onCancel={this.close} centered visible={visible} footer={null} width={400}>
         <div className={styles.container}>
           <Avatar size={'large'} className={styles.avatar} src={avatar} />
           <div className={styles.title}>
