@@ -7,8 +7,12 @@ if (!device) {
   device = getUID();
   localStorage.setItem('deviceId', device);
 }
-
-mixpanel.init('97dfca5378a4329fafbdd455e04f8fb3');
+console.log(process.env.NODE_ENV);
+mixpanel.init(
+  process.env.NODE_ENV === 'development'
+    ? '97dfca5378a4329fafbdd455e04f8fb3'
+    : '22d6bf31b037baadb74830f3e3e5b59d',
+);
 mixpanel.identify(device);
 
 const MixpanelMiddleware = (mixpanel: Mixpanel) => {
