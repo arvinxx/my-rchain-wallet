@@ -84,6 +84,26 @@ export default (config: any) => {
             return 'misc';
           },
         },
+        bip: {
+          name: 'bip39',
+          test: (module: { context: string }) => {
+            const packageName = getModulePackageName(module) || '';
+            if (packageName) {
+              return ['bip39', 'react-dom'].includes(packageName);
+            }
+            return false;
+          },
+        },
+        antd: {
+          name: 'antd',
+          test: (module: { context: string }) => {
+            const packageName = getModulePackageName(module) || '';
+            if (packageName) {
+              return ['antd', '@ant-design'].includes(packageName);
+            }
+            return false;
+          },
+        },
       },
     });
 };

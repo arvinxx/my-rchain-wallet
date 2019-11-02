@@ -7,7 +7,6 @@ if (!device) {
   device = getUID();
   localStorage.setItem('deviceId', device);
 }
-console.log(process.env.NODE_ENV);
 mixpanel.init(
   process.env.NODE_ENV === 'development'
     ? '97dfca5378a4329fafbdd455e04f8fb3'

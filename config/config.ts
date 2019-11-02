@@ -27,11 +27,11 @@ const plugins: IPlugin[] = [
         // default true, when it is true, will use `navigator.language` overwrite default
         // baseNavigator: true,
       },
-      // dynamicImport: {
-      //   loadingComponent: './components/PageLoading/index',
-      //   webpackChunkName: true,
-      //   level: 3,
-      // },
+      dynamicImport: {
+        loadingComponent: './components/PageLoading/index',
+        webpackChunkName: true,
+        level: 1,
+      },
       pwa: pwa
         ? {
             workboxPluginMode: 'InjectManifest',
@@ -57,7 +57,7 @@ const plugins: IPlugin[] = [
   [
     'umi-plugin-auto-externals',
     {
-      packages: ['antd', 'moment'],
+      packages: ['react-dom'],
       urlTemplate: 'https://unpkg.com/{{ library }}@{{ version }}/{{ path }}',
       checkOnline: false,
     },
@@ -82,6 +82,9 @@ export default {
   alias: {
     theme: resolve(__dirname, '../src/theme'), // less 全局样式文件
     '@ant-design/icons/lib/dist$': resolve(__dirname, '../src/icons.ts'),
+  },
+  externals: {
+    'mixpanel-browser': 'window.mixpanel',
   },
   treeShaking: true,
   define: {
