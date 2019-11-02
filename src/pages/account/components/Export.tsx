@@ -10,23 +10,13 @@ import { ConnectProps, ConnectState, DispatchProps, UserModelState } from '@/mod
 
 const { Title, Text } = Typography;
 
-interface IExportInnerProps extends DispatchProps {
-  user: UserModelState;
-}
-
-interface IExportProps extends IExportInnerProps {
+interface IExportProps extends DispatchProps {
   visible: boolean;
+  mnemonic: string;
+  pwd: string;
 }
 
-@connect(({ user }: ConnectState) => ({ user }))
 export default class Export extends Component<IExportProps> {
-  static defaultProps: Partial<IExportInnerProps> = {
-    user: {
-      currentUser: {
-        mnemonic: '',
-      },
-    },
-  };
   state = {
     checked: false,
   };
@@ -43,11 +33,9 @@ export default class Export extends Component<IExportProps> {
   };
 
   copy = () => {
-    const {
-      currentUser: { mnemonic },
-    } = this.props.user;
+    const { mnemonic } = this.props;
 
-    const flag = copyToClipboard(mnemonic ? mnemonic : '');
+    const flag = copyToClipboard(mnemonic);
     this.props.dispatch({
       type: 'analytics',
       meta: {
@@ -63,9 +51,7 @@ export default class Export extends Component<IExportProps> {
     }
   };
   exportToCSV = () => {
-    const {
-      currentUser: { mnemonic },
-    } = this.props.user;
+    const { mnemonic } = this.props;
 
     if (mnemonic) {
       const blob = new Blob([mnemonic], { type: 'text/csv;charset=utf8;' });
@@ -91,11 +77,9 @@ export default class Export extends Component<IExportProps> {
     });
   };
   render() {
-    const { visible, user } = this.props;
-    const {
-      currentUser: { mnemonic, pwd },
-    } = user;
-    const phrase = mnemonic ? mnemonic.split(' ') : [];
+    const { visible, mnemonic, pwd } = this.props;
+
+    const phrase = mnemonic.split(' ');
     const { checked } = this.state;
     return (
       <Modal

@@ -14,6 +14,7 @@ export interface NoticeItem extends NoticeIconData {
 export interface GlobalModelState {
   collapsed: boolean;
   locked: boolean;
+  lockTime: number;
   analytics: boolean;
   exports: boolean;
   notices: NoticeItem[];
@@ -42,6 +43,7 @@ const GlobalModel: GlobalModelType = {
   state: {
     collapsed: false,
     locked: false,
+    lockTime: 30,
     exports: false,
     analytics: true,
     notices: [],

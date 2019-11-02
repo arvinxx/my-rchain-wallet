@@ -33,6 +33,7 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-intl": "^3.3.2",
+    "react-responsive": "^8.0.1",
     "redux": "^4.0.1",
     "umi-request": "^1.2.5",
     "web3": "^1.2.1"
@@ -46,6 +47,7 @@
     "@types/react": "^16.7.18",
     "@types/react-document-title": "^2.0.3",
     "@types/react-dom": "^16.0.11",
+    "@types/react-responsive": "^8.0.1",
     "@types/react-test-renderer": "^16.0.3",
     "@types/web3": "^1.0.20",
     "babel-eslint": "^9.0.0",

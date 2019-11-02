@@ -24,4 +24,9 @@ export default {
   'account.components.export.alert.desc':
     "Mnemonic phrase can be used to steal all your accounts! Don't show mnemonics to anyone at any time!",
   'account.components.export.close': 'Close',
+  'account.components.network.title': 'Select Network',
+  'account.components.network.desc': 'Please select the network to join',
+  'account.components.general.lock-time': 'Lock time',
+  'account.components.general.lock-time.desc':
+    'Please set the free time (in minutes) before MRW automatically lock',
 };

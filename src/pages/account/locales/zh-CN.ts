@@ -22,4 +22,8 @@ export default {
   'account.components.export.alert.desc':
     ' 助记词可以用来窃取您的所有帐户！任何时候都不要对任何人展示助记词！',
   'account.components.export.close': '关闭',
+  'account.components.network.title': '选择网络',
+  'account.components.network.desc': '请选择要加入的网络',
+  'account.components.general.lock-time': '锁定时间',
+  'account.components.general.lock-time.desc': '请设置 MRW 自动锁定的时间（以分钟为单位）',
 };
