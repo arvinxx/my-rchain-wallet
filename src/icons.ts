@@ -17,7 +17,11 @@ export { default as ArrowRightOutline } from '@ant-design/icons-svg/lib/outline/
 export { default as UserOutline } from '@ant-design/icons-svg/lib/outline/UserOutline';
 export { default as CopyOutline } from '@ant-design/icons-svg/lib/outline/CopyOutline';
 export { default as DownloadOutline } from '@ant-design/icons-svg/lib/outline/DownloadOutline';
+export { default as EditOutline } from '@ant-design/icons-svg/lib/outline/EditOutline';
+export { default as CloseOutline } from '@ant-design/icons-svg/lib/outline/CloseOutline';
+export { default as CheckOutline } from '@ant-design/icons-svg/lib/outline/CheckOutline';
 
+export { default as CopyFill } from '@ant-design/icons-svg/lib/fill/CopyFill';
 export { default as CheckCircleFill } from '@ant-design/icons-svg/lib/fill/CheckCircleFill';
 export { default as CloseCircleFill } from '@ant-design/icons-svg/lib/fill/CloseCircleFill';
 export {
