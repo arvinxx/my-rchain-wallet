@@ -20,6 +20,7 @@ export { default as DownloadOutline } from '@ant-design/icons-svg/lib/outline/Do
 export { default as EditOutline } from '@ant-design/icons-svg/lib/outline/EditOutline';
 export { default as CloseOutline } from '@ant-design/icons-svg/lib/outline/CloseOutline';
 export { default as CheckOutline } from '@ant-design/icons-svg/lib/outline/CheckOutline';
+export { default as DeleteOutline } from '@ant-design/icons-svg/lib/outline/DeleteOutline';
 
 export { default as CopyFill } from '@ant-design/icons-svg/lib/fill/CopyFill';
 export { default as CheckCircleFill } from '@ant-design/icons-svg/lib/fill/CheckCircleFill';
