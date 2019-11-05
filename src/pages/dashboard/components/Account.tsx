@@ -38,7 +38,6 @@ export default class Account extends Component<IAccountProps> {
             </div>
           }
           bordered={false}
-          style={{ maxWidth: 550 }}
         >
           <div className={styles.account}>
             <div className={styles.user}>

@@ -1,0 +1,67 @@
+@import '~theme/theme';
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  :global {
+    .ant-card-body {
+      padding: 0;
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+    }
+  }
+}
+.list {
+  flex: 1;
+}
+.item {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  margin: 0 24px;
+  border-bottom: @border-color-split 1px solid;
+  > *:not(:first-child) {
+    margin-left: 12px;
+  }
+  .icon {
+    height: 40px;
+    width: 40px;
+    background: @primary-1;
+  }
+  .info {
+    width: 160px;
+  }
+}
+.tag {
+}
+.money {
+  margin-left: auto !important;
+  text-align: right;
+}
+.send {
+  color: @red-6;
+}
+.receive {
+  color: @green-6;
+}
+.bottom {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  margin: auto 0;
+  padding: 16px;
+  padding-top: 60px;
+  background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+  text-align: center;
+}
+
+.more {
+  font-size: 16px;
+  padding: 0;
+  padding-bottom: 2px;
+  line-height: 1;
+  border-radius: 0;
+  height: auto;
+}

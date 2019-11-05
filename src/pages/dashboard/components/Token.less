@@ -1,0 +1,55 @@
+@import '~theme/theme';
+
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  :global {
+    .ant-card-body {
+      padding: 0;
+      min-height: 200px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+.list {
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s;
+  cursor: pointer;
+  &:hover {
+    background: @primary-1;
+  }
+}
+.selected {
+  background: @primary-1;
+}
+.logo {
+  margin-right: 32px;
+  height: 40px;
+  width: 40px;
+}
+
+.action {
+  margin-left: auto;
+}
+.bottom {
+  margin: auto 16px 8px;
+  //margin-top: auto;
+  text-align: center;
+  //margin-bottom: 8px;
+}
+.add {
+  font-weight: bold;
+  border-bottom: @text-color-secondary 1px solid;
+  padding: 0;
+  padding-bottom: 2px;
+  line-height: 1;
+  border-radius: 0;
+  height: auto;
+  color: @text-color-secondary;
+}

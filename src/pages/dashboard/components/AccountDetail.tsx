@@ -174,7 +174,7 @@ export default class AccountDetail extends Component<IAccountDetailProps> {
                     value={'revAddress:' + address}
                     className={styles.qrcode}
                     includeMargin
-                    style={{ height: 200, width: 200 }}
+                    style={{ height: 280, width: 280 }}
                   />
                 </div>
                 <Text type={'secondary'}>{showHiddenAddress(address, 10)}</Text>
@@ -196,6 +196,7 @@ export default class AccountDetail extends Component<IAccountDetailProps> {
                 type={'error'}
                 showIcon
                 banner
+                icon={<Icon type="exclamation-circle" theme="filled" />}
                 message={<FormattedMessage id={'dashboard.account-detail.export.alert.title'} />}
                 description={<FormattedMessage id={'dashboard.account-detail.export.alert.desc'} />}
                 style={{ marginBottom: 36 }}

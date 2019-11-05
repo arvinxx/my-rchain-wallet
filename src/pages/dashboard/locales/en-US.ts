@@ -1,3 +1,5 @@
+import React from 'react';
+
 export default {
   'dashboard.account.title': 'Account',
   'dashboard.account.button.send': 'SEND',
@@ -14,4 +16,9 @@ export default {
   'dashboard.account-detail.export.copy.success': 'Private key copied successfully 🎉',
   'dashboard.account-detail.export.txt': 'Export to TXT file',
   'dashboard.account-detail.export.return': 'Return',
+  'dashboard.token.title': 'Token',
+  'dashboard.token.add': "Don't see your tokens?{add} to add them to your account",
+  'dashboard.token.add.click': 'Click here',
+  'dashboard.transaction.title': 'Transaction',
+  'dashboard.transaction.more': '>>See More<<',
 };
