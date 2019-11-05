@@ -17,6 +17,6 @@ export default {
   'dashboard.token.title': '通证',
   'dashboard.token.add': '没有找到你的通证?{add}立即添加通证',
   'dashboard.token.add.click': '点击这里',
-  'dashboard.transaction.title': '交易',
+  'dashboard.transaction.title': '交易记录',
   'dashboard.transaction.more': '>> 查看所有 <<',
 };

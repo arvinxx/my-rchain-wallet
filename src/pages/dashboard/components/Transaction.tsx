@@ -5,6 +5,7 @@ import { ITransaction } from '../index';
 import moment from 'moment';
 
 import { Tag, Card, Typography, Avatar, Button } from 'antd';
+import { Link } from 'umi';
 
 const { Text } = Typography;
 
@@ -59,9 +60,9 @@ export default class Transaction extends Component<ITransactionProps> {
           })}
         </div>
         <div className={styles.bottom}>
-          <Button type={'link'} className={styles.more}>
+          <Link to={'/transaction'} className={styles.more}>
             <FormattedMessage id={'dashboard.transaction.more'} />
-          </Button>
+          </Link>
         </div>
       </Card>
     );

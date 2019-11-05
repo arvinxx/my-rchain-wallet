@@ -1,6 +1,6 @@
 export default {
   'menu.welcome': '欢迎',
-  'menu.transfer': '交易',
+  'menu.transfer': '转账',
   'menu.more-blocks': '更多区块',
   'menu.home': '首页',
   'menu.login': '登录',
@@ -13,7 +13,6 @@ export default {
   'menu.dashboard.analysis': '分析页',
   'menu.dashboard.monitor': '监控页',
   'menu.dashboard.workplace': '工作台',
-  'menu.exception.403': '403',
   'menu.exception.404': '404',
   'menu.exception.500': '500',
   'menu.transaction': '交易记录',

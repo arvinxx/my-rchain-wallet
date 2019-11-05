@@ -22,6 +22,7 @@ export { default as CloseOutline } from '@ant-design/icons-svg/lib/outline/Close
 export { default as CheckOutline } from '@ant-design/icons-svg/lib/outline/CheckOutline';
 export { default as DeleteOutline } from '@ant-design/icons-svg/lib/outline/DeleteOutline';
 export { default as MoreOutline } from '@ant-design/icons-svg/lib/outline/MoreOutline';
+export { default as ProfileOutline } from '@ant-design/icons-svg/lib/outline/ProfileOutline';
 
 export { default as CopyFill } from '@ant-design/icons-svg/lib/fill/CopyFill';
 export { default as CheckCircleFill } from '@ant-design/icons-svg/lib/fill/CheckCircleFill';
