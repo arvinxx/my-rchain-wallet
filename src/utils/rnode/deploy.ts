@@ -1,5 +1,8 @@
 import grpcWeb from 'grpc-web';
-import protoSchema from './rnode-grpc-gen/js/pbjs_generated.json';
+import protoSchema from '../../../rnode-grpc-gen/js/pbjs_generated.json';
+// Import generated protobuf types (in global scope)
+import '../../../rnode-grpc-gen/js/DeployServiceV1_pb'
+import '../../../rnode-grpc-gen/js/ProposeServiceV1_pb'
 
 import { rnodeDeploy, rnodePropose, signDeploy } from '@tgrospic/rnode-grpc-js';
 
