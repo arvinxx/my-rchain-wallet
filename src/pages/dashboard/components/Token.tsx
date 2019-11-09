@@ -19,7 +19,6 @@ export default class Token extends Component<ITokenProps> {
 
   render() {
     const { tokenList, selectedToken } = this.props;
-    console.log(tokenList);
     return (
       <Card
         className={styles.container}
@@ -34,7 +33,7 @@ export default class Token extends Component<ITokenProps> {
           const { name, img } = token;
           const isSelected = selectedToken === name;
           return (
-            <div className={styles.list + ` ${isSelected ? styles.selected : null}`}>
+            <div key={name} className={styles.list + ` ${isSelected ? styles.selected : null}`}>
               <Avatar src={img} className={styles.logo} />
               <div className={styles.name}>{name}</div>
               <div className={styles.action}>

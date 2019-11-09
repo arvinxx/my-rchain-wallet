@@ -1,13 +1,13 @@
-import { AnyAction, Dispatch, Reducer } from 'redux';
+import { AnyAction, Dispatch } from 'redux';
 import { MenuDataItem } from '@ant-design/pro-layout';
 import { RouterTypes } from 'umi';
 import { DefaultSettings as SettingModelState } from '../../config/defaultSettings';
 import { GlobalModelState } from './global';
 import { UserModelState } from './user';
-import { LoginModelStore } from './login';
+import { WalletModelState } from './wallet';
 import { EffectsCommandMap, Subscription } from 'dva';
 
-export { GlobalModelState, SettingModelState, UserModelState };
+export { GlobalModelState, SettingModelState, WalletModelState, UserModelState };
 
 export interface Loading {
   global: boolean;
@@ -26,7 +26,7 @@ export interface ConnectState {
   loading: Loading;
   settings: SettingModelState;
   user: UserModelState;
-  login: LoginModelStore;
+  wallet: WalletModelState;
   routing: { location: Location };
 }
 
@@ -41,7 +41,7 @@ export interface ConnectProps<T = {}> extends Partial<RouterTypes<Route, T>> {
   dispatch?: Dispatch<AnyAction>;
 }
 
-export { Reducer, EffectsCommandMap, Subscription };
+export { EffectsCommandMap, Subscription };
 
 export type Effect = (
   action: AnyAction,
@@ -59,6 +59,12 @@ export type Action<P = any, C = (payload: P) => void> = {
   };
   [key: string]: any;
 };
+/*
+ * @template S The type of state consumed and produced by this reducer.
+ * @template A The type of actions the reducer can potentially respond to.
+ */
+export type Reducer<S = any, A extends Action = AnyAction> = (state: S, action: A) => S;
+
 /**
  * @type P: Type of payload
  * @type C: Type of callback

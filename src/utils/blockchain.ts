@@ -10,7 +10,7 @@ import {
 import hdkey from 'ethereumjs-wallet/hdkey';
 import { fromPrivateKey } from 'ethereumjs-wallet';
 
-import { getAddrFromEth } from '@/utils/rnode';
+import { getAddrFromEth, getAddrFromPublicKey } from '@/utils/rnode';
 
 /**
  * generate Mnemonic Phrase
@@ -78,3 +78,5 @@ export const showHiddenAddress = (address: string, count: number = 5) => {
   const suffix = address.slice(-count);
   return prefix + '*****' + suffix;
 };
+
+export const getTwoTypeAddrFromPublicKey = getAddrFromPublicKey;

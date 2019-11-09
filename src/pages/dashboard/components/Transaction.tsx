@@ -21,7 +21,6 @@ export default class Transaction extends Component<ITransactionProps> {
 
   render() {
     const { transaction, token } = this.props;
-    console.log(transaction);
     return (
       <Card
         className={styles.container}
@@ -34,11 +33,11 @@ export default class Transaction extends Component<ITransactionProps> {
         bordered={false}
       >
         <div className={styles.list}>
-          {transaction.map(bill => {
+          {transaction.map((bill, index) => {
             const { number, status, timestamp, title, type } = bill;
 
             return (
-              <div className={styles.item}>
+              <div className={styles.item} key={index}>
                 <Avatar src={'21312341'} className={styles.icon} />
 
                 <div className={styles.info}>

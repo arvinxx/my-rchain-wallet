@@ -9,6 +9,7 @@
     "test": "umi test",
     "gh-pages": "cp CNAME ./dist/ && gh-pages -d dist",
     "deploy": "cross-env npm run build && npm run gh-pages",
+    "rnode-generate": "rnode-grpc --rnode-version v0.9.16",
     "analyze": "cross-env ANALYZE=1 umi build"
   },
   "dependencies": {
@@ -23,6 +24,8 @@
     "dva": "^2.5.0-beta.2",
     "ethereumjs-util": "^6.1.0",
     "ethereumjs-wallet": "^0.6.3",
+    "google-protobuf": "^3.10.0",
+    "grpc-web": "^1.0.7",
     "identicon.js": "^2.3.3",
     "js-sha3": "^0.8.0",
     "lodash": "^4.17.15",
@@ -61,6 +64,7 @@
     "eslint-plugin-react": "^7.11.1",
     "gh-pages": "^2.1.1",
     "husky": "^0.14.3",
+    "protobufjs": "^6.8.8",
     "less-vars-to-js": "^1.3.0",
     "lint-staged": "^7.2.2",
     "react-test-renderer": "^16.7.0",

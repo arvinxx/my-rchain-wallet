@@ -1,37 +1,24 @@
 import { Effect } from 'dva';
-import { Reducer } from 'redux';
+
+import { Reducer } from './connect';
 
 import { queryCurrent, query as queryUsers, updateUserList } from '@/services/user';
 import { IAccount } from '@/services/account';
 import { accountLogin } from '@/services/login';
-
-export interface CurrentUser extends IAccount {
-  title?: string;
-  group?: string;
-  signature?: string;
-  tags?: {
-    key: string;
-    label: string;
-  }[];
-  userid?: string;
-  unreadCount?: number;
-}
-
+export interface CurrentUser extends IAccount {}
 export interface UserModelState {
-  currentUser: CurrentUser;
+  currentUser: IAccount;
   userList?: IAccount[];
 }
 
 export interface UserModelStore {
   state: UserModelState;
-  effects: {
-    fetch: Effect;
-    fetchCurrent: Effect;
-    register: Effect;
-  };
   reducers: {
     save: Reducer<UserModelState>;
     changeName: Reducer<UserModelState>;
+    fetchCurrent: Reducer<UserModelState>;
+    fetchAll: Reducer<UserModelState>;
+    register: Reducer<UserModelState>;
   };
 }
 
@@ -46,6 +33,9 @@ const UserModel: UserModelStore = {
       privateKey: '',
       pwd: '',
       uid: '',
+      balanceId: '',
+      transferId: '',
+      userid: '',
     },
     userList: [],
   },
@@ -70,26 +60,30 @@ const UserModel: UserModelStore = {
         currentUser: { ...currentUser, username: newName },
       };
     },
-  },
-
-  effects: {
-    *fetch(_, { put }) {
+    fetchAll(state) {
       const userList = queryUsers();
-      yield put({
-        type: 'save',
-        payload: { userList },
-      });
+      if (!userList) {
+        return state;
+      }
+      return {
+        ...state,
+        userList,
+      };
     },
-    *fetchCurrent(_, { put }) {
+    fetchCurrent(state) {
       const currentUser = queryCurrent();
-      yield put({
-        type: 'save',
-        payload: { currentUser },
-      });
+      if (!currentUser) {
+        return state;
+      }
+      return {
+        ...state,
+        currentUser,
+      };
     },
-    *register({ payload }, { put }) {
+    register(state, payload) {
       const { uid } = payload;
       accountLogin(uid);
+      return state;
     },
   },
 };

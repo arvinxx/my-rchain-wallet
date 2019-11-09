@@ -1,4 +1,3 @@
-import request from '@/utils/request';
 import { getDecryptedItem, getItem, setEncryptedItem } from '@/utils/utils';
 import { IAccount } from '@/services/account';
 
@@ -14,10 +13,6 @@ export const queryCurrent = (): IAccount | undefined => {
   const userList: IAccount[] = getDecryptedItem('userList');
   return userList.find(user => user.uid === currentUser);
 };
-
-export async function queryNotices(): Promise<any> {
-  return request('/api/notices');
-}
 
 export const transfer = async () => {
   //TODO: make the rev transfer

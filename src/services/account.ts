@@ -1,10 +1,10 @@
 import {
   getKeyPairFromMnemonic,
   getMnemonic,
+  getTwoTypeAddrFromPublicKey,
   getPublicKeyFromPrivateKey,
   getRevAddressFromPublicKey,
 } from '@/utils/blockchain';
-import { getAddrFromPublicKey } from '@/utils/rnode';
 
 export interface IAccount {
   address: string;
@@ -15,10 +15,13 @@ export interface IAccount {
   username: string;
   mnemonic?: string;
   avatar: string;
+  balanceId: string;
+  userid: string;
+  transferId: string;
 }
 export const getAccountFromPrivateKey = (privateKey: string) => {
   const publicKey = getPublicKeyFromPrivateKey(privateKey);
-  const res = getAddrFromPublicKey(publicKey);
+  const res = getTwoTypeAddrFromPublicKey(publicKey);
   if (!res) {
     return;
   }

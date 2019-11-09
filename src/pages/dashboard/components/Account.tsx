@@ -9,6 +9,7 @@ import { copyToClipboard } from '@/utils/utils';
 const { Text } = Typography;
 interface IAccountProps {
   currentUser: CurrentUser;
+  balance: number;
   open: () => void;
 }
 export default class Account extends Component<IAccountProps> {
@@ -21,7 +22,7 @@ export default class Account extends Component<IAccountProps> {
     message.success(formatMessage({ id: 'dashboard.account.copy.success' }), 0.5);
   };
   render() {
-    const { currentUser, open } = this.props;
+    const { currentUser, open, balance } = this.props;
     if (!currentUser) {
       return <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />;
     }
@@ -69,8 +70,8 @@ export default class Account extends Component<IAccountProps> {
             <div className={styles.operation}>
               <div className={styles.money}>
                 <Text> {formatMessage({ id: 'dashboard.account.balance' })}</Text>
-                <div className={styles.balance}>1,016,100 REV</div>
-                <Text type={'secondary'}>$ 16,100 USD</Text>
+                <div className={styles.balance}>{balance} REV</div>
+                <Text type={'secondary'}>$ {balance * 7} USD</Text>
               </div>
               <div className={styles.button}>
                 <Button type={'primary'} className={styles.receive}>

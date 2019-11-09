@@ -57,7 +57,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const checkLocked = () => {
     const lastLogin = localStorage.getItem('lastLogin') as string;
     const dueTime = 30 * 60 * 1000; // lock after 30 mins
-    const duration = new Date().valueOf() - lastLogin;
+    const duration = new Date().valueOf() - Number(lastLogin);
 
     if (duration > dueTime) {
       dispatch({

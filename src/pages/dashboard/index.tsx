@@ -7,7 +7,7 @@ import AccountDetail from './components/AccountDetail';
 import Token from './components/Token';
 import Transaction from './components/Transaction';
 import { connect } from 'dva';
-import { ConnectState, DispatchProps, UserModelState } from '@/models/connect';
+import { ConnectState, DispatchProps, UserModelState, WalletModelState } from '@/models/connect';
 
 const { Text } = Typography;
 
@@ -21,13 +21,20 @@ export interface ITransaction {
 
 interface IAccountDetailProps extends DispatchProps {
   user: UserModelState;
+  wallet: WalletModelState;
 }
 
-@connect(({ user }: ConnectState) => ({ user }))
+@connect(({ user, wallet }: ConnectState) => ({ user, wallet }))
 export default class Dashboard extends Component<IAccountDetailProps> {
   state = {
     visible: false,
   };
+  componentDidMount(): void {
+    this.props.dispatch({
+      type: 'wallet/checkBalance',
+    });
+  }
+
   close = () => {
     this.setState({
       visible: false,
@@ -40,9 +47,10 @@ export default class Dashboard extends Component<IAccountDetailProps> {
   };
 
   render() {
-    const { user, dispatch } = this.props;
+    const { user, dispatch, wallet } = this.props;
     const { visible } = this.state;
     const { currentUser } = user;
+    const { revBalance } = wallet;
     const tokenList = [
       { name: 'RChain', img: 'http://pics.arvinx.com/2019-11-05-150211.jpg' },
       { name: 'ETH', img: 'http://pics.arvinx.com/2019-11-05-150237.jpg' },
@@ -108,7 +116,7 @@ export default class Dashboard extends Component<IAccountDetailProps> {
     return (
       <div className={styles.container}>
         <div className={styles.left}>
-          <Account open={this.open} currentUser={currentUser} />
+          <Account open={this.open} currentUser={currentUser} balance={revBalance} />
           <AccountDetail
             dispatch={dispatch}
             close={this.close}
