@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Card, Typography, Tag, Button, Avatar } from 'antd';
 import styles from './style.less';
+import mixpanel from 'mixpanel-browser';
+
 import { formatMessage } from 'umi-plugin-locale';
 import Account from './components/Account';
 import AccountDetail from './components/AccountDetail';
@@ -39,11 +41,13 @@ export default class Dashboard extends Component<IAccountDetailProps> {
     this.setState({
       visible: false,
     });
+    mixpanel.track('关闭用户详情窗口');
   };
   open = () => {
     this.setState({
       visible: true,
     });
+    mixpanel.track('打开用户详情窗口');
   };
 
   render() {

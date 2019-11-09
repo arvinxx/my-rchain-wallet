@@ -20,6 +20,7 @@ import { CurrentUser } from '@/models/user';
 import { showHiddenAddress } from '@/utils/blockchain';
 import { DispatchProps } from '@/models/connect';
 import { copyToClipboard } from '@/utils/utils';
+import mixpanel from 'mixpanel-browser';
 
 const { Text, Title } = Typography;
 
@@ -77,6 +78,14 @@ export default class AccountDetail extends Component<IAccountDetailProps> {
       this.props.dispatch({
         type: 'user/changeName',
         payload: value,
+        meta: {
+          mixpanel: {
+            event: '修改用户名',
+            props: {
+              username: value,
+            },
+          },
+        },
       });
     }
   };

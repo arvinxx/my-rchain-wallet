@@ -43,7 +43,7 @@ export const sendDeploy = async (rnodeUrl: string, code: string, privateKey: str
   return [result, deploy];
 };
 
-export const getDataForDeploy = async (rnodeUrl: string, deployId: string) => {
+export const getDataForDeploy = async (rnodeUrl: string, deployId: any) => {
   const { listenForDataAtName } = rnode(rnodeUrl);
   const {
     payload: { blockinfoList },

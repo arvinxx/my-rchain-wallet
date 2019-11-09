@@ -3,7 +3,6 @@ import styles from './Network.less';
 import { Button, Typography } from 'antd';
 import { formatMessage, FormattedMessage } from 'umi-plugin-locale';
 
-
 const { Title, Text } = Typography;
 interface INetworkInnerProps {}
 

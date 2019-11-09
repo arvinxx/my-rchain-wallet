@@ -80,7 +80,7 @@ const UserModel: UserModelStore = {
         currentUser,
       };
     },
-    register(state, payload) {
+    register(state, { payload }) {
       const { uid } = payload;
       accountLogin(uid);
       return state;

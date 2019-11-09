@@ -42,7 +42,7 @@ export default class Login extends Component<LoginProps, LoginState> {
   };
 
   componentDidMount(): void {
-    this.props.dispatch({ type: 'user/fetch' });
+    this.props.dispatch({ type: 'user/fetchAll' });
   }
 
   signup = () => {

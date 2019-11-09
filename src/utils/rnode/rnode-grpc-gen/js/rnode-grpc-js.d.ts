@@ -2,8 +2,6 @@
  * Generated TypeScript definitions for RNode v0.9.15
  */
 declare module "@tgrospic/rnode-grpc-js" {
-  import { ec } from 'elliptic'
-
   interface Options {
     // gRPC protocol implementation
     // - `@grpc/grpc-js` for Nodejs
@@ -142,7 +140,7 @@ declare module "@tgrospic/rnode-grpc-js" {
    * const signed = signDeploy(key, deployData)
    * ```
    */
-  export function signDeploy(key: string | Uint8Array | Buffer | ec.KeyPair, deploy: UnsignedDeployData): DeployDataProto
+  export function signDeploy(key: string | Uint8Array | Buffer, deploy: UnsignedDeployData): DeployDataProto
 
   /**
    * Verifies deploy for a valid signature.
@@ -463,11 +461,11 @@ declare module "@tgrospic/rnode-grpc-js" {
   }
 
   interface ListeningNameDataResponse {
-    payload?: ListeningNameDataPayload
+    payload: ListeningNameDataPayload
   }
 
   interface ListeningNameDataPayload {
-    blockinfoList?: DataWithBlockInfo[]
+    blockinfoList: DataWithBlockInfo[]
     length?: number /* int32 */
   }
 
