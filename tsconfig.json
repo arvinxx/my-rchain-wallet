@@ -13,6 +13,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
+    "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true
   }
 }
