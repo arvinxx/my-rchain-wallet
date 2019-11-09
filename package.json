@@ -10,9 +10,11 @@
     "gh-pages": "cp CNAME ./dist/ && gh-pages -d dist",
     "deploy": "cross-env npm run build && npm run gh-pages",
     "rnode-generate": "rnode-grpc --rnode-version v0.9.16",
-    "analyze": "cross-env ANALYZE=1 umi build"
+    "analyze": "cross-env ANALYZE=1 umi build",
+    "postinstall": "npm run rnode-generate"
   },
   "dependencies": {
+    "@ant-design/icons-svg": "^4.0.0-alpha.0",
     "@ant-design/pro-layout": "^4.5.16",
     "@tgrospic/rnode-grpc-js": "^0.8.2",
     "antd": "^3.23.3",
@@ -35,6 +37,7 @@
     "qrcode.react": "^0.9.3",
     "qs": "^6.7.0",
     "react": "^16.7.0",
+    "react-document-title": "^2.0.3",
     "react-dom": "^16.7.0",
     "react-intl": "^3.3.2",
     "react-responsive": "^8.0.1",
@@ -63,10 +66,11 @@
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.11.1",
     "gh-pages": "^2.1.1",
+    "grpc-tools": "^1.8.0",
     "husky": "^0.14.3",
-    "protobufjs": "^6.8.8",
     "less-vars-to-js": "^1.3.0",
     "lint-staged": "^7.2.2",
+    "protobufjs": "^6.8.8",
     "react-test-renderer": "^16.7.0",
     "tslint": "^5.12.0",
     "tslint-eslint-rules": "^5.4.0",
