@@ -36,7 +36,7 @@ export default class Transaction extends Component<ITransactionProps> {
         <div className={styles.list}>
           {loading ? (
             <div className={styles.skelContainer}>
-              <Skeleton active avatar paragraph={{ rows: 1 }} className={styles.skeleton}/>
+              <Skeleton active avatar paragraph={{ rows: 1 }} className={styles.skeleton} />
               <Skeleton active avatar paragraph={{ rows: 1 }} className={styles.skeleton} />
               <Skeleton active avatar paragraph={{ rows: 1 }} className={styles.skeleton} />
               <Skeleton active avatar paragraph={{ rows: 1 }} className={styles.skeleton} />
@@ -48,7 +48,7 @@ export default class Transaction extends Component<ITransactionProps> {
 
               return (
                 <div className={styles.item} key={index}>
-                  <Avatar src={'21312341'} className={styles.icon} />
+                  <Avatar src={''} className={styles.icon} />
                   <div className={styles.info}>
                     <div>{title}</div>
                     <div>

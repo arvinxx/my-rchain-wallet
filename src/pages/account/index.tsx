@@ -19,7 +19,7 @@ interface IAccountProps extends DispatchProps {
 
 const Account: FC<IAccountProps> = props => {
   const { global, dispatch, user } = props;
-  const { analytics, exports, lockTime } = global;
+  const { analytics, exports, lockTime, network, netList } = global;
   const { currentUser } = user;
   const { mnemonic, pwd } = currentUser;
   const isMobile = useMediaQuery({
@@ -37,7 +37,7 @@ const Account: FC<IAccountProps> = props => {
             <General lockTime={lockTime} dispatch={dispatch} />
           </TabPane>
           <TabPane key={'network'} tab={<FormattedMessage id={'account.tabs.network'} />}>
-            <Network />
+            <Network network={network} dispatch={dispatch} netList={netList} />
           </TabPane>
           <TabPane key={'private'} tab={<FormattedMessage id={'account.tabs.private'} />}>
             <Private

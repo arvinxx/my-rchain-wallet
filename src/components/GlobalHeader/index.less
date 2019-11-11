@@ -25,6 +25,9 @@
   }
 }
 
+.network {
+  width: 100px;
+}
 .trigger {
   height: @layout-header-height;
   padding: ~'calc((@{layout-header-height} - 20px) / 2)' 24px;
@@ -37,10 +40,11 @@
 }
 
 .right {
+  display: flex;
   float: right;
   height: 100%;
   margin-right: 12px;
-  overflow: hidden;
+  //overflow: hidden;
   .action {
     display: inline-block;
     height: 100%;

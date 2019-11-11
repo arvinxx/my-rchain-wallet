@@ -94,6 +94,16 @@ export default (config: any) => {
             return false;
           },
         },
+        rgpc: {
+          name: 'rgpc',
+          test: (module: { context: string }) => {
+            const packageName = getModulePackageName(module) || '';
+            if (packageName) {
+              return ['grpc-web', 'google-protobuf', 'rnode-grpc-gen'].includes(packageName);
+            }
+            return false;
+          },
+        },
         antd: {
           name: 'antd',
           test: (module: { context: string }) => {

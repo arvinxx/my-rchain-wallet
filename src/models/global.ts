@@ -9,7 +9,9 @@ export interface NoticeItem extends NoticeIconData {
   type: string;
   status: string;
 }
-
+export interface INetList {
+  testNetList: string[];
+}
 export interface GlobalModelState {
   collapsed: boolean;
   locked: boolean;
@@ -17,6 +19,7 @@ export interface GlobalModelState {
   analytics: boolean;
   exports: boolean;
   network: string;
+  netList: INetList;
   notices: NoticeItem[];
 }
 
@@ -42,12 +45,26 @@ const GlobalModel: GlobalModelStore = {
     analytics: true,
     network: 'https://testnet-1.grpc.rchain.isotypic.com',
     notices: [],
+    netList: {
+      testNetList: [
+        'node0',
+        'node1',
+        'node2',
+        'node3',
+        'node4',
+        'node5',
+        'node6',
+        'node7',
+        'node8',
+        'node9',
+      ],
+    },
   },
   reducers: {
     save(state, { payload }) {
       return { ...state, ...payload };
     },
-    changeLayoutCollapsed(state, { payload }): GlobalModelState {
+    changeLayoutCollapsed(state, { payload }) {
       return {
         ...state,
         collapsed: payload,
@@ -58,13 +75,11 @@ const GlobalModel: GlobalModelStore = {
   subscriptions: {
     setup({ history }): void {
       // Subscribe history(url) change, trigger `load` action if pathname is `/`
-      history.listen(
-        ({ pathname, search }): void => {
-          if (typeof window.ga !== 'undefined') {
-            window.ga('send', 'pageview', pathname + search);
-          }
-        },
-      );
+      history.listen(({ pathname, search }): void => {
+        if (typeof window.ga !== 'undefined') {
+          window.ga('send', 'pageview', pathname + search);
+        }
+      });
     },
   },
 };
