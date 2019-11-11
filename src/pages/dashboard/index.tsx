@@ -24,9 +24,14 @@ export interface ITransaction {
 interface IAccountDetailProps extends DispatchProps {
   user: UserModelState;
   wallet: WalletModelState;
+  checkBalance: boolean;
 }
 
-@connect(({ user, wallet }: ConnectState) => ({ user, wallet }))
+@connect(({ user, wallet, loading }: ConnectState) => ({
+  user,
+  wallet,
+  checkBalance: loading.effects['wallet/checkBalance'],
+}))
 export default class Dashboard extends Component<IAccountDetailProps> {
   state = {
     visible: false,
@@ -51,7 +56,7 @@ export default class Dashboard extends Component<IAccountDetailProps> {
   };
 
   render() {
-    const { user, dispatch, wallet } = this.props;
+    const { user, dispatch, wallet, checkBalance } = this.props;
     const { visible } = this.state;
     const { currentUser } = user;
     const { revBalance } = wallet;
@@ -120,7 +125,12 @@ export default class Dashboard extends Component<IAccountDetailProps> {
     return (
       <div className={styles.container}>
         <div className={styles.left}>
-          <Account open={this.open} currentUser={currentUser} balance={revBalance} />
+          <Account
+            open={this.open}
+            currentUser={currentUser}
+            balance={revBalance}
+            loading={checkBalance}
+          />
           <AccountDetail
             dispatch={dispatch}
             close={this.close}
@@ -130,7 +140,7 @@ export default class Dashboard extends Component<IAccountDetailProps> {
           <Token tokenList={tokenList} selectedToken={'RChain'} />
         </div>
         <div className={styles.right}>
-          <Transaction transaction={transaction} token={'REV'} />
+          <Transaction transaction={transaction} token={'REV'} loading={checkBalance} />
         </div>
       </div>
     );

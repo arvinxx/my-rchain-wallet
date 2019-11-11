@@ -9,6 +9,7 @@ import { copyToClipboard } from '@/utils/utils';
 const { Text } = Typography;
 interface IAccountProps {
   currentUser: CurrentUser;
+  loading: boolean;
   balance: number;
   open: () => void;
 }
@@ -22,12 +23,11 @@ export default class Account extends Component<IAccountProps> {
     message.success(formatMessage({ id: 'dashboard.account.copy.success' }), 0.5);
   };
   render() {
-    const { currentUser, open, balance } = this.props;
+    const { currentUser, open, balance, loading } = this.props;
     if (!currentUser) {
       return <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />;
     }
     const { username, address, avatar } = currentUser;
-
     return (
       avatar && (
         <Card
@@ -70,8 +70,16 @@ export default class Account extends Component<IAccountProps> {
             <div className={styles.operation}>
               <div className={styles.money}>
                 <Text> {formatMessage({ id: 'dashboard.account.balance' })}</Text>
-                <div className={styles.balance}>{balance} REV</div>
-                <Text type={'secondary'}>$ {balance * 7} USD</Text>
+                {loading ? (
+                  <div style={{ marginTop: 16, marginBottom: 24 }}>
+                    <Spin />
+                  </div>
+                ) : (
+                  <>
+                    <div className={styles.balance}>{balance} REV</div>
+                    <Text type={'secondary'}>$ {balance * 7} USD</Text>
+                  </>
+                )}
               </div>
               <div className={styles.button}>
                 <Button type={'primary'} className={styles.receive}>

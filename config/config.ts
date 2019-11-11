@@ -81,6 +81,7 @@ export default {
   // },
   alias: {
     theme: resolve(__dirname, '../src/theme'), // less 全局样式文件
+    '@rnode': resolve(process.cwd(), './rnode-grpc-gen'),
     '@ant-design/icons/lib/dist$': resolve(__dirname, '../src/icons.ts'),
   },
   externals: {

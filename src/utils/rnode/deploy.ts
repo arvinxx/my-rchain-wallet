@@ -1,5 +1,9 @@
 import grpcWeb from 'grpc-web';
-import protoSchema from './rnode-grpc-gen/js/pbjs_generated.json';
+import protoSchema from '@rnode/js/pbjs_generated.json';
+
+// Import generated protobuf types (in global scope)
+import '@rnode/js/DeployServiceV1_pb';
+import '@rnode/js/ProposeServiceV1_pb';
 
 import { rnodeDeploy, rnodePropose, signDeploy } from '@tgrospic/rnode-grpc-js';
 
@@ -22,6 +26,7 @@ export const sendDeploy = async (rnodeUrl: string, code: string, privateKey: str
   const deployData = {
     term: code,
     phlolimit: 100e3,
+    // TODO
     // TEMP: in RNode v0.9.16 'valid after block number' must be zero
     // so that signature will be valid.
     // Future versions will require correct block number.
@@ -30,12 +35,12 @@ export const sendDeploy = async (rnodeUrl: string, code: string, privateKey: str
 
   // Sign deploy
   const deploy = signDeploy(key, deployData);
-
   // Send deploy
   const { result } = await DoDeploy(deploy);
   // Try to propose but don't throw on error
   try {
     const resPropose = await propose();
+    console.log(resPropose);
   } catch (error) {
     console.warn(error);
   }

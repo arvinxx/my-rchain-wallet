@@ -16,6 +16,7 @@ export interface UserModelStore {
   reducers: {
     save: Reducer<UserModelState>;
     changeName: Reducer<UserModelState>;
+    updateCurrent: Reducer<UserModelState>;
     fetchCurrent: Reducer<UserModelState>;
     fetchAll: Reducer<UserModelState>;
     register: Reducer<UserModelState>;
@@ -58,6 +59,19 @@ const UserModel: UserModelStore = {
       return {
         ...state,
         currentUser: { ...currentUser, username: newName },
+      };
+    },
+    updateCurrent(state, { payload }) {
+      const { currentUser } = state;
+      const { username } = currentUser;
+      const userList = queryUsers();
+      const index = userList.findIndex(user => user.username === username);
+      const user = { ...userList[index], ...payload };
+      userList.splice(index, 1, user);
+      updateUserList(userList);
+      return {
+        ...state,
+        currentUser: user,
       };
     },
     fetchAll(state) {

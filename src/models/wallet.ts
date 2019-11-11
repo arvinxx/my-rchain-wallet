@@ -33,9 +33,28 @@ const WalletModel: WalletModelStore = {
     *checkBalance(_, { put, call, select }) {
       const currentUser: CurrentUser = yield select(state => state.user.currentUser);
       const network: string = yield select(state => state.global.network);
-      const { address, privateKey } = currentUser;
-      const res = yield call(checkRevBalance, address, privateKey, network);
-      console.log(res);
+      const { address, privateKey, balanceId } = currentUser;
+      const { balance, deployId } = yield call(
+        checkRevBalance,
+        address,
+        privateKey,
+        network,
+        balanceId,
+      );
+      yield put({
+        type: 'save',
+        payload: {
+          revBalance: balance,
+        },
+      });
+      if (balanceId !== deployId) {
+        yield put({
+          type: 'user/updateCurrent',
+          payload: {
+            balanceId: deployId,
+          },
+        });
+      }
     },
   },
 };

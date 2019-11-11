@@ -11,7 +11,8 @@
     "baseUrl": ".",
     "strict": true,
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@rnode/*": ["rnode-grpc-gen/*"]
     },
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true
