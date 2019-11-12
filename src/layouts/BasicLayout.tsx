@@ -18,6 +18,7 @@ import styles from './BasicLayout.less';
 import rectLogo from '../assets/logo-long.svg';
 import circleLogo from '../assets/logo-circle.svg';
 import { Unlock } from '@/components';
+import { getItem } from '@/utils/utils';
 
 const { Footer } = Layout;
 
@@ -87,6 +88,12 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     checkLocked();
     dispatch({
       type: 'user/fetchCurrent',
+    });
+
+    const network = getItem('network') || 'https://testnet-0.grpc.rchain.isotypic.com';
+    dispatch({
+      type: 'global/changeNetwork',
+      payload: network,
     });
   }, []);
 

@@ -3,6 +3,7 @@ import { Subscription, Effect } from 'dva';
 
 import { NoticeIconData } from '@/components/NoticeIcon';
 import { ConnectState } from './connect.d';
+import { setItem } from '@/utils/utils';
 
 export interface NoticeItem extends NoticeIconData {
   id: string;
@@ -29,6 +30,7 @@ export interface GlobalModelStore {
 
   reducers: {
     save: Reducer<GlobalModelState>;
+    changeNetworkchangeNetwork: Reducer<GlobalModelState>;
     changeLayoutCollapsed: Reducer<GlobalModelState>;
   };
   subscriptions: { setup: Subscription };
@@ -64,6 +66,11 @@ const GlobalModel: GlobalModelStore = {
     save(state, { payload }) {
       return { ...state, ...payload };
     },
+    changeNetwork(state, { payload: network }) {
+      setItem('network', network);
+      return { ...state, network };
+    },
+
     changeLayoutCollapsed(state, { payload }) {
       return {
         ...state,

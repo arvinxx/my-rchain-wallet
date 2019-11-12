@@ -28,10 +28,8 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
   }
   const changeNetwork = (network: string) => {
     dispatch({
-      type: 'global/save',
-      payload: {
-        network,
-      },
+      type: 'global/changeNetwork',
+      payload: network,
     });
   };
   return (
@@ -84,6 +82,7 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
               {net}
             </Select.Option>
           ))}
+          <Select.Option value={'http://localhost:44401'}>localhost</Select.Option>
         </Select>
       </div>
       <Avatar />

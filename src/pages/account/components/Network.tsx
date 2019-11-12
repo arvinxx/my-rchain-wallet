@@ -22,10 +22,8 @@ export default class Network extends Component<INetworkProps> {
 
   onChange = e => {
     this.props.dispatch({
-      type: 'global/save',
-      payload: {
-        network: e.target.value,
-      },
+      type: 'global/changeNetwork',
+      payload: e.target.value,
     });
   };
 
@@ -58,7 +56,7 @@ export default class Network extends Component<INetworkProps> {
                 {net}
               </Radio>
             ))}
-            <Radio className={styles.radio} value={`http://localhost`}>
+            <Radio className={styles.radio} value={`http://localhost:44401`}>
               localhost
             </Radio>
           </Radio.Group>
