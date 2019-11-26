@@ -1,0 +1,125 @@
+@import '~theme/theme';
+
+@gap: 24px;
+
+.container {
+  display: flex;
+  width: 100%;
+  @media (max-width: @screen-lg-max) {
+    flex-direction: column;
+  }
+}
+.transfer {
+  min-width: 500px;
+  @media (max-width: @screen-lg-max) {
+    min-width: auto;
+  }
+  :global {
+    .ant-card-body {
+      > *:not(:first-child) {
+        margin-top: 24px;
+      }
+    }
+  }
+}
+.title {
+  margin-bottom: 8px;
+}
+.numberWrapper {
+  display: flex;
+  align-items: center;
+}
+.number {
+  width: 100%;
+}
+.send {
+  border: solid @border-color-base 1px;
+  display: flex;
+  padding: 8px 16px;
+  align-items: center;
+  border-radius: 4px;
+}
+
+.user {
+  margin-left: 16px;
+}
+.balance {
+  margin-left: auto;
+  display: flex;
+  :global {
+    .ant-statistic-content {
+      display: inline-flex;
+      font-size: 16px;
+      color: @text-color-secondary;
+    }
+  }
+}
+.down {
+  color: @primary-color;
+  border: solid @border-color-base 1px;
+  padding: 8px;
+  border-radius: 50px;
+  font-size: 20px;
+}
+.card {
+  background: white;
+}
+.input {
+  :global {
+    .ant-input {
+      font-size: 16px;
+      padding: 24px 30px;
+    }
+    .ant-input:not(:first-child) {
+      padding-left: 60px;
+    }
+  }
+}
+
+.icon {
+  font-size: 18px;
+  padding: 0 8px;
+}
+.action {
+  display: flex;
+  margin-top: 48px !important;
+  justify-content: space-between;
+}
+.button {
+  height: 48px;
+}
+
+.feeCard {
+  //padding: 12px;
+  //font-size: 16px;
+  margin-bottom: 40px;
+  .fee {
+    display: flex;
+    justify-content: space-between;
+  }
+  .time {
+    margin: 4px 0;
+  }
+
+  .slider {
+    color: @text-color-secondary;
+    :global {
+      .ant-slider:hover .ant-slider-rail {
+        background: @background-color-base;
+      }
+
+      .ant-slider-track {
+        background: @primary-color;
+      }
+
+      .ant-slider-mark-text {
+        color: @text-color-secondary;
+        //color: fade(#fff, 45%);
+      }
+
+      .ant-slider-mark-text-active {
+        //color: fade(#fff, 65%);
+      }
+    }
+  }
+}

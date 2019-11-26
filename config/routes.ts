@@ -51,6 +51,7 @@ const routes: IRoute[] = [
             path: '/transfer',
             name: 'transfer',
             icon: 'transaction',
+            component: '../pages/transfer',
           },
           {
             path: '/transaction',

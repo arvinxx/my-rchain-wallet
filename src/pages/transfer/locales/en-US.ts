@@ -1,0 +1,16 @@
+export default {
+  'transfer.title': 'Transfer',
+  'transfer.receive-address.title': 'Receive Address',
+  'transfer.receive-address.placeholder': 'Enter receive address',
+  'transfer.send-address.title': 'Send Address',
+  'transfer.fee.title': 'Transfer Speed',
+  'transfer.send-number.title': 'Amount',
+  'transfer.send-number.max': 'Max',
+  'transfer.note.title': 'Note',
+  'transfer.note.placeholder': 'Enter note(optional)',
+  'transfer.button.reset': 'Reset',
+  'transfer.button.confirm': 'Send',
+  'transfer.fee.time': 'Time',
+  'transfer.fee.slow': 'Slow',
+  'transfer.fee.fast': 'Fast',
+};

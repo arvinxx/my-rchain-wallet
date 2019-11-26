@@ -1,0 +1,16 @@
+export default {
+  'transfer.title': '发起转账',
+  'transfer.receive-address.placeholder': '请输入接收地址',
+  'transfer.send-address.title': '发送地址',
+  'transfer.send-number.title': '发送数量',
+  'transfer.send-number.max': '最大数量',
+  'transfer.note.title': '说明',
+  'transfer.note.placeholder': '请输入说明(可选)',
+  'transfer.receive-address.title': '接收地址',
+  'transfer.button.reset': '重置',
+  'transfer.button.confirm': '发送',
+  'transfer.fee.title': '交易费用',
+  'transfer.fee.time': '时间',
+  'transfer.fee.slow': '慢',
+  'transfer.fee.fast': '快',
+};

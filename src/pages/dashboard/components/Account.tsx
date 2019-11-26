@@ -5,6 +5,7 @@ import { formatMessage, FormattedMessage } from 'umi-plugin-locale';
 import { showHiddenAddress } from '@/utils/blockchain';
 import { CurrentUser } from '@/models/user';
 import { copyToClipboard } from '@/utils/utils';
+import { router } from 'umi';
 
 const { Text } = Typography;
 interface IAccountProps {
@@ -22,6 +23,11 @@ export default class Account extends Component<IAccountProps> {
     copyToClipboard(address);
     message.success(formatMessage({ id: 'dashboard.account.copy.success' }), 0.5);
   };
+  navigate = (type: string) => () => {
+    console.log(type);
+    router.push('transfer');
+  };
+
   render() {
     const { currentUser, open, balance, loading } = this.props;
     if (!currentUser) {
@@ -85,7 +91,7 @@ export default class Account extends Component<IAccountProps> {
                 <Button type={'primary'} className={styles.receive}>
                   <FormattedMessage id={'dashboard.account.button.receive'} />
                 </Button>
-                <Button type={'primary'} className={styles.send}>
+                <Button type={'primary'} className={styles.send} onClick={this.navigate('send')}>
                   <FormattedMessage id={'dashboard.account.button.send'} />
                 </Button>
               </div>
