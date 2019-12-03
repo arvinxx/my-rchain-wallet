@@ -56,8 +56,8 @@ export default class Network extends Component<INetworkProps> {
                 {net}
               </Radio>
             ))}
-            <Radio className={styles.radio} value={`http://localhost:44401`}>
-              localhost
+            <Radio className={styles.radio} value={`http://localhost:54401`}>
+              Localhost 54401
             </Radio>
           </Radio.Group>
         </div>

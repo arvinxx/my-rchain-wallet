@@ -82,7 +82,7 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
               {net}
             </Select.Option>
           ))}
-          <Select.Option value={'http://localhost:44401'}>localhost</Select.Option>
+          <Select.Option value={'http://localhost:54401'}>localhost</Select.Option>
         </Select>
       </div>
       <Avatar />

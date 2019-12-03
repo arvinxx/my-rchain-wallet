@@ -96,11 +96,19 @@
 }
 
 .balance {
-  color: @primary-color;
   font-size: 24px;
   font-weight: 500;
   letter-spacing: 0;
   margin-top: 8px;
+  :global {
+    .ant-statistic-content {
+      color: @primary-color;
+    }
+    .ant-statistic-title {
+      color: @text-color;
+      font-weight: normal;
+    }
+  }
 }
 .button {
   display: flex;

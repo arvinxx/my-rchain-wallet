@@ -1,0 +1,37 @@
+@import '~theme/theme';
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+}
+.icon {
+  background: @primary-4;
+  padding: 20px;
+  font-size: 36px;
+  color: white;
+  border-radius: 50%;
+}
+.success {
+  background: @green-4;
+}
+.type {
+  :global {
+    .ant-list-item-meta-title {
+      color: @text-color-secondary;
+    }
+  }
+}
+.amount {
+  color: @primary-color;
+  font-weight: bold;
+  font-size: 16px;
+}
+.action {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.button {
+  height: 48px;
+}

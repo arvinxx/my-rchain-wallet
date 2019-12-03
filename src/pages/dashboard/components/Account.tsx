@@ -1,5 +1,16 @@
 import React, { Component } from 'react';
-import { Card, Typography, Tag, Button, Tooltip, Icon, Avatar, message, Spin } from 'antd';
+import {
+  Card,
+  Typography,
+  Tag,
+  Button,
+  Statistic,
+  Tooltip,
+  Icon,
+  Avatar,
+  message,
+  Spin,
+} from 'antd';
 import styles from './Account.less';
 import { formatMessage, FormattedMessage } from 'umi-plugin-locale';
 import { showHiddenAddress } from '@/utils/blockchain';
@@ -75,15 +86,20 @@ export default class Account extends Component<IAccountProps> {
             </div>
             <div className={styles.operation}>
               <div className={styles.money}>
-                <Text> {formatMessage({ id: 'dashboard.account.balance' })}</Text>
+                {/*<Text> {formatMessage({ id: 'dashboard.account.balance' })}</Text>*/}
                 {loading ? (
                   <div style={{ marginTop: 16, marginBottom: 24 }}>
                     <Spin />
                   </div>
                 ) : (
                   <>
-                    <div className={styles.balance}>{balance} REV</div>
-                    <Text type={'secondary'}>$ {balance * 7} USD</Text>
+                    <Statistic
+                      title={formatMessage({ id: 'dashboard.account.balance' })}
+                      className={styles.balance}
+                      value={balance}
+                      suffix="REV"
+                    />
+                    {/*<Text type={'secondary'}>$ {balance * 7} USD</Text>*/}
                   </>
                 )}
               </div>

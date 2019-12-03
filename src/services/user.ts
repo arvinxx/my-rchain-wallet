@@ -14,10 +14,6 @@ export const queryCurrent = (): IAccount | undefined => {
   return userList.find(user => user.uid === currentUser);
 };
 
-export const transfer = async () => {
-  //TODO: make the rev transfer
-};
-
 export const updateUserList = (userList: IAccount[]) => {
   if (!userList) {
     return;

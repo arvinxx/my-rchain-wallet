@@ -11,10 +11,12 @@ import {
   Avatar,
   Button,
   Icon,
+  Spin,
 } from 'antd';
 import styles from './style.less';
 import mixpanel from 'mixpanel-browser';
-import { IconFont, CheckPassword } from '@/components';
+import { IconFont, BaseLoading } from '@/components';
+import Confirm from './components/Confirm';
 
 import { formatMessage, FormattedMessage } from 'umi-plugin-locale';
 
@@ -50,8 +52,9 @@ interface IAccountDetailProps extends DispatchProps {
 export default class Dashboard extends Component<IAccountDetailProps> {
   state = {
     visible: false,
-    number: 0,
-    sendAddress: '',
+    amount: 10,
+    toAddr: '11113y7AfYj7hShN49oAHHd3KiWxZRsodesdBi8QwSrPR5Veyh77S',
+    note: '',
   };
 
   componentDidMount(): void {
@@ -72,14 +75,19 @@ export default class Dashboard extends Component<IAccountDetailProps> {
     });
     mixpanel.track('点击发送按钮');
   };
-  handleNumber = number => {
+  handleAmount = (amount: number | undefined) => {
     this.setState({
-      number,
+      amount,
     });
   };
-  handleSendAddr = e => {
+  handleToAddr = e => {
     this.setState({
-      sendAddress: e.target.value,
+      toAddr: e.target.value,
+    });
+  };
+  handleNote = e => {
+    this.setState({
+      note: e.target.value,
     });
   };
   setMax = () => {
@@ -96,28 +104,39 @@ export default class Dashboard extends Component<IAccountDetailProps> {
     });
   };
   send = () => {
-    console.log('send');
+    const { amount, toAddr } = this.state;
+    this.props.dispatch({
+      type: 'wallet/transfer',
+      payload: { amount, toAddr },
+    });
+  };
+  hide = () => {
+    this.setState({
+      visible: false,
+    });
   };
   render() {
-    const { user, dispatch, wallet } = this.props;
-    const { visible, number, sendAddress } = this.state;
+    const { user, dispatch, wallet, checkBalance: balanceLoading } = this.props;
+    const { visible, amount, toAddr, note } = this.state;
     const { currentUser } = user;
-    const { revBalance } = wallet;
+    const { revBalance, fee } = wallet;
     const { address, avatar, username, pwd } = currentUser;
+
     return (
       <div className={styles.container}>
-        <Modal
+        <Confirm
           visible={visible}
-          centered
-          footer={null}
-          onCancel={() => {
-            this.setState({
-              visible: false,
-            });
-          }}
-        >
-          <CheckPassword next={this.send} password={pwd} />
-        </Modal>
+          hide={this.hide}
+          pwd={pwd}
+          send={this.send}
+          note={note}
+          type={'payment'}
+          address={address}
+          toAddr={toAddr}
+          amount={amount}
+          fee={fee}
+          dispatch={dispatch}
+        />
         <Card className={styles.transfer} bordered={false}>
           <Title level={3}>
             <FormattedMessage id={'transfer.title'} />
@@ -131,8 +150,8 @@ export default class Dashboard extends Component<IAccountDetailProps> {
             <div className={styles.numberWrapper} style={{ display: 'flex' }}>
               <InputNumber
                 className={styles.number}
-                onChange={this.handleNumber}
-                value={number}
+                onChange={this.handleAmount}
+                value={amount}
                 size={'large'}
               />
               <Button type={'link'} onClick={this.setMax}>
@@ -157,7 +176,9 @@ export default class Dashboard extends Component<IAccountDetailProps> {
                 </div>
               </div>
               <div className={styles.balance}>
-                <Statistic title={'REV'} precision={4} value={revBalance} />
+                <BaseLoading loading={balanceLoading}>
+                  <Statistic title={'REV'} precision={4} value={revBalance} />
+                </BaseLoading>
               </div>
             </div>
           </div>
@@ -173,8 +194,8 @@ export default class Dashboard extends Component<IAccountDetailProps> {
             <Input
               className={styles.input}
               prefix={<IconFont type="mrw-address" className={styles.icon} />}
-              value={sendAddress}
-              onChange={this.handleSendAddr}
+              value={toAddr}
+              onChange={this.handleToAddr}
               placeholder={formatMessage({
                 id: 'transfer.receive-address.placeholder',
               })}
@@ -192,8 +213,7 @@ export default class Dashboard extends Component<IAccountDetailProps> {
                 />
               </Text>
               <Text type={'secondary'}>
-                <FormattedMessage id={'transfer.fee.title'} />：
-                <Text>{(0.58861).toFixed(8)} REV</Text>
+                <FormattedMessage id={'transfer.fee.title'} />：<Text>{fee.toFixed(8)} REV</Text>
               </Text>
             </div>
             <Slider className={styles.slider} defaultValue={10} marks={marks} />
@@ -206,12 +226,15 @@ export default class Dashboard extends Component<IAccountDetailProps> {
             </div>
             <Input
               className={styles.input}
+              value={note}
+              onChange={this.handleNote}
               prefix={<IconFont type="mrw-note" className={styles.icon} />}
               placeholder={formatMessage({
                 id: 'transfer.note.placeholder',
               })}
             />
           </div>
+
           <div className={styles.action}>
             <Button
               block
@@ -225,7 +248,7 @@ export default class Dashboard extends Component<IAccountDetailProps> {
             <Button
               block
               type={'primary'}
-              disabled={!(number && address)}
+              disabled={!(!balanceLoading && amount && toAddr)}
               className={styles.button}
               onClick={this.showModal}
             >

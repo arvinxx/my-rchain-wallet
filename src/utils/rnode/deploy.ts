@@ -39,8 +39,7 @@ export const sendDeploy = async (rnodeUrl: string, code: string, privateKey: str
   const { result } = await DoDeploy(deploy);
   // Try to propose but don't throw on error
   try {
-    const resPropose = await propose();
-    console.log(resPropose);
+    await propose();
   } catch (error) {
     console.warn(error);
   }
