@@ -1,7 +1,7 @@
 {
   "/vendors.css": "/vendors.dde3181b.chunk.css",
   "/vendors.js": "/vendors.fa0ca856.async.js",
-  "/antd.css": "/antd.97002830.chunk.css",
+  "/antd.css": "/antd.0c8c8e83.chunk.css",
   "/antd.js": "/antd.f6f3e022.async.js",
   "/bip39.js": "/bip39.9d5852f6.async.js",
   "/layouts__SecurityLayout.css": "/layouts__SecurityLayout.ac8bdea9.chunk.css",
@@ -10,7 +10,7 @@
   "/layouts__UserLayout.js": "/layouts__UserLayout.29dd3097.async.js",
   "/p__user__login__model.ts.js": "/p__user__login__model.ts.90f986e7.async.js",
   "/umi.css": "/umi.3928bb9c.css",
-  "/umi.js": "/umi.831338b2.js",
+  "/umi.js": "/umi.50eaccd2.js",
   "/favicon.png": "/favicon.png",
   "/icons/icon-128x128.png": "/icons/icon-128x128.png",
   "/icons/icon-192x192.png": "/icons/icon-192x192.png",
