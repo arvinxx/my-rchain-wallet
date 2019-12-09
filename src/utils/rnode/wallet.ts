@@ -7,9 +7,11 @@ import { getDataForDeploy, sendDeploy } from './deploy';
 export const checkRevBalance = async (address: string, privateKey: string, url: string) => {
   const deployCode = checkBalance_rho(address);
   // @ts-ignore
-  const [_, { sig }] = await sendDeploy(url, deployCode, privateKey);
+  const [res, { sig }] = await sendDeploy(url, deployCode, privateKey);
+  const deployId = res.match(/:(.*)$/)[1].replace(/\s/, '');
+
   const balance = await getDataForDeploy(url, sig);
-  return { balance };
+  return { balance, deployId };
 };
 
 /**

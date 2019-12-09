@@ -1,4 +1,4 @@
-import { Reducer, Effect, UserModelState } from './connect';
+import { Reducer, Effect, UserModelState, DvaModel } from './connect';
 import { CurrentUser } from '@/models/user';
 import { checkRevBalance, transferToken } from '@/utils/rnode';
 
@@ -18,7 +18,7 @@ export interface WalletModelStore {
   };
 }
 
-const WalletModel: WalletModelStore = {
+const WalletModel: DvaModel<WalletModelState> = {
   state: {
     revBalance: 0,
     fee: 0.9846,
@@ -37,7 +37,8 @@ const WalletModel: WalletModelStore = {
       const currentUser: CurrentUser = yield select(state => state.user.currentUser);
       const network: string = yield select(state => state.global.network);
       const { address, privateKey, balanceId } = currentUser;
-      const { balance } = yield call(checkRevBalance, address, privateKey, network);
+      const { balance, deployId } = yield call(checkRevBalance, address, privateKey, network);
+      localStorage.setItem('check_balance', deployId);
       yield put({
         type: 'save',
         payload: {

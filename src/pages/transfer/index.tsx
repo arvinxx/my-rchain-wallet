@@ -53,7 +53,7 @@ export default class Dashboard extends Component<IAccountDetailProps> {
   state = {
     visible: false,
     amount: 10,
-    toAddr: '11113y7AfYj7hShN49oAHHd3KiWxZRsodesdBi8QwSrPR5Veyh77S',
+    toAddr: '',
     note: '',
   };
 

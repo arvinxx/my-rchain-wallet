@@ -23,7 +23,7 @@ export default {
   'transfer.component.confirm.type.note': 'Note',
   'transfer.component.confirm.type.fee': 'Fee',
   'transfer.component.info':
-    'Please make show the information above are all correct!Check your receive address especially!',
+    'Please make sure the information above are all correct!Check your receive address especially!',
   'transfer.component.confirm.action.cancel': 'Cancel',
   'transfer.component.confirm.action.confirm': 'Confirm',
   'transfer.component.confirm.action.back': 'Back',

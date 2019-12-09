@@ -2,7 +2,7 @@ import { Reducer } from 'redux';
 import { Subscription, Effect } from 'dva';
 
 import { NoticeIconData } from '@/components/NoticeIcon';
-import { ConnectState } from './connect.d';
+import { ConnectState, DvaModel } from './connect.d';
 import { setItem } from '@/utils/utils';
 
 export interface NoticeItem extends NoticeIconData {
@@ -36,7 +36,7 @@ export interface GlobalModelStore {
   subscriptions: { setup: Subscription };
 }
 
-const GlobalModel: GlobalModelStore = {
+const GlobalModel: DvaModel<GlobalModelState> = {
   namespace: 'global',
 
   state: {
@@ -66,11 +66,6 @@ const GlobalModel: GlobalModelStore = {
     save(state, { payload }) {
       return { ...state, ...payload };
     },
-    changeNetwork(state, { payload: network }) {
-      setItem('network', network);
-      return { ...state, network };
-    },
-
     changeLayoutCollapsed(state, { payload }) {
       return {
         ...state,
@@ -78,7 +73,14 @@ const GlobalModel: GlobalModelStore = {
       };
     },
   },
+  effects: {
+    *changeNetwork({ payload: network }, { put }) {
+      setItem('network', network);
 
+      yield put({ type: 'save', payload: { network } });
+      yield put({ type: 'wallet/checkBalance' });
+    },
+  },
   subscriptions: {
     setup({ history }): void {
       // Subscribe history(url) change, trigger `load` action if pathname is `/`
