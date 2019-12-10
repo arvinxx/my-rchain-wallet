@@ -4,6 +4,7 @@ import { Subscription, Effect } from 'dva';
 import { NoticeIconData } from '@/components/NoticeIcon';
 import { ConnectState, DvaModel } from './connect.d';
 import { setItem } from '@/utils/utils';
+import { startRNodeWs } from '@/services/websocket';
 
 export interface NoticeItem extends NoticeIconData {
   id: string;
@@ -76,8 +77,12 @@ const GlobalModel: DvaModel<GlobalModelState> = {
   effects: {
     *changeNetwork({ payload: network }, { put }) {
       setItem('network', network);
+      // startRNodeWs(`ws://node0.testnet.rchain-dev.tk:40403/ws/events`);
 
-      yield put({ type: 'save', payload: { network } });
+      yield put({
+        type: 'save',
+        payload: { network },
+      });
       yield put({ type: 'wallet/checkBalance' });
     },
   },

@@ -26,6 +26,7 @@ export const sendDeploy = async (rnodeUrl: string, code: string, privateKey: str
   const deployData = {
     term: code,
     phlolimit: 100e3,
+    phloprice: 1,
     // TODO
     // TEMP: in RNode v0.9.16 'valid after block number' must be zero
     // so that signature will be valid.

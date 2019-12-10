@@ -43,10 +43,10 @@ export default class Network extends Component<INetworkProps> {
           </div>
         </div>
         <div className={styles.block}>
-          <Title level={4}>
-            <FormattedMessage id={'account.components.network.title.test'} />
-          </Title>
           <Radio.Group onChange={this.onChange} value={network}>
+            <Title level={4}>
+              <FormattedMessage id={'account.components.network.title.test'} />
+            </Title>
             {testNetList.map((net, index) => (
               <Radio
                 key={net}
@@ -56,6 +56,9 @@ export default class Network extends Component<INetworkProps> {
                 {net}
               </Radio>
             ))}
+            <Title level={4}>
+              <FormattedMessage id={'account.components.network.title.local'} />
+            </Title>
             <Radio className={styles.radio} value={`http://localhost:54401`}>
               Localhost 54401
             </Radio>

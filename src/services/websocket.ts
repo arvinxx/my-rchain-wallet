@@ -15,13 +15,12 @@ export const startRNodeWs = (rnodeUrl: string) => {
 
   connection.onmessage = ({ data }) => {
     const { event, payload } = JSON.parse(data);
-    // console.log('RNODE_EVENT', event, payload);
+    console.log('RNODE_EVENT', event, payload);
 
     const deployId = localStorage.getItem('check_balance');
 
-    if (deployId === payload['deploy-ids']) {
+    if (payload && payload['deploy-ids'] && payload['deploy-ids'].indexOf(deployId) > -1) {
       console.log('success');
     }
-    payload && console.log('DEPLOYS', payload['deploy-ids']);
   };
 };

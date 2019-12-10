@@ -46,6 +46,19 @@ const WalletModel: DvaModel<WalletModelState> = {
         },
       });
     },
+    *deployCheckBalance(_, { put, call, select }) {
+      const currentUser: CurrentUser = yield select(state => state.user.currentUser);
+      const network: string = yield select(state => state.global.network);
+      const { address, privateKey, balanceId } = currentUser;
+      const { balance, deployId } = yield call(checkRevBalance, address, privateKey, network);
+      localStorage.setItem('check_balance', deployId);
+      yield put({
+        type: 'save',
+        payload: {
+          revBalance: balance,
+        },
+      });
+    },
 
     *transfer({ payload }, { put, call, select }) {
       const { amount, toAddr } = payload;
