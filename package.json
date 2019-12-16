@@ -10,7 +10,7 @@
     "gh-pages": "cp CNAME ./dist/ && gh-pages -d dist",
     "deploy": "cross-env npm run build && npm run gh-pages",
     "analyze": "cross-env ANALYZE=1 umi build",
-    "rnode-generate": "rnode-grpc --rnode-version v0.9.16",
+    "rnode-generate": "rnode-grpc --rnode-version v0.9.18",
     "postinstall": "npm run rnode-generate"
   },
   "dependencies": {

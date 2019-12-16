@@ -1,6 +1,5 @@
 import { checkBalance_rho, transferFunds_rho } from './rho';
 import { getDataForDeploy, sendDeploy } from './deploy';
-import { Uint8ArrayToString } from '@/utils/utils';
 // import { bufferToHex } from 'ethereumjs-util';
 
 /**
@@ -15,12 +14,21 @@ export const checkRevBalance = async (address: string, privateKey: string, url: 
 
   // const x = sig;
   // console.log('sig', bufferToHex(x));
-  console.log(sig);
+
   const balance = await getDataForDeploy(url, sig);
+  console.log('getDataForDeploy', balance);
+
   return {
-    balance,
+    // balance,
     deployId,
+    sig,
   };
+};
+/**
+ * get Balance Function
+ */
+export const getRevBalance = async (sig: string, url: string) => {
+  return await getDataForDeploy(url, sig);
 };
 
 /**

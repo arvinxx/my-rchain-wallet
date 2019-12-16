@@ -12,26 +12,27 @@ const rnode = (rnodeUrl: string) => {
   const options = { grpcLib: grpcWeb, host: rnodeUrl, protoSchema };
 
   // Get RNode service methods
-  const { doDeploy, listenForDataAtName } = rnodeDeploy(options);
+  const { doDeploy, listenForDataAtName, getBlocks } = rnodeDeploy(options);
   const { propose } = rnodePropose(options);
-  return { DoDeploy: doDeploy, propose, listenForDataAtName };
+  return { DoDeploy: doDeploy, propose, listenForDataAtName, getBlocks };
 };
 
 export const sendDeploy = async (rnodeUrl: string, code: string, privateKey: string) => {
-  const { DoDeploy, propose } = rnode(rnodeUrl);
+  const { DoDeploy, propose, getBlocks } = rnode(rnodeUrl);
+
+  const blocks = await getBlocks({ depth: 1 });
+
+  const { blockinfo } = blocks[0];
+  const validafterblocknumber = (blockinfo && blockinfo.blocknumber) || 0;
 
   // Deploy signing key
   const key = privateKey;
   // Create deploy
   const deployData = {
     term: code,
-    phlolimit: 100e3,
-    phloprice: 1,
-    // TODO
-    // TEMP: in RNode v0.9.16 'valid after block number' must be zero
-    // so that signature will be valid.
-    // Future versions will require correct block number.
-    validafterblocknumber: 1,
+    phlolimit: 100e4,
+    phloprice: 2,
+    validafterblocknumber,
   };
 
   // Sign deploy
@@ -48,7 +49,7 @@ export const sendDeploy = async (rnodeUrl: string, code: string, privateKey: str
   return [result, deploy];
 };
 
-export const getDataForDeploy = async (rnodeUrl: string, deployId: any) => {
+export const getDataForDeploy = async (rnodeUrl: string, deployId: Uint8Array) => {
   const { listenForDataAtName } = rnode(rnodeUrl);
   const {
     payload: { blockinfoList },
@@ -56,6 +57,7 @@ export const getDataForDeploy = async (rnodeUrl: string, deployId: any) => {
     depth: -1,
     name: { unforgeablesList: [{ gDeployIdBody: { sig: deployId } }] },
   });
+
   // Get data as number
   return blockinfoList.length && blockinfoList[0].postblockdataList[0].exprsList[0].gInt;
 };

@@ -1,10 +1,12 @@
 import { Reducer, Effect, UserModelState, DvaModel } from './connect';
 import { CurrentUser } from '@/models/user';
-import { checkRevBalance, transferToken } from '@/utils/rnode';
+import { checkRevBalance, getRevBalance, transferToken } from '@/utils/rnode';
+import { getItem, setItem } from '@/utils/utils';
 
 export interface WalletModelState {
   revBalance: number;
   fee: number;
+  checkBalanceSig?: Uint8Array;
 }
 
 export interface WalletModelStore {
@@ -36,22 +38,23 @@ const WalletModel: DvaModel<WalletModelState> = {
     *checkBalance(_, { put, call, select }) {
       const currentUser: CurrentUser = yield select(state => state.user.currentUser);
       const network: string = yield select(state => state.global.network);
-      const { address, privateKey, balanceId } = currentUser;
-      const { balance, deployId } = yield call(checkRevBalance, address, privateKey, network);
-      localStorage.setItem('check_balance', deployId);
+      const { address, privateKey } = currentUser;
+      const { deployId, sig } = yield call(checkRevBalance, address, privateKey, network);
+      setItem('check_balance_deploy_id', deployId);
+      console.log('setItem', deployId);
       yield put({
         type: 'save',
         payload: {
-          revBalance: balance,
+          checkBalanceSig: sig,
         },
       });
+      console.log('setItem check_balance_sig', sig);
     },
-    *deployCheckBalance(_, { put, call, select }) {
-      const currentUser: CurrentUser = yield select(state => state.user.currentUser);
+    *getBalance(_, { put, call, select }) {
       const network: string = yield select(state => state.global.network);
-      const { address, privateKey, balanceId } = currentUser;
-      const { balance, deployId } = yield call(checkRevBalance, address, privateKey, network);
-      localStorage.setItem('check_balance', deployId);
+      const sig: string = yield select(state => state.wallet.checkBalanceSig);
+      const balance = yield call(getRevBalance, sig, network);
+      console.log('balance', balance);
       yield put({
         type: 'save',
         payload: {

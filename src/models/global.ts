@@ -3,8 +3,8 @@ import { Subscription, Effect } from 'dva';
 
 import { NoticeIconData } from '@/components/NoticeIcon';
 import { ConnectState, DvaModel } from './connect.d';
-import { setItem } from '@/utils/utils';
-import { startRNodeWs } from '@/services/websocket';
+import { getItem, setItem } from '@/utils/utils';
+import { rnodeWs } from '@/services/websocket';
 
 export interface NoticeItem extends NoticeIconData {
   id: string;
@@ -77,7 +77,7 @@ const GlobalModel: DvaModel<GlobalModelState> = {
   effects: {
     *changeNetwork({ payload: network }, { put }) {
       setItem('network', network);
-      // startRNodeWs(`ws://node0.testnet.rchain-dev.tk:40403/ws/events`);
+      // rnodeWs(`ws://node0.testnet.rchain-dev.tk:40403/ws/events`);
 
       yield put({
         type: 'save',
@@ -94,6 +94,21 @@ const GlobalModel: DvaModel<GlobalModelState> = {
           window.ga('send', 'pageview', pathname + search);
         }
       });
+    },
+    listenForRnode({ dispatch }) {
+      // const network = getItem('network');
+      // const rnode = rnodeWs('ws://node0.testnet.rchain-dev.tk:40403/ws/events');
+      const rnode = rnodeWs('ws://localhost:50403/ws/events');
+      rnode.onmessage = ({ data }) => {
+        const { event, payload } = JSON.parse(data);
+        console.log('RNODE_EVENT', event, payload);
+        const deployId = getItem('check_balance_deploy_id');
+
+        if (payload && payload['deploy-ids'] && payload['deploy-ids'].indexOf(deployId) > -1) {
+          console.log('success');
+          dispatch({ type: 'wallet/getBalance' });
+        }
+      };
     },
   },
 };

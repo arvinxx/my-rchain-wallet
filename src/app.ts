@@ -4,10 +4,10 @@ import * as Sentry from '@sentry/browser';
 import { Store } from 'redux';
 import { Action, ConnectState } from '@/models/connect';
 import { getUID } from '@/utils/utils';
-import { startRNodeWs } from '@/services/websocket';
+import { rnodeWs } from '@/services/websocket';
 
-startRNodeWs('ws://node0.testnet.rchain-dev.tk:40403/ws/events');
-// startRNodeWs('ws://localhost:50403/ws/events');
+// rnodeWs('ws://node0.testnet.rchain-dev.tk:40403/ws/events');
+// rnodeWs('ws://localhost:50403/ws/events');
 
 if (process.env.NODE_ENV !== 'development') {
   Sentry.init({ dsn: 'https://d74588d11e9e4127af0ee8879b8da23a@sentry.io/1815974' });

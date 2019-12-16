@@ -20,7 +20,13 @@ export const getUID = () => {
 };
 export const getPageQuery = () => parse(window.location.href.split('?')[1]);
 
-type ILocalData = 'currentUser' | 'restore' | 'lastLogin' | 'network';
+type ILocalData =
+  | 'currentUser'
+  | 'restore'
+  | 'lastLogin'
+  | 'network'
+  | 'check_balance_deploy_id'
+  | 'check_balance_sig';
 type IEncryptedData = 'userList' | 'mnemonic' | 'privateKey';
 
 export const generateAvatar = (string: string = '') => {
