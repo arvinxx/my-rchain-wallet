@@ -75,7 +75,3 @@ export const copyToClipboard = (string: string): boolean => {
   mixpanel.track('复制地址');
   return flag;
 };
-
-export const Uint8ArrayToString = function(buf) {
-  return String.fromCharCode.apply(null, new Uint8Array(buf));
-};

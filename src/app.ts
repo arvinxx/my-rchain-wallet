@@ -4,10 +4,9 @@ import * as Sentry from '@sentry/browser';
 import { Store } from 'redux';
 import { Action, ConnectState } from '@/models/connect';
 import { getUID } from '@/utils/utils';
-import { rnodeWs } from '@/services/websocket';
+import * as elliptic from 'elliptic';
 
-// rnodeWs('ws://node0.testnet.rchain-dev.tk:40403/ws/events');
-// rnodeWs('ws://localhost:50403/ws/events');
+const ec = new elliptic.ec('secp256k1');
 
 if (process.env.NODE_ENV !== 'development') {
   Sentry.init({ dsn: 'https://d74588d11e9e4127af0ee8879b8da23a@sentry.io/1815974' });

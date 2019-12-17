@@ -2,10 +2,18 @@
 @import '../theme/theme';
 
 .layout {
+  display: flex;
+  height: 100vh;
   :global {
     .ant-layout-content {
       display: flex;
+      min-height: auto !important;
     }
+    .ant-pro-basicLayout-children-content-wrap {
+      display: flex;
+      width: 100%;
+    }
+
     .ant-pro-sider-menu-logo {
       padding-left: 0;
       display: flex;

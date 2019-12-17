@@ -39,7 +39,13 @@ const WalletModel: DvaModel<WalletModelState> = {
       const currentUser: CurrentUser = yield select(state => state.user.currentUser);
       const network: string = yield select(state => state.global.network);
       const { address, privateKey } = currentUser;
-      const { deployId, sig } = yield call(checkRevBalance, address, privateKey, network);
+      const { deployId, sig } = yield call(
+        checkRevBalance,
+        address,
+        // privateKey,
+        privateKey.replace('0x', ''),
+        network,
+      );
       setItem('check_balance_deploy_id', deployId);
       console.log('setItem', deployId);
       yield put({
@@ -68,7 +74,14 @@ const WalletModel: DvaModel<WalletModelState> = {
       const currentUser: CurrentUser = yield select(state => state.user.currentUser);
       const network: string = yield select(state => state.global.network);
       const { address: fromAddr, privateKey } = currentUser;
-      const res = yield call(transferToken, fromAddr, toAddr, amount, privateKey, network);
+      const res = yield call(
+        transferToken,
+        fromAddr,
+        toAddr,
+        amount,
+        privateKey.replace(/^0x/, ''),
+        network,
+      );
       yield put({
         type: 'checkBalance',
       });

@@ -6,8 +6,8 @@ import { Button, Typography, Checkbox, Input, Divider, message } from 'antd';
 import { Link, router } from 'umi';
 import { LabelSelector } from './components';
 import { CreateAccount, PhraseBox } from '@/components';
-import { copyToClipboard, getDecryptedItem, getItem, getUID, setItem } from '@/utils/utils';
-import { accountLogin } from '@/services/login';
+import { getDecryptedItem } from '@/utils/utils';
+import copy from 'react-copy-to-clipboard';
 import { connect } from 'dva';
 import { DispatchProps } from '@/models/connect';
 
@@ -35,7 +35,7 @@ export default class SignUp extends Component<ISignUpProps> {
     mnemonic.forEach((word: string) => {
       string += word + ' ';
     });
-    const flag = copyToClipboard(string);
+    const flag = copy(string);
     this.props.dispatch({
       type: 'analytics',
       meta: {

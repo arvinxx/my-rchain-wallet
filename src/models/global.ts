@@ -105,7 +105,6 @@ const GlobalModel: DvaModel<GlobalModelState> = {
         const deployId = getItem('check_balance_deploy_id');
 
         if (payload && payload['deploy-ids'] && payload['deploy-ids'].indexOf(deployId) > -1) {
-          console.log('success');
           dispatch({ type: 'wallet/getBalance' });
         }
       };
