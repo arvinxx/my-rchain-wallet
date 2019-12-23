@@ -1,70 +1,75 @@
-import React, { Component } from 'react';
+import React, { FC } from 'react';
 import styles from './Network.less';
-import { Button, Radio, Typography } from 'antd';
+import { Button, Select, Radio, Typography } from 'antd';
 import { formatMessage, FormattedMessage } from 'umi-plugin-locale';
 import { DispatchProps } from '@/models/connect';
-import { INetList } from '@/models/global';
+import { INetwork } from '@/models/global';
+import { RadioChangeEvent } from 'antd/lib/radio';
 
 const { Title, Text } = Typography;
 
+const { Option } = Select;
 interface INetworkInnerProps extends DispatchProps {}
 
 interface INetworkProps extends INetworkInnerProps {
   network: string;
-  netList: INetList;
+  node: string;
+  networkList: INetwork[];
 }
 
-export default class Network extends Component<INetworkProps> {
-  static defaultProps: INetworkInnerProps;
-  state = {
-    value: 1,
-  };
-
-  onChange = e => {
-    this.props.dispatch({
+const Network: FC<INetworkProps> = ({ network, node, networkList, dispatch }) => {
+  const onRadioChange = (e: RadioChangeEvent) => {
+    dispatch({
       type: 'global/changeNetwork',
       payload: e.target.value,
     });
   };
+  const onSelectChange = (value: string) => {
+    dispatch({
+      type: 'global/save',
+      payload: { node: value },
+    });
+  };
 
-  render() {
-    const { network, netList } = this.props;
-    const { testNetList } = netList;
-    return (
-      <div className={styles.container}>
-        <div className={styles.block}>
-          <div className={styles.title}>
-            <Title level={3}>
-              <FormattedMessage id={'account.components.network.title'} />
-            </Title>
-            <Text type={'secondary'}>
-              <FormattedMessage id={`account.components.network.desc`} />
-            </Text>
-          </div>
-        </div>
-        <div className={styles.block}>
-          <Radio.Group onChange={this.onChange} value={network}>
-            <Title level={4}>
-              <FormattedMessage id={'account.components.network.title.test'} />
-            </Title>
-            {testNetList.map((net, index) => (
-              <Radio
-                key={net}
-                className={styles.radio}
-                value={`https://testnet-${index}.grpc.rchain.isotypic.com`}
-              >
-                {net}
-              </Radio>
-            ))}
-            <Title level={4}>
-              <FormattedMessage id={'account.components.network.title.local'} />
-            </Title>
-            <Radio className={styles.radio} value={`http://localhost:54401`}>
-              Localhost 54401
-            </Radio>
-          </Radio.Group>
+  const [testnet, ...networks] = networkList;
+  return (
+    <div className={styles.container}>
+      <div className={styles.block}>
+        <div className={styles.title}>
+          <Title level={3}>
+            <FormattedMessage id={'account.components.network.title'} />
+          </Title>
+          <Text type={'secondary'}>
+            <FormattedMessage id={`account.components.network.desc`} />
+          </Text>
         </div>
       </div>
-    );
-  }
-}
+      <div className={styles.block}>
+        <Radio.Group onChange={onRadioChange} value={network}>
+          <Radio value={testnet.name} className={styles.radio}>
+            <FormattedMessage id={`account.components.network.title.${testnet.name}`} />
+            <Select
+              defaultValue={testnet.nodes && testnet.nodes[0].name}
+              value={node}
+              onChange={onSelectChange}
+              style={{ marginLeft: 8 }}
+            >
+              {testnet.nodes &&
+                testnet.nodes.map((node, index) => (
+                  <Option key={index} value={node.name}>
+                    {node.name}
+                  </Option>
+                ))}
+            </Select>
+          </Radio>
+          {networks.map((item, index) => (
+            <Radio key={index} className={styles.radio} value={item.name}>
+              <FormattedMessage id={`account.components.network.title.${item.name}`} />
+            </Radio>
+          ))}
+        </Radio.Group>
+      </div>
+    </div>
+  );
+};
+export default Network;

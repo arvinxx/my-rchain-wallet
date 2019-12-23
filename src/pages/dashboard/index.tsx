@@ -37,9 +37,9 @@ export default class Dashboard extends Component<IAccountDetailProps> {
     visible: false,
   };
   componentDidMount(): void {
-    this.props.dispatch({
-      type: 'wallet/checkBalance',
-    });
+    // this.props.dispatch({
+    //   type: 'wallet/checkBalance',
+    // });
   }
 
   close = () => {
@@ -59,7 +59,7 @@ export default class Dashboard extends Component<IAccountDetailProps> {
     const { user, dispatch, wallet, checkBalance } = this.props;
     const { visible } = this.state;
     const { currentUser } = user;
-    const { revBalance } = wallet;
+    const { revBalance, deployStatus } = wallet;
     const tokenList = [
       { name: 'RChain', img: 'http://pics.arvinx.com/2019-11-05-150211.jpg' },
       { name: 'ETH', img: 'http://pics.arvinx.com/2019-11-05-150237.jpg' },
@@ -129,6 +129,7 @@ export default class Dashboard extends Component<IAccountDetailProps> {
             open={this.open}
             currentUser={currentUser}
             balance={revBalance}
+            deployStatus={deployStatus}
             loading={checkBalance}
           />
           <AccountDetail

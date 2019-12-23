@@ -11,15 +11,7 @@ export const checkRevBalance = async (address: string, privateKey: string, url: 
     const [res, { sig }] = await sendDeploy(url, deployCode, privateKey);
     // @ts-ignore
     const deployId = res.match(/:(.*)$/)[1].replace(/\s/, '');
-
-    const balance = await getDataForDeploy(url, sig);
-    console.log('getDataForDeploy', balance);
-
-    return {
-      // balance,
-      deployId,
-      sig,
-    };
+    return { deployId, sig };
   } catch (e) {
     console.log(e);
   }
@@ -27,7 +19,7 @@ export const checkRevBalance = async (address: string, privateKey: string, url: 
 /**
  * get Balance Function
  */
-export const getRevBalance = async (sig: string, url: string) => {
+export const getRevBalance = async (sig: Uint8Array, url: string) => {
   return await getDataForDeploy(url, sig);
 };
 

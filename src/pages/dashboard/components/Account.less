@@ -94,7 +94,19 @@
     margin-bottom: 12px;
   }
 }
-
+.reload {
+  margin-left: 8px;
+  color: @text-color-secondary;
+  cursor: pointer;
+  transition: all 0.3s @ease-in-out;
+  &:hover,
+  &:focus {
+    color: fade(@text-color-secondary, 65%);
+  }
+  //&:active {
+  //  color: fade(@text-color-secondary, 120%);
+  //}
+}
 .balance {
   font-size: 24px;
   font-weight: 500;

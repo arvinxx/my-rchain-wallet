@@ -19,6 +19,7 @@ declare module '@antv/data-set';
 declare module 'nzh/cn';
 declare module 'webpack-theme-color-replacer';
 declare module 'webpack-theme-color-replacer/client';
+declare module 'identicon.js';
 
 // google analytics interface
 interface GAFieldsObject {
@@ -37,7 +38,3 @@ interface Window {
 }
 
 declare let ga: Function;
-
-// preview.pro.ant.design only do not use in your production ;
-// preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
-declare let MY_RCHAIN_WALLET_ONLINE: 'site' | undefined;

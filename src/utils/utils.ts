@@ -14,6 +14,7 @@ export const getUID = () => {
     s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
   }
   s[14] = '4';
+  // @ts-ignore
   s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
   s[8] = s[13] = s[18] = s[23] = '-';
   return s.join('');
@@ -25,6 +26,8 @@ type ILocalData =
   | 'restore'
   | 'lastLogin'
   | 'network'
+  | 'grpc'
+  | 'http'
   | 'check_balance_deploy_id'
   | 'check_balance_sig';
 type IEncryptedData = 'userList' | 'mnemonic' | 'privateKey';
@@ -74,4 +77,21 @@ export const copyToClipboard = (string: string): boolean => {
   document.body.removeChild(tempInput); // Delete TempInput
   mixpanel.track('复制地址');
   return flag;
+};
+
+export const Uint8ArrayToString = (fileData: Uint8Array) => {
+  var dataString = '';
+  for (var i = 0; i < fileData.length; i++) {
+    dataString += String.fromCharCode(fileData[i]);
+  }
+
+  return dataString;
+};
+
+export const stringToUint8Array = (str: string) => {
+  var arr = [];
+  for (var i = 0, j = str.length; i < j; ++i) {
+    arr.push(str.charCodeAt(i));
+  }
+  return new Uint8Array(arr);
 };

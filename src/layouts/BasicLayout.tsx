@@ -90,11 +90,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       type: 'user/fetchCurrent',
     });
 
-    const network = getItem('network') || 'https://testnet-0.grpc.rchain.isotypic.com';
-    dispatch({
-      type: 'global/changeNetwork',
-      payload: network,
-    });
+    dispatch({ type: 'global/initNetwork' });
   }, []);
 
   return (

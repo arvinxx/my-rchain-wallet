@@ -11,20 +11,27 @@ import {
   message,
   Spin,
 } from 'antd';
-import styles from './Account.less';
 import { formatMessage, FormattedMessage } from 'umi-plugin-locale';
 import { showHiddenAddress } from '@/utils/blockchain';
 import { CurrentUser } from '@/models/user';
+import { TDeployStatus } from '@/models/wallet';
 import { copyToClipboard } from '@/utils/utils';
 import { router } from 'umi';
+import { DispatchProps } from '@/models/connect';
+import { connect } from 'dva';
+import styles from './Account.less';
 
 const { Text } = Typography;
-interface IAccountProps {
+
+interface IAccountProps extends DispatchProps {
   currentUser: CurrentUser;
   loading: boolean;
+  deployStatus: TDeployStatus;
   balance: number;
   open: () => void;
 }
+
+@connect()
 export default class Account extends Component<IAccountProps> {
   copy = () => {
     const {
@@ -40,7 +47,7 @@ export default class Account extends Component<IAccountProps> {
   };
 
   render() {
-    const { currentUser, open, balance, loading } = this.props;
+    const { currentUser, open, balance, dispatch, deployStatus } = this.props;
     if (!currentUser) {
       return <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />;
     }
@@ -86,15 +93,36 @@ export default class Account extends Component<IAccountProps> {
             </div>
             <div className={styles.operation}>
               <div className={styles.money}>
-                {/*<Text> {formatMessage({ id: 'dashboard.account.balance' })}</Text>*/}
-                {loading ? (
-                  <div style={{ marginTop: 16, marginBottom: 24 }}>
-                    <Spin />
-                  </div>
+                {deployStatus !== 'success' ? (
+                  <>
+                    <div style={{ marginTop: 16, marginBottom: 24 }}>
+                      <Spin />
+                    </div>
+                    <div>
+                      <Text type={'secondary'}>
+                        {formatMessage({ id: `dashboard.account.balance.${deployStatus}` })}
+                      </Text>
+                    </div>
+                  </>
                 ) : (
                   <>
                     <Statistic
-                      title={formatMessage({ id: 'dashboard.account.balance' })}
+                      title={
+                        <>
+                          {formatMessage({ id: 'dashboard.account.balance' })}
+                          <Tooltip title={'重新部署余额合约'}>
+                            <Icon
+                              type={'reload'}
+                              className={styles.reload}
+                              onClick={() => {
+                                dispatch({
+                                  type: 'wallet/deployCheckBalance',
+                                });
+                              }}
+                            />
+                          </Tooltip>
+                        </>
+                      }
                       className={styles.balance}
                       value={balance}
                       suffix="REV"

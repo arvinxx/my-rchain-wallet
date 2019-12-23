@@ -25,6 +25,7 @@ export { default as CheckOutline } from '@ant-design/icons/lib/outline/CheckOutl
 export { default as DeleteOutline } from '@ant-design/icons/lib/outline/DeleteOutline';
 export { default as MoreOutline } from '@ant-design/icons/lib/outline/MoreOutline';
 export { default as ProfileOutline } from '@ant-design/icons/lib/outline/ProfileOutline';
+export { default as ReloadOutline } from '@ant-design/icons/lib/outline/ReloadOutline';
 
 export { default as CopyFill } from '@ant-design/icons/lib/fill/CopyFill';
 export { default as CheckCircleFill } from '@ant-design/icons/lib/fill/CheckCircleFill';

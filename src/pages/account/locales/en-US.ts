@@ -25,8 +25,8 @@ export default {
     "Mnemonic phrase can be used to steal all your accounts! Don't show mnemonics to anyone at any time!",
   'account.components.export.close': 'Close',
   'account.components.network.title': 'Select Network',
-  'account.components.network.title.test': 'Test Network',
-  'account.components.network.title.local': 'Local Network',
+  'account.components.network.title.testnet': 'Test Network',
+  'account.components.network.title.localhost': 'Local Network',
   'account.components.network.desc': 'Please select the network to join',
   'account.components.general.lock-time': 'Lock time',
   'account.components.general.lock-time.desc':
