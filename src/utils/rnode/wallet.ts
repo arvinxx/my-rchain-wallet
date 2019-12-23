@@ -4,21 +4,17 @@ import { getDataForDeploy, sendDeploy } from './deploy';
 /**
  * Check Balance Function
  */
-export const deployCheckRevBalanceContact = async (
+export const deployCheckBalance = async (
   address: string,
   privateKey: string,
   url: string,
 ) => {
   const deployCode = checkBalance_rho(address);
-  try {
-    // @ts-ignore
-    const [res, { sig }] = await sendDeploy(url, deployCode, privateKey);
-    // @ts-ignore
-    const deployId = res.match(/:(.*)$/)[1].replace(/\s/, '');
-    return { deployId, sig };
-  } catch (e) {
-    console.log(e);
-  }
+  // @ts-ignore
+  const [res, { sig }] = await sendDeploy(url, deployCode, privateKey);
+  // @ts-ignore
+  const deployId = res.match(/:(.*)$/)[1].replace(/\s/, '');
+  return { deployId, sig };
 };
 /**
  * get Balance Function

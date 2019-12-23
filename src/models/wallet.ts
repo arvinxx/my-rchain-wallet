@@ -1,9 +1,10 @@
 import { Reducer, Effect, UserModelState, DvaModel } from './connect';
 import { CurrentUser } from '@/models/user';
-import { deployCheckRevBalanceContact, getRevBalance, transferToken } from '@/utils/rnode';
+import { deployCheckBalance, getRevBalance, transferToken } from '@/utils/rnode';
 import { getItem, setItem, stringToUint8Array, Uint8ArrayToString } from '@/utils/utils';
 import { IConnection } from '@/models/global';
 import { getMsgFromRNode } from '@/services/websocket';
+import { message } from 'antd';
 
 export type TDeployStatus = 'waiting' | 'success' | 'failed' | 'none';
 
@@ -71,33 +72,51 @@ const WalletModel: WalletModelStore = {
         type: 'save',
         payload: { deployStatus: 'none' },
       });
-
-      const { sig, deployId } = yield call(
-        deployCheckRevBalanceContact,
-        address,
-        // need replace 0x !!!!
-        privateKey.replace('0x', ''),
-        http,
-      );
-      setItem('checkBalanceContact', { deployId, sig: Uint8ArrayToString(sig), network });
-      yield put({
-        type: 'save',
-        payload: { deployStatus: 'waiting' },
-      });
-
-      /**
-       * 开始构建 WebSocket
-       */
-      const { event, payload } = yield call(getMsgFromRNode, `ws://${grpc}/ws/events`);
-      console.log(event, payload);
-      if (
-        deployId &&
-        payload &&
-        payload['deploy-ids'] &&
-        payload['deploy-ids'].indexOf(deployId) > -1
-      ) {
-        console.log('部署');
-        yield put({ type: 'getBalance' });
+      try {
+        const { sig, deployId } = yield call(
+          deployCheckBalance,
+          address,
+          // need replace 0x !!!!
+          privateKey.replace('0x', ''),
+          http,
+        );
+        setItem('checkBalanceContact', {
+          deployId,
+          sig: Uint8ArrayToString(sig),
+          network,
+          status: 'success',
+        });
+        yield put({
+          type: 'save',
+          payload: { deployStatus: 'waiting' },
+        });
+        /**
+         * 开始构建 WebSocket
+         */
+        const { event, payload } = yield call(getMsgFromRNode, `ws://${grpc}/ws/events`);
+        console.log(event, payload);
+        if (
+          deployId &&
+          payload &&
+          payload['deploy-ids'] &&
+          payload['deploy-ids'].indexOf(deployId) > -1
+        ) {
+          console.log('部署');
+          yield put({ type: 'getBalance' });
+        }
+      } catch (e) {
+        console.error(e);
+        if (
+          e.toString() ===
+          'Error: Service error: Error while creating block: Must wait for more blocks from other validators'
+        ) {
+          message.error('network is error');
+        } else {
+          yield put({
+            type: 'save',
+            payload: { deployStatus: 'failed' },
+          });
+        }
       }
     },
     *getBalance(_, { put, call, select }) {
@@ -107,7 +126,7 @@ const WalletModel: WalletModelStore = {
       const sig = stringToUint8Array(string);
 
       const balance = yield call(getRevBalance, sig, http);
-      console.log('balance', balance);
+
       yield put({
         type: 'save',
         payload: {

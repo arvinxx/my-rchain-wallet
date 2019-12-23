@@ -52,6 +52,7 @@ export const sendDeploy = async (rnodeUrl: string, code: string, privateKey: str
 export const getDataForDeploy = async (rnodeUrl: string, deployId: Uint8Array) => {
   const { listenForDataAtName } = rnode(rnodeUrl);
   const {
+    // @ts-ignore
     payload: { blockinfoList },
   } = await listenForDataAtName({
     depth: -1,

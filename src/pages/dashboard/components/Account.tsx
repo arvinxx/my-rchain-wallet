@@ -86,9 +86,33 @@ const Account: FC<IAccountProps> = ({ currentUser, open, balance, dispatch, depl
         </div>
         <div className={styles.operation}>
           <div className={styles.money}>
-            {deployStatus !== 'success' ? (
+            {deployStatus === 'failed' ? (
               <>
-                <div style={{ marginTop: 16, marginBottom: 24 }}>
+                <div style={{ marginTop: 16, marginBottom: 16 }}>
+                  <Tooltip title={formatMessage({ id: 'dashboard.account.balance.deploy' })}>
+                    <Icon
+                      type={'reload'}
+                      style={{
+                        fontSize: 20,
+                      }}
+                      className={styles.reload}
+                      onClick={() => {
+                        dispatch({
+                          type: 'wallet/deployCheckBalance',
+                        });
+                      }}
+                    />
+                  </Tooltip>
+                </div>
+                <div>
+                  <Text type={'secondary'}>
+                    {formatMessage({ id: `dashboard.account.balance.${deployStatus}` })}
+                  </Text>
+                </div>
+              </>
+            ) : deployStatus !== 'success' ? (
+              <>
+                <div style={{ marginTop: 16, marginBottom: 16 }}>
                   <Spin />
                 </div>
                 <div>
@@ -103,7 +127,7 @@ const Account: FC<IAccountProps> = ({ currentUser, open, balance, dispatch, depl
                   title={
                     <>
                       {formatMessage({ id: 'dashboard.account.balance' })}
-                      <Tooltip title={'重新部署余额合约'}>
+                      <Tooltip title={formatMessage({ id: 'dashboard.account.balance.deploy' })}>
                         <Icon
                           type={'reload'}
                           className={styles.reload}
