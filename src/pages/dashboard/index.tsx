@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
-import { Card, Typography, Tag, Button, Avatar } from 'antd';
 import styles from './style.less';
 import mixpanel from 'mixpanel-browser';
+import { connect } from 'dva';
 
-import { formatMessage } from 'umi-plugin-locale';
 import Account from './components/Account';
 import AccountDetail from './components/AccountDetail';
 import Token from './components/Token';
 import Transaction from './components/Transaction';
-import { connect } from 'dva';
 import { ConnectState, DispatchProps, UserModelState, WalletModelState } from '@/models/connect';
-
-const { Text } = Typography;
 
 export interface ITransaction {
   type: string;
@@ -37,9 +33,9 @@ export default class Dashboard extends Component<IAccountDetailProps> {
     visible: false,
   };
   componentDidMount(): void {
-    // this.props.dispatch({
-    //   type: 'wallet/checkBalance',
-    // });
+    this.props.dispatch({
+      type: 'wallet/checkBalance',
+    });
   }
 
   close = () => {

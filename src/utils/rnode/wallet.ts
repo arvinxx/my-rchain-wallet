@@ -4,7 +4,11 @@ import { getDataForDeploy, sendDeploy } from './deploy';
 /**
  * Check Balance Function
  */
-export const checkRevBalance = async (address: string, privateKey: string, url: string) => {
+export const deployCheckRevBalanceContact = async (
+  address: string,
+  privateKey: string,
+  url: string,
+) => {
   const deployCode = checkBalance_rho(address);
   try {
     // @ts-ignore

@@ -7,8 +7,9 @@ declare global {
   }
 }
 
-const initWebSocket = (url: string) => {
+export const getMsgFromRNode = (url: string): Promise<{ event: string; payload: object }> => {
   const connection = new WebSocket(url);
+  console.log('监听 RNode', connection);
   connection.onopen = _ => {
     console.log(`RNODE Socket connected`);
   };
@@ -17,26 +18,14 @@ const initWebSocket = (url: string) => {
     console.log(`RNODE Socket closed`);
   };
 
-  connection.onerror = err => {
-    console.error(`RNODE_WS_ERROR`, err);
-  };
   global.rnodeWS = connection;
   global.rnodeWSUrl = url;
-  return connection;
-};
-export const rnodeWS = (url: string) => {
-  if (!global.rnodeWS) {
-    console.log('ws 初始化 - url:', url);
-    return initWebSocket(url);
-  }
-  console.log(global.rnodeWSUrl, url);
-  if (global.rnodeWSUrl === url) {
-    console.log('URL相同 - url:', url);
-    console.log(global.rnodeWS);
-
-    return global.rnodeWS;
-  }
-  console.log('URL改变 - url:', url);
-  global.rnodeWS.close();
-  return initWebSocket(url);
+  return new Promise((resolve, reject) => {
+    connection.onmessage = ({ data }: any) => {
+      resolve(JSON.parse(data));
+    };
+    connection.onerror = err => {
+      reject(err);
+    };
+  });
 };

@@ -5,6 +5,8 @@ export default {
   'dashboard.account.button.send': 'SEND',
   'dashboard.account.button.receive': 'RECEIVE',
   'dashboard.account.balance': 'Total Balance',
+  'dashboard.account.balance.none': 'Start deploying contact...',
+  'dashboard.account.balance.waiting': 'Contact deployed success, waiting to propose...',
   'dashboard.account.view': 'view',
   'dashboard.account.copy.success': 'Address copied successfully',
   'dashboard.account.address.tip': 'Copy to clipboard',

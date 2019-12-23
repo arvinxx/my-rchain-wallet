@@ -4,7 +4,6 @@ import { Subscription } from 'dva';
 import { NoticeIconData } from '@/components/NoticeIcon';
 import { DvaModel } from './connect.d';
 import { getItem, setItem } from '@/utils/utils';
-import { rnodeWS } from '@/services/websocket';
 
 export interface NoticeItem extends NoticeIconData {
   id: string;
@@ -35,6 +34,11 @@ export interface GlobalModelState {
   grpc: string;
   networkList: INetwork[];
 }
+export interface IConnection {
+  http: string;
+  grpc: string;
+  network: string;
+}
 
 export interface GlobalModelStore extends DvaModel<GlobalModelState> {
   reducers: {
@@ -43,7 +47,7 @@ export interface GlobalModelStore extends DvaModel<GlobalModelState> {
     handleNetwork: Reducer;
     initNetwork: Reducer;
   };
-  subscriptions: { setup: Subscription; RNodeWebSocket: Subscription };
+  subscriptions: { setup: Subscription };
 }
 
 const GlobalModel: GlobalModelStore = {
@@ -107,21 +111,15 @@ const GlobalModel: GlobalModelStore = {
       };
     },
     initNetwork(state) {
-      const network = getItem('network') || 'testnet';
-      const grpc = getItem('grpc') || 'node0.testnet.rchain-dev.tk:40403';
-      const http = getItem('http') || 'https://testnet-0.grpc.rchain.isotypic.com';
+      const connection: IConnection = getItem('connection');
       return {
         ...state,
-        network,
-        grpc,
-        http,
+        ...connection,
       };
     },
     handleNetwork(state, { payload }) {
       const { network, http, grpc } = payload;
-      setItem('network', network);
-      setItem('grpc', grpc);
-      setItem('http', http);
+      setItem('connection', { network, grpc, http });
       return {
         ...state,
         network,
@@ -150,21 +148,7 @@ const GlobalModel: GlobalModelStore = {
           payload: { http, grpc, network },
         });
       }
-      // yield put({ type: 'switchWebSocket' });
-      // yield put({ type: 'wallet/checkBalance' });
-    },
-    *switchWebSocket(_, { select, put }) {
-      const { grpc } = yield select(state => state.global);
-      setItem('grpc', grpc);
-      const rnode = rnodeWS('ws://' + grpc + '/ws/events');
-      rnode.onmessage = async ({ data }) => {
-        const { event, payload } = JSON.parse(data);
-        console.log('RNODE_EVENT', event, payload);
-        const deployId = getItem('check_balance_deploy_id');
-        if (payload && payload['deploy-ids'] && payload['deploy-ids'].indexOf(deployId) > -1) {
-          await put({ type: 'wallet/getBalance' });
-        }
-      };
+      yield put({ type: 'wallet/checkBalance' });
     },
   },
   subscriptions: {
@@ -175,23 +159,6 @@ const GlobalModel: GlobalModelStore = {
           window.ga('send', 'pageview', pathname + search);
         }
       });
-    },
-
-    RNodeWebSocket({ dispatch }) {
-      const grpc = getItem('grpc') || 'node0.testnet.rchain-dev.tk:40403';
-
-      const rnode = rnodeWS('ws://' + grpc + '/ws/events');
-
-      console.log('监听 RNode', rnode);
-      rnode.onmessage = ({ data }: any) => {
-        const { event, payload } = JSON.parse(data);
-        console.log('RNODE_EVENT', event, payload);
-        const deployId = getItem('check_balance_deploy_id');
-
-        if (payload && payload['deploy-ids'] && payload['deploy-ids'].indexOf(deployId) > -1) {
-          dispatch({ type: 'wallet/checkBalance' });
-        }
-      };
     },
   },
 };

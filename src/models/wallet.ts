@@ -1,7 +1,9 @@
 import { Reducer, Effect, UserModelState, DvaModel } from './connect';
 import { CurrentUser } from '@/models/user';
-import { checkRevBalance, getRevBalance, transferToken } from '@/utils/rnode';
+import { deployCheckRevBalanceContact, getRevBalance, transferToken } from '@/utils/rnode';
 import { getItem, setItem, stringToUint8Array, Uint8ArrayToString } from '@/utils/utils';
+import { IConnection } from '@/models/global';
+import { getMsgFromRNode } from '@/services/websocket';
 
 export type TDeployStatus = 'waiting' | 'success' | 'failed' | 'none';
 
@@ -41,36 +43,28 @@ const WalletModel: WalletModelStore = {
   effects: {
     *checkBalance(_, { put, select }) {
       const { network } = yield select(state => state.global);
+      const contact = getItem('checkBalanceContact');
 
-      const prevDeployId = getItem('check_balance_deploy_id');
-      const prevNetwork = getItem('network');
-
-      console.log('prevDeployId', prevDeployId);
-      console.log('prevNetwork', prevNetwork);
-      console.log('network', network);
-
-      // 当没有切换网络,且本地已存在合约 ID 时
-      if (network === prevNetwork && prevDeployId) {
-        const string = getItem('check_balance_sig');
-        const checkBalanceSig = stringToUint8Array(string);
+      // 如果没有合约或者切换网络,部署合约
+      if (!contact || contact.network !== network) {
         yield put({
-          type: 'save',
-          payload: { checkBalanceSig },
-        });
-        yield put({
-          type: 'getBalance',
-          payload: '检查余额',
+          type: 'deployCheckBalance',
         });
         return;
       }
-      // 如果没有合约或者切换网络,部署合约
+      const { sig } = contact;
+      const checkBalanceSig = stringToUint8Array(sig);
       yield put({
-        type: 'deployCheckBalance',
+        type: 'save',
+        payload: { checkBalanceSig },
+      });
+      yield put({
+        type: 'getBalance',
       });
     },
     *deployCheckBalance(_, { put, call, select }) {
       const currentUser: CurrentUser = yield select(state => state.user.currentUser);
-      const { http } = yield select(state => state.global);
+      const { http, network, grpc } = yield select(state => state.global);
 
       const { address, privateKey } = currentUser;
       yield put({
@@ -79,24 +73,37 @@ const WalletModel: WalletModelStore = {
       });
 
       const { sig, deployId } = yield call(
-        checkRevBalance,
+        deployCheckRevBalanceContact,
         address,
         // need replace 0x !!!!
         privateKey.replace('0x', ''),
         http,
       );
-      setItem('check_balance_deploy_id', deployId);
-      setItem('check_balance_sig', Uint8ArrayToString(sig));
+      setItem('checkBalanceContact', { deployId, sig: Uint8ArrayToString(sig), network });
       yield put({
         type: 'save',
         payload: { deployStatus: 'waiting' },
       });
+
+      /**
+       * 开始构建 WebSocket
+       */
+      const { event, payload } = yield call(getMsgFromRNode, `ws://${grpc}/ws/events`);
+      console.log(event, payload);
+      if (
+        deployId &&
+        payload &&
+        payload['deploy-ids'] &&
+        payload['deploy-ids'].indexOf(deployId) > -1
+      ) {
+        console.log('部署');
+        yield put({ type: 'getBalance' });
+      }
     },
-    *getBalance({ payload }, { put, call, select }) {
-      console.log(payload);
+    *getBalance(_, { put, call, select }) {
       const http: string = yield select(state => state.global.http);
 
-      const string = getItem('check_balance_sig');
+      const { sig: string } = getItem('checkBalanceContact');
       const sig = stringToUint8Array(string);
 
       const balance = yield call(getRevBalance, sig, http);
@@ -113,11 +120,11 @@ const WalletModel: WalletModelStore = {
     *transfer({ payload }, { put, call, select }) {
       const { amount, toAddr } = payload;
       const currentUser: CurrentUser = yield select(state => state.user.currentUser);
-      const network: string = yield select(state => state.global.network);
+      const http: string = yield select(state => state.global.http);
       const { address: fromAddr, privateKey } = currentUser;
-      yield call(transferToken, fromAddr, toAddr, amount, privateKey.replace(/^0x/, ''), network);
+      yield call(transferToken, fromAddr, toAddr, amount, privateKey.replace(/^0x/, ''), http);
       yield put({
-        type: 'checkBalance',
+        type: 'deployCheckBalance',
       });
     },
   },

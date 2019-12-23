@@ -119,7 +119,7 @@ export default class Dashboard extends Component<IAccountDetailProps> {
     const { user, dispatch, wallet, checkBalance: balanceLoading } = this.props;
     const { visible, amount, toAddr, note } = this.state;
     const { currentUser } = user;
-    const { revBalance, fee } = wallet;
+    const { revBalance, fee, deployStatus } = wallet;
     const { address, avatar, username, pwd } = currentUser;
 
     return (
@@ -176,7 +176,7 @@ export default class Dashboard extends Component<IAccountDetailProps> {
                 </div>
               </div>
               <div className={styles.balance}>
-                <BaseLoading loading={balanceLoading}>
+                <BaseLoading loading={deployStatus !== 'success'}>
                   <Statistic title={'REV'} precision={4} value={revBalance} />
                 </BaseLoading>
               </div>
