@@ -53,14 +53,18 @@ export const getPublicKeyFromPrivateKey = (privateKey: string) => {
  * @param privateKey private key
  */
 export const isValidPrivateKey = (privateKey: string): string => {
-  let valid = isValidPrivate(toBuffer(privateKey));
-  if (valid) {
-    return privateKey;
-  }
-  const addHexPrivateKey = addHexPrefix(privateKey);
-  valid = isValidPrivate(toBuffer(addHexPrivateKey));
-  if (valid) {
-    return addHexPrivateKey;
+  let valid;
+  try {
+    let valid = isValidPrivate(toBuffer(privateKey));
+    if (valid) {
+      return privateKey;
+    }
+  } catch (e) {
+    const addHexPrivateKey = addHexPrefix(privateKey);
+    valid = isValidPrivate(toBuffer(addHexPrivateKey));
+    if (valid) {
+      return addHexPrivateKey;
+    }
   }
   return '';
 };

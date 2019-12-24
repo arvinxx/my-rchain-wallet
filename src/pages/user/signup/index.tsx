@@ -7,7 +7,7 @@ import { Link, router } from 'umi';
 import { LabelSelector } from './components';
 import { CreateAccount, PhraseBox } from '@/components';
 import { getDecryptedItem } from '@/utils/utils';
-import copy from 'react-copy-to-clipboard';
+import copy from 'copy-to-clipboard';
 import { connect } from 'dva';
 import { DispatchProps } from '@/models/connect';
 

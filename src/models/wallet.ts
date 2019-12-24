@@ -44,10 +44,23 @@ const WalletModel: WalletModelStore = {
   effects: {
     *checkBalance(_, { put, select }) {
       const { network } = yield select(state => state.global);
+      const {
+        currentUser: { uid },
+      } = yield select(state => state.user);
       const contact = getItem('checkBalanceContact');
 
-      // 如果没有合约或者切换网络,部署合约
-      if (!contact || contact.network !== network) {
+      if (
+        // 如果没有合约
+        !contact ||
+        // 或者切换网络
+        contact.network !== network ||
+        // 或不是同一个用户
+        contact.uid !== uid ||
+        // 或不是成功状态
+        contact.status !== 'success'
+      ) {
+        // 部署合约
+        console.log('deploy check balance contact...');
         yield put({
           type: 'deployCheckBalance',
         });
@@ -67,7 +80,7 @@ const WalletModel: WalletModelStore = {
       const currentUser: CurrentUser = yield select(state => state.user.currentUser);
       const { http, network, grpc } = yield select(state => state.global);
 
-      const { address, privateKey } = currentUser;
+      const { address, privateKey, uid } = currentUser;
       yield put({
         type: 'save',
         payload: { deployStatus: 'none' },
@@ -84,7 +97,8 @@ const WalletModel: WalletModelStore = {
           deployId,
           sig: Uint8ArrayToString(sig),
           network,
-          status: 'success',
+          uid,
+          status: 'waiting',
         });
         yield put({
           type: 'save',
@@ -93,19 +107,7 @@ const WalletModel: WalletModelStore = {
         /**
          * 开始构建 WebSocket
          */
-        const { event, payload }: { payload: IPayload; event: string } = yield call(
-          getMsgFromRNode,
-          `ws://${grpc}/ws/events`,
-        );
-        console.log(event, payload);
-        if (
-          deployId &&
-          payload &&
-          payload['deploy-ids'] &&
-          payload['deploy-ids'].indexOf(deployId) > -1
-        ) {
-          yield put({ type: 'getBalance' });
-        }
+        getMsgFromRNode(`ws://${grpc}/ws/events`, http);
       } catch (e) {
         console.error(e);
         if (
@@ -133,7 +135,7 @@ const WalletModel: WalletModelStore = {
         type: 'save',
         payload: {
           deployStatus: 'success',
-          revBalance: balance,
+          revBalance: balance / 1e9,
         },
       });
     },
@@ -143,7 +145,14 @@ const WalletModel: WalletModelStore = {
       const currentUser: CurrentUser = yield select(state => state.user.currentUser);
       const http: string = yield select(state => state.global.http);
       const { address: fromAddr, privateKey } = currentUser;
-      yield call(transferToken, fromAddr, toAddr, amount, privateKey.replace(/^0x/, ''), http);
+      yield call(
+        transferToken,
+        fromAddr,
+        toAddr,
+        amount * 1e9,
+        privateKey.replace(/^0x/, ''),
+        http,
+      );
       yield put({
         type: 'deployCheckBalance',
       });

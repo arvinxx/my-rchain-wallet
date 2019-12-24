@@ -1,3 +1,6 @@
+import { getItem, setItem, Uint8ArrayToString } from '@/utils/utils';
+import { getBlock } from '@/utils/rnode/deploy';
+
 export interface IPayload {
   'block-hash': string;
   'parent-hashes': string[];
@@ -6,9 +9,11 @@ export interface IPayload {
   creator: string;
   'seq-num': number;
 }
-export const getMsgFromRNode = (url: string): Promise<{ event: string; payload: IPayload }> => {
+export const getMsgFromRNode = (
+  url: string,
+  rnodeUrl: string,
+): Promise<{ event: string; payload: IPayload }> => {
   const connection = new WebSocket(url);
-  console.log('监听 RNode', connection);
   connection.onopen = _ => {
     console.log(`RNODE Socket connected`);
   };
@@ -17,12 +22,42 @@ export const getMsgFromRNode = (url: string): Promise<{ event: string; payload: 
     console.log(`RNODE Socket closed`);
   };
 
-  return new Promise((resolve, reject) => {
-    connection.onmessage = ({ data }: any) => {
-      resolve(JSON.parse(data));
-    };
-    connection.onerror = err => {
-      reject(err);
-    };
-  });
+  connection.onmessage = async ({ data }: any) => {
+    const { event, payload } = JSON.parse(data);
+    console.log(event, payload);
+    // console.log(event, payload);
+    const item = getItem('checkBalanceContact');
+    const { deployId } = item;
+    if (
+      deployId &&
+      payload &&
+      payload['deploy-ids'] &&
+      payload['deploy-ids'].indexOf(deployId) > -1
+    ) {
+      // @ts-ignore
+      console.log('deploy success');
+      const hash = payload['block-hash'];
+      const { blockinfo } = await getBlock(rnodeUrl, hash);
+      const blockNumber = (blockinfo && blockinfo.blockinfo.blocknumber) || 0;
+
+      setItem('checkBalanceContact', {
+        ...item,
+        blockNumber: blockNumber,
+        status: 'success',
+      });
+      global.g_app._store.dispatch({ type: 'wallet/getBalance' });
+    }
+  };
+
+  connection.onerror = e => {
+    console.log(`RNODE error`, e);
+  };
+  // return new Promise((resolve, reject) => {
+  //   connection.onmessage = ({ data }: any) => {
+  //     resolve(JSON.parse(data));
+  //   };
+  //   connection.onerror = err => {
+  //     reject(err);
+  //   };
+  // });
 };
