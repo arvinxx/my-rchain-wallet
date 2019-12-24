@@ -1,13 +1,12 @@
-declare global {
-  namespace NodeJS {
-    export interface Global {
-      rnodeWS: any;
-      rnodeWSUrl: string;
-    }
-  }
+export interface IPayload {
+  'block-hash': string;
+  'parent-hashes': string[];
+  'justification-hashes': string[][];
+  'deploy-ids'?: string[];
+  creator: string;
+  'seq-num': number;
 }
-
-export const getMsgFromRNode = (url: string): Promise<{ event: string; payload: object }> => {
+export const getMsgFromRNode = (url: string): Promise<{ event: string; payload: IPayload }> => {
   const connection = new WebSocket(url);
   console.log('监听 RNode', connection);
   connection.onopen = _ => {
@@ -18,8 +17,6 @@ export const getMsgFromRNode = (url: string): Promise<{ event: string; payload: 
     console.log(`RNODE Socket closed`);
   };
 
-  global.rnodeWS = connection;
-  global.rnodeWSUrl = url;
   return new Promise((resolve, reject) => {
     connection.onmessage = ({ data }: any) => {
       resolve(JSON.parse(data));

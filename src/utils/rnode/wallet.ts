@@ -4,16 +4,17 @@ import { getDataForDeploy, sendDeploy } from './deploy';
 /**
  * Check Balance Function
  */
-export const deployCheckBalance = async (
-  address: string,
-  privateKey: string,
-  url: string,
-) => {
+export const deployCheckBalance = async (address: string, privateKey: string, url: string) => {
   const deployCode = checkBalance_rho(address);
-  // @ts-ignore
-  const [res, { sig }] = await sendDeploy(url, deployCode, privateKey);
-  // @ts-ignore
-  const deployId = res.match(/:(.*)$/)[1].replace(/\s/, '');
+
+  const {
+    result,
+    deploy: { sig },
+  } = await sendDeploy(url, deployCode, privateKey);
+
+  const match = result && result.match(/:(.*)$/);
+  const deployId = match && match[1] && match[1].replace(/\s/, '');
+
   return { deployId, sig };
 };
 /**
@@ -35,10 +36,6 @@ export const transferToken = async (
 ) => {
   const deployCode = transferFunds_rho(fromAddr, toAddr, amount);
 
-  try {
-    const [response] = await sendDeploy(url, deployCode, privateKey);
-    return response;
-  } catch (e) {
-    console.error(e);
-  }
+  const { result } = await sendDeploy(url, deployCode, privateKey);
+  return result;
 };

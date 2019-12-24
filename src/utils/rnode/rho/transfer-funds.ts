@@ -9,7 +9,7 @@ export const transferFunds_rho = (revAddrFrom: string, revAddrTo: string, amount
     rl!(\`rho:rchain:revVault\`, *RevVaultCh) |
     for (@(_, RevVault) <- RevVaultCh) {
 
-      stdout!(("3.transfer_funds.rho")) |
+      stdout!(("MyRChainWallet.TransferREVs.rho")) |
 
       match ("${revAddrFrom}", "${revAddrTo}", ${amount}) {
         (from, to, amount) => {

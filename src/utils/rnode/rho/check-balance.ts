@@ -13,7 +13,7 @@ export const checkBalance_rho = (revAddress: string) => `
     rl!(\`rho:rchain:revVault\`, *RevVaultCh) |
     for (@(_, RevVault) <- RevVaultCh) {
 
-      stdout!(("2.check_balance.rho")) |
+      stdout!(("MyRChainWallet.CheckBalance.rho")) |
 
       match "${revAddress}" {
         revAddress => {

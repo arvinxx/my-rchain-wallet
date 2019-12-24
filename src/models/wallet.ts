@@ -3,7 +3,7 @@ import { CurrentUser } from '@/models/user';
 import { deployCheckBalance, getRevBalance, transferToken } from '@/utils/rnode';
 import { getItem, setItem, stringToUint8Array, Uint8ArrayToString } from '@/utils/utils';
 import { IConnection } from '@/models/global';
-import { getMsgFromRNode } from '@/services/websocket';
+import { getMsgFromRNode, IPayload } from '@/services/websocket';
 import { message } from 'antd';
 
 export type TDeployStatus = 'waiting' | 'success' | 'failed' | 'none';
@@ -93,7 +93,10 @@ const WalletModel: WalletModelStore = {
         /**
          * 开始构建 WebSocket
          */
-        const { event, payload } = yield call(getMsgFromRNode, `ws://${grpc}/ws/events`);
+        const { event, payload }: { payload: IPayload; event: string } = yield call(
+          getMsgFromRNode,
+          `ws://${grpc}/ws/events`,
+        );
         console.log(event, payload);
         if (
           deployId &&
@@ -101,7 +104,6 @@ const WalletModel: WalletModelStore = {
           payload['deploy-ids'] &&
           payload['deploy-ids'].indexOf(deployId) > -1
         ) {
-          console.log('部署');
           yield put({ type: 'getBalance' });
         }
       } catch (e) {

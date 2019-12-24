@@ -5,7 +5,7 @@ import protoSchema from '@rnode/js/pbjs_generated.json';
 import '@rnode/js/DeployServiceV1_pb';
 import '@rnode/js/ProposeServiceV1_pb';
 
-import { rnodeDeploy, rnodePropose, signDeploy } from '@tgrospic/rnode-grpc-js';
+import { DeployDataProto, rnodeDeploy, rnodePropose, signDeploy } from '@tgrospic/rnode-grpc-js';
 
 const rnode = (rnodeUrl: string) => {
   // Instantiate http clients
@@ -17,7 +17,11 @@ const rnode = (rnodeUrl: string) => {
   return { DoDeploy: doDeploy, propose, listenForDataAtName, getBlocks };
 };
 
-export const sendDeploy = async (rnodeUrl: string, code: string, privateKey: string) => {
+export const sendDeploy = async (
+  rnodeUrl: string,
+  code: string,
+  privateKey: string,
+): Promise<{ result?: string; deploy: DeployDataProto }> => {
   const { DoDeploy, propose, getBlocks } = rnode(rnodeUrl);
 
   const blocks = await getBlocks({ depth: 1 });
@@ -30,8 +34,8 @@ export const sendDeploy = async (rnodeUrl: string, code: string, privateKey: str
   // Create deploy
   const deployData = {
     term: code,
-    phlolimit: 100e4,
-    phloprice: 2,
+    phlolimit: 1e6,
+    phloprice: 1,
     validafterblocknumber,
   };
 
@@ -46,7 +50,7 @@ export const sendDeploy = async (rnodeUrl: string, code: string, privateKey: str
     console.warn(error);
   }
   // Deploy response
-  return [result, deploy];
+  return { result, deploy };
 };
 
 export const getDataForDeploy = async (rnodeUrl: string, deployId: Uint8Array) => {

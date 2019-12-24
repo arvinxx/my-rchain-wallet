@@ -1,13 +1,35 @@
-import { AnyAction, Dispatch } from 'redux';
+import { AnyAction, Dispatch, Reducer } from 'redux';
+import { EffectsCommandMap, Subscription } from 'dva';
 import { MenuDataItem } from '@ant-design/pro-layout';
-import { RouterTypes } from 'umi';
+// 导入相关 model 的 State
+
 import { DefaultSettings as SettingModelState } from '../../config/defaultSettings';
 import { GlobalModelState } from './global';
 import { UserModelState } from './user';
 import { WalletModelState } from './wallet';
-import { EffectsCommandMap, Subscription } from 'dva';
+import { LoginModelState } from '@/pages/user/login/model';
 
-export { GlobalModelState, SettingModelState, WalletModelState, UserModelState };
+//******************//
+// State 相关类型定义 //
+//******************//
+
+// 统一导出相关 model 的 State
+export { GlobalModelState, SettingModelState, WalletModelState, UserModelState, LoginModelState };
+
+// 导出合并后的 Store State 类型
+
+export interface ConnectState {
+  global: GlobalModelState;
+  loading: Loading;
+  settings: SettingModelState;
+  user: UserModelState;
+  wallet: WalletModelState;
+  login: WalletModelState;
+  routing: { location: Location };
+}
+//********************//
+// Loading 相关类型定义 //
+//********************//
 
 export interface Loading {
   global: boolean;
@@ -17,38 +39,17 @@ export interface Loading {
     menu?: boolean;
     setting?: boolean;
     user?: boolean;
+    wallet?: boolean;
     login?: boolean;
   };
 }
 
-export interface ConnectState {
-  global: GlobalModelState;
-  loading: Loading;
-  settings: SettingModelState;
-  user: UserModelState;
-  wallet: WalletModelState;
-  routing: { location: Location };
-}
+//*********************//
+// dispatch 相关类型定义 //
+//*********************//
 
-export interface Route extends MenuDataItem {
-  routes?: Route[];
-}
-
-/**
- * @type T: Params matched in dynamic routing
- */
-export interface ConnectProps<T = {}> extends Partial<RouterTypes<Route, T>> {
-  dispatch?: Dispatch<AnyAction>;
-}
-
-export { EffectsCommandMap, Subscription };
-
-export type Effect = (
-  action: AnyAction,
-  effects: EffectsCommandMap & {
-    select: <T>(func: (state: ConnectState) => T) => T;
-  },
-) => void;
+// 导出基础方法类型
+export { Reducer, EffectsCommandMap, Subscription };
 
 export type Action<P = any, C = (payload: P) => void> = {
   type: string;
@@ -59,28 +60,40 @@ export type Action<P = any, C = (payload: P) => void> = {
   };
   [key: string]: any;
 };
-/*
- * @template S The type of state consumed and produced by this reducer.
- * @template A The type of actions the reducer can potentially respond to.
- */
-export type Reducer<S = any, A extends Action = AnyAction> = (state: S, action: A) => S;
 
 /**
+ * Dva dispatch 方法的类型定义
  * @type P: Type of payload
  * @type C: Type of callback
  */
-export type Dispatch = <P = any, C = (payload: P) => void>(action: Action<P, C>) => any;
+export type Dispatch = <P = any, C = (payload: P) => void>(action: Action) => any;
 
-export interface DispatchProps {
-  dispatch: Dispatch;
-}
+// Dva 中 effects 方法的类型定义
+export type Effect = (
+  action: AnyAction,
+  effects: EffectsCommandMap & {
+    select: <T>(func: (state: ConnectState) => T) => T;
+  },
+) => void;
 
+// 导出完整可以给到任何一个 Dva Model 的类型
 export interface DvaModel<S> {
   namespace?: string;
   state: S;
-  reducers: {
-    save: Reducer<S>;
-  };
+  reducers: { [key: string]: Reducer<S> };
   effects?: { [key: string]: Effect };
   subscriptions?: { [key: string]: Subscription };
+}
+
+//************************//
+// React Props 相关类型定义 //
+//************************//
+
+export interface Route extends MenuDataItem {
+  routes?: Route[];
+}
+
+// React 组件props 的 DispatchProps
+export interface DispatchProps {
+  dispatch: Dispatch;
 }
