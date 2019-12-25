@@ -1,17 +1,18 @@
 import { Reducer, Effect, UserModelState, DvaModel } from './connect';
 import { CurrentUser } from '@/models/user';
-import { deployCheckBalance, getRevBalance, transferToken } from '@/utils/rnode';
+import { deployCheckBalance, getBlockDepth, getRevBalance, transferToken } from '@/utils/rnode';
 import { getItem, setItem, stringToUint8Array, Uint8ArrayToString } from '@/utils/utils';
 import { IConnection } from '@/models/global';
 import { getMsgFromRNode, IPayload } from '@/services/websocket';
 import { message } from 'antd';
 
-export type TDeployStatus = 'waiting' | 'success' | 'failed' | 'none';
+export type TDeployStatus = 'success' | 'processing' | 'default' | 'error' | 'warning';
 
 export interface WalletModelState {
   revBalance: number;
   fee: number;
   deployStatus: TDeployStatus;
+  waitingBlockNumber: number;
 }
 
 export interface WalletModelStore extends DvaModel<WalletModelState> {
@@ -23,6 +24,7 @@ export interface WalletModelStore extends DvaModel<WalletModelState> {
   };
   reducers: {
     save: Reducer<WalletModelState>;
+    addBlockNumber: Reducer<WalletModelState>;
   };
 }
 
@@ -30,13 +32,21 @@ const WalletModel: WalletModelStore = {
   state: {
     revBalance: 0,
     fee: 0.9846,
-    deployStatus: 'none',
+    deployStatus: 'default',
+    waitingBlockNumber: 0,
   },
   reducers: {
     save(state, { payload }) {
       return {
         ...state,
         ...payload,
+      };
+    },
+    addBlockNumber(state) {
+      const { waitingBlockNumber } = state;
+      return {
+        ...state,
+        waitingBlockNumber: waitingBlockNumber + 1,
       };
     },
   },
@@ -64,13 +74,17 @@ const WalletModel: WalletModelStore = {
         yield put({
           type: 'deployCheckBalance',
         });
+        yield put({
+          type: 'save',
+          payload: { waitingBlockNumber: 0 },
+        });
         return;
       }
       const { sig } = contact;
       const checkBalanceSig = stringToUint8Array(sig);
       yield put({
         type: 'save',
-        payload: { checkBalanceSig },
+        payload: { checkBalanceSig, deployStatus: contact.status },
       });
       yield put({
         type: 'getBalance',
@@ -83,7 +97,7 @@ const WalletModel: WalletModelStore = {
       const { address, privateKey, uid } = currentUser;
       yield put({
         type: 'save',
-        payload: { deployStatus: 'none' },
+        payload: { deployStatus: 'default' },
       });
       try {
         const { sig, deployId } = yield call(
@@ -98,16 +112,16 @@ const WalletModel: WalletModelStore = {
           sig: Uint8ArrayToString(sig),
           network,
           uid,
-          status: 'waiting',
+          status: 'processing',
         });
         yield put({
           type: 'save',
-          payload: { deployStatus: 'waiting' },
+          payload: { deployStatus: 'processing' },
         });
         /**
          * 开始构建 WebSocket
          */
-        getMsgFromRNode(`ws://${grpc}/ws/events`, http);
+        getMsgFromRNode(`wss://${grpc}/ws/events`, http);
       } catch (e) {
         console.error(e);
         if (
@@ -129,15 +143,22 @@ const WalletModel: WalletModelStore = {
       const { sig: string } = getItem('checkBalanceContact');
       const sig = stringToUint8Array(string);
 
-      const balance = yield call(getRevBalance, sig, http);
+      const depth = yield getBlockDepth(http);
+      if (depth > 500) {
+        yield put({
+          type: 'deployCheckBalance',
+        });
+      } else {
+        const balance = yield call(getRevBalance, sig, http);
 
-      yield put({
-        type: 'save',
-        payload: {
-          deployStatus: 'success',
-          revBalance: balance / 1e9,
-        },
-      });
+        yield put({
+          type: 'save',
+          payload: {
+            deployStatus: 'success',
+            revBalance: balance / 1e9,
+          },
+        });
+      }
     },
 
     *transfer({ payload }, { put, call, select }) {

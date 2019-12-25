@@ -61,7 +61,7 @@ const GlobalModel: GlobalModelStore = {
     network: 'testnet',
     node: 'node0',
     http: 'https://testnet-0.grpc.rchain.isotypic.com',
-    grpc: 'node0.testnet.rchain-dev.tk:40403',
+    grpc: 'testnet.myrchainwallet.com',
     networkList: [
       {
         name: 'testnet',
@@ -69,27 +69,27 @@ const GlobalModel: GlobalModelStore = {
           {
             name: 'node0',
             http: 'https://testnet-0.grpc.rchain.isotypic.com',
-            grpc: 'node0.testnet.rchain-dev.tk:40403',
+            grpc: 'testnet.myrchainwallet.com',
           },
           {
             name: 'node1',
             http: 'https://testnet-1.grpc.rchain.isotypic.com',
-            grpc: 'node1.testnet.rchain-dev.tk:40403',
+            grpc: 'testnet.myrchainwallet.com',
           },
           {
             name: 'node2',
             http: 'https://testnet-2.grpc.rchain.isotypic.com',
-            grpc: 'node2.testnet.rchain-dev.tk:40403',
+            grpc: 'testnet.myrchainwallet.com',
           },
           {
             name: 'node3',
             http: 'https://testnet-3.grpc.rchain.isotypic.com',
-            grpc: 'node3.testnet.rchain-dev.tk:40403',
+            grpc: 'testnet.myrchainwallet.com',
           },
           {
             name: 'node4',
             http: 'https://testnet-4.grpc.rchain.isotypic.com',
-            grpc: 'node4.testnet.rchain-dev.tk:40403',
+            grpc: 'testnet.myrchainwallet.com',
           },
         ],
       },

@@ -26,6 +26,9 @@ export const getMsgFromRNode = (
     const { event, payload } = JSON.parse(data);
     console.log(event, payload);
     // console.log(event, payload);
+    if (event === 'block-added') {
+      global.g_app._store.dispatch({ type: 'wallet/addBlockNumber' });
+    }
     const item = getItem('checkBalanceContact');
     const { deployId } = item;
     if (
@@ -35,17 +38,20 @@ export const getMsgFromRNode = (
       payload['deploy-ids'].indexOf(deployId) > -1
     ) {
       // @ts-ignore
-      console.log('deploy success');
       const hash = payload['block-hash'];
       const { blockinfo } = await getBlock(rnodeUrl, hash);
-      const blockNumber = (blockinfo && blockinfo.blockinfo.blocknumber) || 0;
-
-      setItem('checkBalanceContact', {
-        ...item,
-        blockNumber: blockNumber,
-        status: 'success',
-      });
-      global.g_app._store.dispatch({ type: 'wallet/getBalance' });
+      const blockNumber = blockinfo && blockinfo.blockinfo.blocknumber;
+      console.log('blockinfo', blockinfo.blockinfo.seqnum);
+      if (blockinfo && blockinfo.blockinfo.seqnum) {
+        console.log('deploy success');
+        setItem('checkBalanceContact', {
+          ...item,
+          blockNumber: blockNumber,
+          status: 'success',
+        });
+        global.g_app._store.dispatch({ type: 'wallet/getBalance' });
+        connection.close();
+      }
     }
   };
 

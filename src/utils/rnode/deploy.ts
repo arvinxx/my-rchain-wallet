@@ -6,9 +6,11 @@ import '@rnode/js/DeployServiceV1_pb';
 import '@rnode/js/ProposeServiceV1_pb';
 
 import { DeployDataProto, rnodeDeploy, rnodePropose, signDeploy } from '@tgrospic/rnode-grpc-js';
+import { getBlockDepth } from './block';
+
 import { getItem } from '@/utils/utils';
 
-const rnode = (rnodeUrl: string) => {
+export const rnode = (rnodeUrl: string) => {
   // Instantiate http clients
   const options = { grpcLib: grpcWeb, host: rnodeUrl, protoSchema };
 
@@ -56,16 +58,10 @@ export const sendDeploy = async (
 };
 
 export const getDataForDeploy = async (rnodeUrl: string, deployId: Uint8Array) => {
-  const { listenForDataAtName, getBlocks } = rnode(rnodeUrl);
+  const { listenForDataAtName } = rnode(rnodeUrl);
 
-  const blocks = await getBlocks({ depth: 1 });
+  const depth = await getBlockDepth(rnodeUrl);
 
-  const { blockinfo } = blocks[0];
-  const currentBlockNumber: number = (blockinfo && (blockinfo.blocknumber as number)) || 0;
-  const { blockNumber = 0 } = getItem('checkBalanceContact');
-
-  const depth = currentBlockNumber - blockNumber + 2;
-  console.log(currentBlockNumber, blockNumber, depth);
   const {
     // @ts-ignore
     payload: { blockinfoList },

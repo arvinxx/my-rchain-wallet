@@ -21,11 +21,13 @@ interface IAccountDetailProps extends DispatchProps {
   user: UserModelState;
   wallet: WalletModelState;
   checkBalance: boolean;
+  getBalance: boolean;
 }
 
 @connect(({ user, wallet, loading }: ConnectState) => ({
   user,
   wallet,
+  getBalance: loading.effects['wallet/getBalance'],
   checkBalance: loading.effects['wallet/checkBalance'],
 }))
 export default class Dashboard extends Component<IAccountDetailProps> {
@@ -52,10 +54,10 @@ export default class Dashboard extends Component<IAccountDetailProps> {
   };
 
   render() {
-    const { user, dispatch, wallet, checkBalance } = this.props;
+    const { user, dispatch, wallet, getBalance, checkBalance } = this.props;
     const { visible } = this.state;
     const { currentUser } = user;
-    const { revBalance, deployStatus } = wallet;
+    const { revBalance, deployStatus, waitingBlockNumber } = wallet;
     const tokenList = [
       { name: 'RChain', img: 'http://pics.arvinx.com/2019-11-05-150211.jpg' },
       { name: 'ETH', img: 'http://pics.arvinx.com/2019-11-05-150237.jpg' },
@@ -123,10 +125,12 @@ export default class Dashboard extends Component<IAccountDetailProps> {
         <div className={styles.left}>
           <Account
             open={this.open}
+            blockNumber={waitingBlockNumber}
             currentUser={currentUser}
             balance={revBalance}
+            dispatch={dispatch}
             deployStatus={deployStatus}
-            loading={checkBalance}
+            loading={getBalance}
           />
           <AccountDetail
             dispatch={dispatch}

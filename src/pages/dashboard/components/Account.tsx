@@ -1,5 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import {
+  Badge,
   Card,
   Typography,
   Tag,
@@ -28,10 +29,19 @@ interface IAccountProps extends DispatchProps {
   loading: boolean;
   deployStatus: TDeployStatus;
   balance: number;
+  blockNumber: number;
   open: () => void;
 }
 
-const Account: FC<IAccountProps> = ({ currentUser, open, balance, dispatch, deployStatus }) => {
+const Account: FC<IAccountProps> = ({
+  currentUser,
+  open,
+  balance,
+  dispatch,
+  blockNumber,
+  loading,
+  deployStatus,
+}) => {
   if (!currentUser || !currentUser.avatar) {
     return <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />;
   }
@@ -86,7 +96,7 @@ const Account: FC<IAccountProps> = ({ currentUser, open, balance, dispatch, depl
         </div>
         <div className={styles.operation}>
           <div className={styles.money}>
-            {deployStatus === 'failed' ? (
+            {deployStatus === 'error' ? (
               <>
                 <div style={{ marginTop: 16, marginBottom: 16 }}>
                   <Tooltip title={formatMessage({ id: 'dashboard.account.balance.deploy' })}>
@@ -104,21 +114,11 @@ const Account: FC<IAccountProps> = ({ currentUser, open, balance, dispatch, depl
                     />
                   </Tooltip>
                 </div>
-                <div>
-                  <Text type={'secondary'}>
-                    {formatMessage({ id: `dashboard.account.balance.${deployStatus}` })}
-                  </Text>
-                </div>
               </>
-            ) : deployStatus !== 'success' ? (
+            ) : deployStatus !== 'success' || loading ? (
               <>
                 <div style={{ marginTop: 16, marginBottom: 16 }}>
                   <Spin />
-                </div>
-                <div>
-                  <Text type={'secondary'}>
-                    {formatMessage({ id: `dashboard.account.balance.${deployStatus}` })}
-                  </Text>
                 </div>
               </>
             ) : (
@@ -147,6 +147,24 @@ const Account: FC<IAccountProps> = ({ currentUser, open, balance, dispatch, depl
                 {/*<Text type={'secondary'}>$ {balance * 7} USD</Text>*/}
               </>
             )}
+            <div>
+              <Badge count={5} status={deployStatus} />
+
+              <Text type={'secondary'}>
+                {formatMessage({ id: `dashboard.account.balance.${deployStatus}` })}
+
+                {deployStatus === 'processing' ? (
+                  <>
+                    {formatMessage(
+                      { id: `dashboard.account.balance.processing.block` },
+                      {
+                        number: blockNumber,
+                      },
+                    )}
+                  </>
+                ) : null}
+              </Text>
+            </div>
           </div>
           <div className={styles.button}>
             <Button type={'primary'} className={styles.receive}>
@@ -161,4 +179,4 @@ const Account: FC<IAccountProps> = ({ currentUser, open, balance, dispatch, depl
     </Card>
   );
 };
-export default connect()(Account);
+export default Account;
