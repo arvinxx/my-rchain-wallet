@@ -5,7 +5,7 @@ import { stringify } from 'querystring';
 import { ConnectState } from '@/models/connect';
 
 import PageLoading from '@/components/PageLoading';
-import { getItem } from '@/utils/utils';
+import { checkOverTime, getItem } from '@/utils/utils';
 
 const SecurityLayout: FC = ({ children }) => {
   const [isReady, handleIsReady] = useState(false);
@@ -17,16 +17,12 @@ const SecurityLayout: FC = ({ children }) => {
   const loading = useSelector<ConnectState, boolean | undefined>(
     state => state.loading.models.user,
   );
-  const checkLocked = () => {
-    const lastLogin = localStorage.getItem('lastLogin') as string;
-    const dueTime = 30 * 60 * 1000; // lock after 30 mins
-    const duration = new Date().valueOf() - Number(lastLogin);
+  const lockTime = useSelector<ConnectState, number>(state => state.global.lockTime);
+  const isOverTime = checkOverTime(lockTime);
 
-    return duration > dueTime;
-  };
+  const autoLogin = getItem('autoLogin');
 
   const isLogin = getItem('currentUser');
-  const autoLogin = getItem('autoLogin');
 
   const queryString = stringify({
     redirect: window.location.href,
@@ -37,11 +33,11 @@ const SecurityLayout: FC = ({ children }) => {
   }
   // isn't login
   // or didn't check autoLogin and time over due time
-  if (!isLogin || (!autoLogin && checkLocked())) {
+  if (!isLogin || (!autoLogin && isOverTime)) {
     return <Redirect to={`/user/login?${queryString}`} />;
   }
 
-  return children;
+  return children ? <>{children}</> : null;
 };
 
 export default SecurityLayout;

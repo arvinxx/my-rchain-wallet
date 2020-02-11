@@ -2,7 +2,7 @@ export default {
   'component.tagSelect.expand': 'Expand',
   'component.tagSelect.collapse': 'Collapse',
   'component.tagSelect.all': 'All',
-  'component.footer.about-us': 'About us',
+  'component.footer.about-us': 'About',
   'component.footer.rights': 'All Rights Reserved.',
   'component.footer.rchain': 'RChain',
   'component.create-account.username': 'Username',

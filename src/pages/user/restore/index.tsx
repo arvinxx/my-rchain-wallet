@@ -12,15 +12,13 @@ import { isValidMnemonic, isValidPrivateKey } from '@/utils/blockchain';
 const { Title, Text } = Typography;
 const { TextArea } = Input;
 
-interface IRestoreProps {}
-
-export default class Restore extends Component<IRestoreProps> {
-  static defaultProps: IRestoreProps = {};
+export default class Restore extends Component {
   state = {
     step: 0,
     method: '',
     phrase: '',
     privateKey: '',
+    error: '',
   };
   handleStep = (method?: string) => {
     const { step, phrase, privateKey, method: way } = this.state;

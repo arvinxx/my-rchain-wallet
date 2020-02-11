@@ -5,12 +5,12 @@ import React from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
 
-import { ConnectProps, ConnectState } from '@/models/connect';
+import { ConnectState } from '@/models/connect';
 import { CurrentUser } from '@/models/user';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 
-export interface GlobalHeaderRightProps extends ConnectProps {
+export interface GlobalHeaderRightProps {
   currentUser?: CurrentUser;
   menu?: boolean;
 }

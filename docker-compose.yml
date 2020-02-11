@@ -1,27 +1,25 @@
 version: '3.4'
 
-x-rnode:
-  &default-rnode
+x-rnode: &default-rnode
   image: $RNODE_IMAGE
   user: root
   restart: always
   networks:
-  - rchain-net
+    - rchain-net
 
 services:
-
   boot:
-    << : *default-rnode
-    container_name: boot
+    <<: *default-rnode
+    container_name: rnode
     command: run -s --validator-private-key $VALIDATOR_PRIVATE_BOOT --allow-private-addresses --host $MY_NET_IP -p 50400 -n --synchrony-constraint-threshold 0
     ports:
-    - $MY_NET_IP:50400:50400
-    - $MY_NET_IP:50401:40401
-    - $MY_NET_IP:50402:40402
-    - $MY_NET_IP:50403:40403
-    - $MY_NET_IP:50404:40404
+      - $MY_NET_IP:50400:50400
+      - $MY_NET_IP:50401:40401
+      - $MY_NET_IP:50402:40402
+      - $MY_NET_IP:50403:40403
+      - $MY_NET_IP:50404:40404
     volumes:
-    - ./data/boot:/var/lib/rnode
+      - ./data/boot:/var/lib/rnode
 
   envoy:
     container_name: envoy
@@ -29,14 +27,14 @@ services:
     restart: always
     command: -c /etc/envoy/envoy.yaml -l trace
     volumes:
-    # Envoy configuration
-    - ./envoy.yaml:/etc/envoy/envoy.yaml
+      # Envoy configuration
+      - ./envoy.yaml:/etc/envoy/envoy.yaml
     ports:
-    - $MY_NET_IP:44401:44401
-    - $MY_NET_IP:54401:54401
-    - $MY_NET_IP:9901:9901
+      - $MY_NET_IP:44401:44401
+      - $MY_NET_IP:54401:54401
+      - $MY_NET_IP:9901:9901
     networks:
-    - rchain-net
+      - rchain-net
 
 networks:
   rchain-net:

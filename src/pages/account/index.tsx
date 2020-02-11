@@ -30,14 +30,14 @@ const Account: FC<IAccountProps> = props => {
       <Card bordered={false}>
         <Tabs
           tabPosition={isMobile ? 'top' : 'left'}
-          defaultActiveKey={'general'}
+          defaultActiveKey={'network'}
           tabBarStyle={{ border: 'none' }}
         >
           <TabPane key={'general'} tab={<FormattedMessage id={'account.tabs.general'} />}>
             <General lockTime={lockTime} dispatch={dispatch} />
           </TabPane>
           <TabPane key={'network'} tab={<FormattedMessage id={'account.tabs.network'} />}>
-            <Network network={network} node={node} dispatch={dispatch} networkList={networkList} />
+            <Network network={network} node={node} networkList={networkList} />
           </TabPane>
           <TabPane key={'private'} tab={<FormattedMessage id={'account.tabs.private'} />}>
             <Private

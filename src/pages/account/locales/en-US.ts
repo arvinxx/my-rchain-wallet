@@ -28,6 +28,12 @@ export default {
   'account.components.network.title.testnet': 'Test Network',
   'account.components.network.title.localhost': 'Local Network',
   'account.components.network.desc': 'Please select the network to join',
+  'account.components.network.list.title': 'Network List',
+  'account.components.network.list.add-network': 'Add Network',
+  'account.components.network.form.title': 'Configuration',
+  'account.components.network.form.name': 'Network name',
+  'account.components.network.form.http': 'HTTP URL',
+  'account.components.network.form.grpc': 'GRPC URL',
   'account.components.general.lock-time': 'Lock time',
   'account.components.general.lock-time.desc':
     'Please set the free time (in minutes) before MRW automatically lock',

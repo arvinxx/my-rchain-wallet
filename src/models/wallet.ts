@@ -121,7 +121,7 @@ const WalletModel: WalletModelStore = {
         /**
          * 开始构建 WebSocket
          */
-        getMsgFromRNode(`wss://${grpc}/ws/events`, http);
+        getMsgFromRNode(`${grpc}/ws/events`, http);
       } catch (e) {
         console.error(e);
         if (
@@ -132,7 +132,7 @@ const WalletModel: WalletModelStore = {
         } else {
           yield put({
             type: 'save',
-            payload: { deployStatus: 'failed' },
+            payload: { deployStatus: 'error' },
           });
         }
       }

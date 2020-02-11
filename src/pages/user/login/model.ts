@@ -1,9 +1,6 @@
-import { routerRedux } from 'dva/router';
-import { stringify } from 'querystring';
 import { router } from 'umi';
 
 import { accountLogin } from '@/services/login';
-import { getPageQuery } from '@/utils/utils';
 import { query } from '@/services/user';
 import { Effect, Reducer } from '@/models/connect';
 
@@ -18,7 +15,6 @@ export interface LoginModelStore {
   state: LoginModelState;
   effects: {
     login: Effect;
-    logout: Effect;
   };
   reducers: {
     save: Reducer<LoginModelState>;
@@ -59,20 +55,6 @@ const LoginModel: LoginModelStore = {
           type: 'save',
           payload: { status: 'error' },
         });
-      }
-    },
-    *logout(_, { put }) {
-      const { redirect } = getPageQuery();
-      // redirect
-      if (window.location.pathname !== '/user/login' && !redirect) {
-        yield put(
-          routerRedux.replace({
-            pathname: '/user/login',
-            search: stringify({
-              redirect: window.location.href,
-            }),
-          }),
-        );
       }
     },
   },

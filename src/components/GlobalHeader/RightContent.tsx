@@ -1,23 +1,20 @@
 import React, { FC } from 'react';
 import { Select, Typography } from 'antd';
-import { connect } from 'dva';
-import { ConnectState, DispatchProps } from '@/models/connect';
+import { useDispatch, useSelector } from 'dva';
+import { ConnectState } from '@/models/connect';
+import { formatMessage, FormattedMessage } from 'umi-plugin-locale';
 
 import Avatar from './AvatarDropdown';
 import SelectLang from '../SelectLang';
 import styles from './index.less';
-import { INetwork } from '@/models/global';
-const { Text } = Typography;
-export type SiderTheme = 'light' | 'dark';
-export interface GlobalHeaderRightProps extends DispatchProps {
-  theme?: SiderTheme;
-  layout: 'sidemenu' | 'topmenu';
-  network: string;
-  networkList: INetwork[];
-}
 
-const GlobalHeaderRight: FC<GlobalHeaderRightProps> = props => {
-  const { theme, layout, networkList, dispatch } = props;
+const { Text } = Typography;
+
+const GlobalHeaderRight: FC = () => {
+  const dispatch = useDispatch(),
+    { global, settings } = useSelector<ConnectState, ConnectState>(state => state),
+    { navTheme: theme, layout } = settings,
+    { networkList, network } = global;
   let className = styles.right;
 
   if (theme === 'dark' && layout === 'topmenu') {
@@ -29,6 +26,20 @@ const GlobalHeaderRight: FC<GlobalHeaderRightProps> = props => {
       payload: network,
     });
   };
+
+  const NetMenuItem: FC = () => {
+    const { Option } = Select;
+    return (
+      <Select value={network} className={styles.network} onChange={changeNetwork}>
+        {networkList.map((net, index) => (
+          <Option key={index} value={net.name}>
+            {net.name}
+          </Option>
+        ))}
+      </Select>
+    );
+  };
+
   return (
     <div className={className}>
       {/*<HeaderSearch*/}
@@ -69,28 +80,16 @@ const GlobalHeaderRight: FC<GlobalHeaderRightProps> = props => {
       {/*    <Icon type="question-circle-o" />*/}
       {/*  </a>*/}
       {/*</Tooltip>*/}
-      {/*<div>*/}
-      {/*  <Text type={'secondary'} style={{ marginRight: 4 }}>*/}
-      {/*    <FormattedMessage id={`component.globalHeader.network.desc`} />*/}
-      {/*  </Text>*/}
-      {/*  <Select value={network} className={styles.network} onChange={changeNetwork}>*/}
-      {/*    {testNetList.map((net, index) => (*/}
-      {/*      <Select.Option key={index} value={`https://testnet-${index}.grpc.rchain.isotypic.com`}>*/}
-      {/*        {net}*/}
-      {/*      </Select.Option>*/}
-      {/*    ))}*/}
-      {/*    <Select.Option value={'http://localhost:54401'}>localhost</Select.Option>*/}
-      {/*  </Select>*/}
-      {/*</div>*/}
+      <div>
+        <Text type={'secondary'} style={{ marginRight: 4 }}>
+          <FormattedMessage id={`component.globalHeader.network.desc`} />
+        </Text>
+        <NetMenuItem />
+      </div>
       <Avatar />
       <SelectLang className={styles.action} />
     </div>
   );
 };
 
-export default connect(({ settings, global }: ConnectState) => ({
-  theme: settings.navTheme,
-  layout: settings.layout,
-  network: global.network,
-  networkList: global.networkList,
-}))(GlobalHeaderRight);
+export default GlobalHeaderRight;

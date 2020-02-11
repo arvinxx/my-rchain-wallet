@@ -26,6 +26,12 @@ export default {
   'account.components.network.title.testnet': '测试网',
   'account.components.network.title.localhost': '本地网络',
   'account.components.network.desc': '请选择要加入的网络',
+  'account.components.network.list.title': '网络列表',
+  'account.components.network.form.title': '配置参数',
+  'account.components.network.form.name': '网络名称',
+  'account.components.network.form.http': 'HTTP 地址',
+  'account.components.network.form.grpc': 'GRPC 地址',
+  'account.components.network.list.add-network': '添加网络',
   'account.components.general.lock-time': '锁定时间',
   'account.components.general.lock-time.desc': '请设置 MRW 自动锁定的时间（以分钟为单位）',
 };

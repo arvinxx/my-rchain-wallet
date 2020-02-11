@@ -5,7 +5,10 @@ import { ClickParam } from 'antd/es/menu';
 import React from 'react';
 import classNames from 'classnames';
 import HeaderDropdown from '../HeaderDropdown';
+import { languageLabels, languageIcons, languageKey } from './language';
 import styles from './index.less';
+
+const locales: languageKey[] = ['zh-CN', 'en-US'];
 
 interface SelectLangProps {
   className?: string;
@@ -16,22 +19,14 @@ const SelectLang: React.FC<SelectLangProps> = props => {
   const changeLang = ({ key }: ClickParam): void => {
     setLocale(key, false);
   };
-  const locales = ['zh-CN', 'en-US'];
-  const languageLabels = {
-    'en-US': 'English',
-    'zh-CN': '简体中文',
-  };
-  const languageIcons = {
-    'en-US': '🇺🇸',
-    'zh-CN': '🇨🇳',
-  };
+
   const langMenu = (
     <Menu className={styles.menu} selectedKeys={[selectedLang]} onClick={changeLang}>
       {locales.map(locale => (
         <Menu.Item key={locale}>
           <span role="img" aria-label={languageLabels[locale]}>
             {languageIcons[locale]}
-          </span>{' '}
+          </span>
           {languageLabels[locale]}
         </Menu.Item>
       ))}

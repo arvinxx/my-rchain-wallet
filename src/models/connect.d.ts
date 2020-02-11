@@ -97,3 +97,13 @@ export interface Route extends MenuDataItem {
 export interface DispatchProps {
   dispatch: Dispatch;
 }
+
+declare global {
+  namespace NodeJS {
+    export interface Global {
+      g_app: {
+        _store: { dispatch: Dispatch; getState: () => ConnectState };
+      };
+    }
+  }
+}

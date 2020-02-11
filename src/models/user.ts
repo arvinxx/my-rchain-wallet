@@ -4,8 +4,7 @@ import { queryCurrent, query as queryUsers, updateUserList } from '@/services/us
 import { IAccount } from '@/services/account';
 import { accountLogin } from '@/services/login';
 import { getPageQuery } from '@/utils/utils';
-import { routerRedux } from 'dva/router';
-import { stringify } from 'querystring';
+import { router } from 'umi';
 export interface CurrentUser extends IAccount {}
 export interface UserModelState {
   currentUser: IAccount;
@@ -104,18 +103,11 @@ const UserModel: UserModelStore = {
     },
   },
   effects: {
-    *logout(_, { put }) {
+    *logout() {
       const { redirect } = getPageQuery();
       // redirect
       if (window.location.pathname !== '/user/login' && !redirect) {
-        yield put(
-          routerRedux.replace({
-            pathname: '/user/login',
-            search: stringify({
-              redirect: window.location.href,
-            }),
-          }),
-        );
+        yield router.push('/user/login');
       }
     },
   },

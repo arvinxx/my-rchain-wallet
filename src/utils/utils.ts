@@ -94,3 +94,15 @@ export const stringToUint8Array = (str: string) => {
   }
   return new Uint8Array(arr);
 };
+
+/**
+ * 判断锁定时间是否超过
+ * @param lockTime number
+ */
+export const checkOverTime = (lockTime: number) => {
+  const lastLogin = getItem('lastLogin');
+  const dueTime = lockTime * 60 * 1000; // lock after 30 mins
+  const duration = new Date().valueOf() - Number(lastLogin);
+
+  return duration > dueTime;
+};

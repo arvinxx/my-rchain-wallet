@@ -10,7 +10,7 @@ export default {
   'component.globalHeader.message.empty': 'You have viewed all messsages.',
   'component.globalHeader.event': 'Event',
   'component.globalHeader.event.empty': 'You have viewed all events.',
-  'component.globalHeader.network.desc': 'Network connect to',
+  'component.globalHeader.network.desc': 'Network',
   'component.noticeIcon.clear': 'Clear',
   'component.noticeIcon.cleared': 'Cleared',
   'component.noticeIcon.empty': 'No notifications',
