@@ -7,7 +7,7 @@ import Account from './components/Account';
 import AccountDetail from './components/AccountDetail';
 import Token from './components/Token';
 import Transaction from './components/Transaction';
-import { ConnectState, DispatchProps, UserModelState, WalletModelState } from '@/models/connect';
+import { ConnectState, DispatchProps, UserModelState, LoginModelState } from '@/models/connect';
 
 export interface ITransaction {
   type: string;
@@ -19,7 +19,7 @@ export interface ITransaction {
 
 interface IAccountDetailProps extends DispatchProps {
   user: UserModelState;
-  wallet: WalletModelState;
+  wallet: LoginModelState;
   checkBalance: boolean;
   getBalance: boolean;
 }

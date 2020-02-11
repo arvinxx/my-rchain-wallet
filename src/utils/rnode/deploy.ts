@@ -15,9 +15,12 @@ export const rnode = (rnodeUrl: string) => {
   const options = { grpcLib: grpcWeb, host: rnodeUrl, protoSchema };
 
   // Get RNode service methods
-  const { doDeploy, listenForDataAtName, getBlocks, getBlock } = rnodeDeploy(options);
+  const { doDeploy, listenForDataAtName, getBlocks, getBlock, showMainChain } = rnodeDeploy(
+    options,
+  );
+
   const { propose } = rnodePropose(options);
-  return { DoDeploy: doDeploy, propose, listenForDataAtName, getBlocks, getBlock };
+  return { DoDeploy: doDeploy, propose, listenForDataAtName, getBlocks, getBlock, showMainChain };
 };
 
 export const sendDeploy = async (
@@ -58,7 +61,7 @@ export const sendDeploy = async (
 };
 
 export const getDataForDeploy = async (rnodeUrl: string, deployId: Uint8Array) => {
-  const { listenForDataAtName } = rnode(rnodeUrl);
+  const { listenForDataAtName, showMainChain, getBlocks } = rnode(rnodeUrl);
 
   const depth = await getBlockDepth(rnodeUrl);
 

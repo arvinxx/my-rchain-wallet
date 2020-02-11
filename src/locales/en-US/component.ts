@@ -4,6 +4,7 @@ export default {
   'component.tagSelect.all': 'All',
   'component.footer.about-us': 'About us',
   'component.footer.rights': 'All Rights Reserved.',
+  'component.footer.rchain': 'RChain',
   'component.create-account.username': 'Username',
   'component.create-account.username.require': 'username is required',
   'component.create-account.username.placeholder':

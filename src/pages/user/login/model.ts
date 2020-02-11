@@ -1,13 +1,11 @@
-import { Reducer } from 'redux';
 import { routerRedux } from 'dva/router';
-import { Effect } from 'dva';
 import { stringify } from 'querystring';
+import { router } from 'umi';
 
 import { accountLogin } from '@/services/login';
 import { getPageQuery } from '@/utils/utils';
 import { query } from '@/services/user';
-import { router } from 'umi';
-import { ConnectState } from '@/models/connect';
+import { Effect, Reducer } from '@/models/connect';
 
 export interface LoginModelState {
   status?: 'ok' | 'error';
@@ -37,7 +35,6 @@ const LoginModel: LoginModelStore = {
     *login({ payload }, { select, put }) {
       const { username, password } = payload;
       const userList = query();
-      console.log(username, userList);
       const user = userList.find(user => user.username === username);
 
       // Login successfully
@@ -48,7 +45,9 @@ const LoginModel: LoginModelStore = {
           payload: { status: 'ok' },
         });
 
-        const { query } = yield select((state: ConnectState) => state.routing.location);
+        const { location } = yield select(state => state.router);
+
+        const { query } = location;
 
         if (query && query.redirect) {
           window.location.href = query.redirect;

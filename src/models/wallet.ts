@@ -23,8 +23,8 @@ export interface WalletModelStore extends DvaModel<WalletModelState> {
     transfer: Effect;
   };
   reducers: {
-    save: Reducer<WalletModelState>;
-    addBlockNumber: Reducer<WalletModelState>;
+    save: Reducer;
+    addBlockNumber: Reducer;
   };
 }
 

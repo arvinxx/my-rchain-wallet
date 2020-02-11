@@ -9,4 +9,5 @@ export default {
   'user-login.login.restore': '已有账户? {restore}',
   'user-login.login.restore.restore': '立即恢复',
   'user-login.login.login': '登录',
+  'user-login.auto-login': '自动登录',
 };

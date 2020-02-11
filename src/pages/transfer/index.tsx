@@ -21,7 +21,7 @@ import Confirm from './components/Confirm';
 import { formatMessage, FormattedMessage } from 'umi-plugin-locale';
 
 import { connect } from 'dva';
-import { ConnectState, DispatchProps, UserModelState, WalletModelState } from '@/models/connect';
+import { ConnectState, DispatchProps, UserModelState, LoginModelState } from '@/models/connect';
 import { showHiddenAddress } from '@/utils/blockchain';
 
 const { Text, Title } = Typography;
@@ -40,7 +40,7 @@ export interface ITransfer {
 
 interface IAccountDetailProps extends DispatchProps {
   user: UserModelState;
-  wallet: WalletModelState;
+  wallet: LoginModelState;
   checkBalance: boolean;
 }
 

@@ -24,8 +24,8 @@ export interface ConnectState {
   settings: SettingModelState;
   user: UserModelState;
   wallet: WalletModelState;
-  login: WalletModelState;
-  routing: { location: Location };
+  login: LoginModelState;
+  router: { location: Location };
 }
 //********************//
 // Loading 相关类型定义 //
@@ -33,7 +33,7 @@ export interface ConnectState {
 
 export interface Loading {
   global: boolean;
-  effects: { [key: string]: boolean | undefined };
+  effects: { [key: string]: boolean };
   models: {
     global?: boolean;
     menu?: boolean;

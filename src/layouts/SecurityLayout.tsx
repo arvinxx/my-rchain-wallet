@@ -1,53 +1,47 @@
-import React from 'react';
-import { connect } from 'dva';
+import React, { FC, useEffect, useState } from 'react';
+import { useSelector } from 'dva';
 import { Redirect } from 'umi';
 import { stringify } from 'querystring';
-import { ConnectState, ConnectProps } from '@/models/connect';
-import { CurrentUser } from '@/models/user';
+import { ConnectState } from '@/models/connect';
+
 import PageLoading from '@/components/PageLoading';
 import { getItem } from '@/utils/utils';
 
-interface SecurityLayoutProps extends ConnectProps {
-  loading: boolean;
-  userList: string[];
-}
+const SecurityLayout: FC = ({ children }) => {
+  const [isReady, handleIsReady] = useState(false);
 
-interface SecurityLayoutState {
-  isReady: boolean;
-}
+  useEffect(() => {
+    handleIsReady(true);
+  }, []);
 
-class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayoutState> {
-  state: SecurityLayoutState = {
-    isReady: false,
+  const loading = useSelector<ConnectState, boolean | undefined>(
+    state => state.loading.models.user,
+  );
+  const checkLocked = () => {
+    const lastLogin = localStorage.getItem('lastLogin') as string;
+    const dueTime = 30 * 60 * 1000; // lock after 30 mins
+    const duration = new Date().valueOf() - Number(lastLogin);
+
+    return duration > dueTime;
   };
 
-  componentDidMount() {
-    this.setState({
-      isReady: true,
-    });
+  const isLogin = getItem('currentUser');
+  const autoLogin = getItem('autoLogin');
+
+  const queryString = stringify({
+    redirect: window.location.href,
+  });
+
+  if ((!isLogin && loading) || !isReady) {
+    return <PageLoading />;
+  }
+  // isn't login
+  // or didn't check autoLogin and time over due time
+  if (!isLogin || (!autoLogin && checkLocked())) {
+    return <Redirect to={`/user/login?${queryString}`} />;
   }
 
-  render() {
-    const { isReady } = this.state;
-    const { children, loading } = this.props;
+  return children;
+};
 
-    const isLogin = getItem('currentUser');
-
-    const queryString = stringify({
-      redirect: window.location.href,
-    });
-
-    if ((!isLogin && loading) || !isReady) {
-      return <PageLoading />;
-    }
-    if (!isLogin) {
-      return <Redirect to={`/user/login?${queryString}`}></Redirect>;
-    }
-    return children;
-  }
-}
-
-export default connect(({ user, loading }: ConnectState) => ({
-  currentUser: user.currentUser,
-  loading: loading.models.user,
-}))(SecurityLayout);
+export default SecurityLayout;

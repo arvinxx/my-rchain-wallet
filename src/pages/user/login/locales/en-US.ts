@@ -10,4 +10,5 @@ export default {
   'user-login.login.restore': 'Already have an account? {restore} account from backup',
   'user-login.login.login': 'Login',
   'user-login.login.restore.restore': 'Restore',
+  'user-login.auto-login': 'Auto login',
 };

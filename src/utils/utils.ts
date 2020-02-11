@@ -21,7 +21,13 @@ export const getUID = () => {
 };
 export const getPageQuery = () => parse(window.location.href.split('?')[1]);
 
-type ILocalData = 'currentUser' | 'restore' | 'lastLogin' | 'connection' | 'checkBalanceContact';
+type ILocalData =
+  | 'currentUser'
+  | 'restore'
+  | 'lastLogin'
+  | 'connection'
+  | 'checkBalanceContact'
+  | 'autoLogin';
 
 type IEncryptedData = 'userList' | 'mnemonic' | 'privateKey';
 

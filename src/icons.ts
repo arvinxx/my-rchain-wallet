@@ -1,13 +1,9 @@
 // export what you need
 export { default as DashboardOutline } from '@ant-design/icons/lib/outline/DashboardOutline';
-export {
-  default as TransactionOutline,
-} from '@ant-design/icons/lib/outline/TransactionOutline';
+export { default as TransactionOutline } from '@ant-design/icons/lib/outline/TransactionOutline';
 export { default as MenuFoldOutline } from '@ant-design/icons/lib/outline/MenuFoldOutline';
 export { default as EyeOutline } from '@ant-design/icons/lib/outline/EyeOutline';
-export {
-  default as EyeInvisibleOutline,
-} from '@ant-design/icons/lib/outline/EyeInvisibleOutline';
+export { default as EyeInvisibleOutline } from '@ant-design/icons/lib/outline/EyeInvisibleOutline';
 export { default as MenuUnfoldOutline } from '@ant-design/icons/lib/outline/MenuUnfoldOutline';
 export { default as GlobalOutline } from '@ant-design/icons/lib/outline/GlobalOutline';
 export { default as SearchOutline } from '@ant-design/icons/lib/outline/SearchOutline';
@@ -26,10 +22,9 @@ export { default as DeleteOutline } from '@ant-design/icons/lib/outline/DeleteOu
 export { default as MoreOutline } from '@ant-design/icons/lib/outline/MoreOutline';
 export { default as ProfileOutline } from '@ant-design/icons/lib/outline/ProfileOutline';
 export { default as ReloadOutline } from '@ant-design/icons/lib/outline/ReloadOutline';
+export { default as CopyrightOutline } from '@ant-design/icons/lib/outline/CopyrightOutline';
 
 export { default as CopyFill } from '@ant-design/icons/lib/fill/CopyFill';
 export { default as CheckCircleFill } from '@ant-design/icons/lib/fill/CheckCircleFill';
 export { default as CloseCircleFill } from '@ant-design/icons/lib/fill/CloseCircleFill';
-export {
-  default as ExclamationCircleFill,
-} from '@ant-design/icons/lib/fill/ExclamationCircleFill';
+export { default as ExclamationCircleFill } from '@ant-design/icons/lib/fill/ExclamationCircleFill';

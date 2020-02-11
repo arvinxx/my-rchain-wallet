@@ -25,7 +25,6 @@ export const getMsgFromRNode = (
   connection.onmessage = async ({ data }: any) => {
     const { event, payload } = JSON.parse(data);
     console.log(event, payload);
-    // console.log(event, payload);
     if (event === 'block-added') {
       global.g_app._store.dispatch({ type: 'wallet/addBlockNumber' });
     }

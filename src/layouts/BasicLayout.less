@@ -5,24 +5,23 @@
   display: flex;
   height: 100vh;
   :global {
-    .ant-layout-content {
-      display: flex;
-      min-height: auto !important;
+    .ant-layout {
+      > div {
+        flex: 1;
+        display: flex;
+      }
     }
+    .ant-layout-content,
     .ant-pro-basicLayout-children-content-wrap {
+      flex: 1;
       display: flex;
-      width: 100%;
     }
 
     .ant-pro-sider-menu-logo {
-      padding-left: 0;
       display: flex;
       justify-content: center;
       align-items: center;
       box-shadow: none !important;
-    }
-    .ant-pro-global-header-trigger {
-      padding: calc((64px - 23px) / 2) 24px;
     }
 
     .ant-menu-item {
@@ -61,6 +60,7 @@
 }
 .logo {
   height: 28px !important;
+  margin-top: 24px;
 }
 .footer {
   width: 100%;

@@ -1,173 +1,147 @@
-import React, { Component } from 'react';
-import { Button, Select, Divider, Typography, Avatar } from 'antd';
+import React, { FC, useEffect, useState } from 'react';
+import { Button, Select, Divider, Typography, Avatar, Checkbox } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
-
-import Link from 'umi/link';
-import { router } from 'umi';
-import { connect } from 'dva';
-import { LoginModelState } from './model';
+import { router, Link } from 'umi';
+import { useSelector, useDispatch } from 'dva';
 import { InputBlock } from '@/components';
-import styles from './style.less';
-import { ReactComponent as NewAccount } from '@/assets/img/new_account.svg';
-
-import { UserModelState } from '@/models/user';
+import { ConnectState } from '@/models/connect';
 import { showHiddenAddress } from '@/utils/blockchain';
-import { ConnectState, DispatchProps } from '@/models/connect';
+import { ReactComponent as NewAccount } from '@/assets/img/new_account.svg';
+import styles from './style.less';
+import { setItem } from '@/utils/utils';
 
 const { Text, Title } = Typography;
 const { Option } = Select;
 
-interface LoginProps extends DispatchProps {
-  login: LoginModelState;
-  user: UserModelState;
-  submitting: boolean;
-  location: Location;
-}
+const Login: FC = () => {
+  const dispatch = useDispatch();
 
-interface LoginState {
-  autoLogin: boolean;
-  password: string;
-  user?: string;
-}
+  const [password, handlePassword] = useState('');
+  const [autoLogin, handleAutoLogin] = useState(false);
+  const [userKey, handleUserKey] = useState('');
 
-@connect(({ login, loading, user }: ConnectState) => ({
-  login,
-  user,
-  submitting: loading.effects['login/login'],
-}))
-export default class Login extends Component<LoginProps, LoginState> {
-  state: LoginState = {
-    autoLogin: true,
-    password: '',
-  };
+  const { user, login } = useSelector<ConnectState, ConnectState>(state => state);
+  const { userList } = user;
 
-  componentDidMount(): void {
-    this.props.dispatch({ type: 'user/fetchAll' });
-  }
+  useEffect(() => {
+    dispatch({ type: 'user/fetchAll' });
+  }, []);
 
-  signup = () => {
+  const signup = () => {
     router.push('/user/signup');
   };
-  login = () => {
-    const {
-      user: { userList },
-    } = this.props;
-    const { password, user } = this.state;
-    let username = user;
-    if (!user) {
+  const loginFn = () => {
+    let username = userKey;
+    if (!userKey && userList) {
       username = userList[0].username;
     }
-    this.props.dispatch({
+    dispatch({
       type: 'login/login',
       payload: { username, password },
     });
   };
-  chooseUser = (user: string) => {
-    this.setState({ user });
+  const chooseUser = (user: string) => {
+    handleUserKey(user);
   };
 
-  render() {
-    const { password } = this.state;
-    const {
-      login,
-      user: { userList },
-    } = this.props;
+  const { status } = login;
 
-    const { status } = login;
-    let isNew = userList ? userList.length === 0 : true;
-
-    return (
-      <div className={styles.container}>
-        {isNew ? (
-          <>
-            <NewAccount className={styles.img} />
-            <div>
-              <Text type={'secondary'}>
-                {formatMessage({ id: 'user-login.login.none-account' })}
-              </Text>
-            </div>
-            <Button className={styles.newBtn} type={'primary'} onClick={this.signup}>
-              {formatMessage({ id: 'user-login.login.create-account' })}
-            </Button>
-          </>
-        ) : (
-          <>
-            <Title level={2} style={{ marginBottom: 0 }}>
-              {formatMessage({ id: `user-login.login.title` })}
-            </Title>
-            <Text type={'secondary'} className={styles.description}>
-              <FormattedMessage
-                id={'user-login.login.title.description'}
-                values={{
-                  create: (
-                    <Link to={'/user/signup'}>
-                      {formatMessage({ id: 'user-login.login.title.description.create' })}
-                    </Link>
-                  ),
-                }}
-              />
-            </Text>
-            <Divider dashed className={styles.divider} />
-            <Select
-              defaultValue={userList[0].username}
-              size={'large'}
-              onChange={this.chooseUser}
-              className={styles.account}
-            >
-              {userList.map(user => {
-                const { address, username, avatar } = user;
-
-                return (
-                  <Option value={username} key={address}>
-                    <div className={styles.option}>
-                      <Avatar src={avatar} className={styles.avatar} />
-
-                      <div className={styles.text}>
-                        <div>{username}</div>
-                        <Text type={'secondary'} style={{ fontSize: 12 }}>
-                          {showHiddenAddress(address, 8)}
-                        </Text>
-                      </div>
-                    </div>
-                  </Option>
-                );
-              })}
-            </Select>
-            <InputBlock
-              label={'user-login.login.input.password'}
-              onChange={e => this.setState({ password: e.target.value })}
-              type={'password'}
-              onPressEnter={this.login}
-              error={status === 'error'}
-              errorMsg={'user-login.login.input.password.errorMsg'}
-              value={password}
-            />
-            <Button
-              type={'primary'}
-              size={'large'}
-              className={styles.button}
-              block
-              onClick={this.login}
-            >
-              {formatMessage({ id: 'user-login.login.login' })}
-            </Button>
-          </>
-        )}
-        <div style={{ marginTop: 16 }}>
-          <Text type={'secondary'}>
+  return (
+    <div className={styles.container}>
+      {!userList || userList.length === 0 ? (
+        <>
+          <NewAccount className={styles.img} />
+          <div>
+            <Text type={'secondary'}>{formatMessage({ id: 'user-login.login.none-account' })}</Text>
+          </div>
+          <Button className={styles.newBtn} type={'primary'} onClick={signup}>
+            {formatMessage({ id: 'user-login.login.create-account' })}
+          </Button>
+        </>
+      ) : (
+        <>
+          <Title level={2} style={{ marginBottom: 0 }}>
+            {formatMessage({ id: `user-login.login.title` })}
+          </Title>
+          <Text type={'secondary'} className={styles.description}>
             <FormattedMessage
-              id={'user-login.login.restore'}
+              id={'user-login.login.title.description'}
               values={{
-                restore: (
-                  <Link to={'/user/restore'}>
-                    {formatMessage({ id: 'user-login.login.restore.restore' })}
+                create: (
+                  <Link to={'/user/signup'}>
+                    {formatMessage({ id: 'user-login.login.title.description.create' })}
                   </Link>
                 ),
               }}
             />
           </Text>
-        </div>
+          <Divider dashed className={styles.divider} />
+          <Select
+            defaultValue={userList[0].username}
+            size={'large'}
+            onChange={chooseUser}
+            className={styles.account}
+          >
+            {userList.map(user => {
+              const { address, username, avatar } = user;
+              return (
+                <Option value={username} key={address}>
+                  <div className={styles.option}>
+                    <Avatar src={avatar} className={styles.avatar} />
+
+                    <div className={styles.text}>
+                      <div>{username}</div>
+                      <Text type={'secondary'} style={{ fontSize: 12 }}>
+                        {showHiddenAddress(address, 8)}
+                      </Text>
+                    </div>
+                  </div>
+                </Option>
+              );
+            })}
+          </Select>
+          <InputBlock
+            label={'user-login.login.input.password'}
+            onChange={e => {
+              handlePassword(e.target.value);
+            }}
+            type={'password'}
+            onPressEnter={loginFn}
+            error={status === 'error'}
+            errorMsg={'user-login.login.input.password.errorMsg'}
+            value={password}
+          />
+          <div className={styles.autoLogin}>
+            <Checkbox
+              checked={autoLogin}
+              onChange={() => {
+                setItem('autoLogin', !autoLogin);
+                handleAutoLogin(!autoLogin);
+              }}
+            >
+              <FormattedMessage id="user-login.auto-login" />
+            </Checkbox>
+          </div>
+          <Button type={'primary'} size={'large'} className={styles.button} block onClick={loginFn}>
+            {formatMessage({ id: 'user-login.login.login' })}
+          </Button>
+        </>
+      )}
+      <div style={{ marginTop: 16 }}>
+        <Text type={'secondary'}>
+          <FormattedMessage
+            id={'user-login.login.restore'}
+            values={{
+              restore: (
+                <Link to={'/user/restore'}>
+                  {formatMessage({ id: 'user-login.login.restore.restore' })}
+                </Link>
+              ),
+            }}
+          />
+        </Text>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
+export default Login;

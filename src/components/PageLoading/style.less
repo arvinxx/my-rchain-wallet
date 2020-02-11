@@ -1,0 +1,66 @@
+@import '~theme/theme';
+
+@-webkit-keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.body {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: @layout-body-background;
+}
+
+.ctnr {
+  display: -webkit-box;
+  display: flex;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: @layout-body-background;
+}
+
+.ldr {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  -webkit-box-align: center;
+  align-items: center;
+  margin: auto;
+  width: 36px;
+  height: 36px;
+}
+
+.ldrBlk {
+  height: 35%;
+  width: 35%;
+  -webkit-animation: pulse 0.75s ease-in infinite alternate;
+  animation: pulse 0.75s ease-in infinite alternate;
+  background-color: @primary-color;
+}
+
+.anDelay {
+  -webkit-animation-delay: 0.75s;
+  animation-delay: 0.75s;
+}

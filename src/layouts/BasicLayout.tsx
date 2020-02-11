@@ -1,13 +1,16 @@
+import React, { useEffect } from 'react';
 import ProLayout, {
   MenuDataItem,
   BasicLayoutProps as ProLayoutProps,
   Settings,
 } from '@ant-design/pro-layout';
-import React, { useEffect } from 'react';
 import Link from 'umi/link';
 import { Dispatch } from 'redux';
 import { connect } from 'dva';
-import { Layout } from 'antd';
+import { Layout, Row, Col, Typography } from 'antd';
+import { Unlock } from '@/components';
+import { getItem } from '@/utils/utils';
+import moment from 'moment';
 
 import { formatMessage } from 'umi-plugin-react/locale';
 
@@ -17,11 +20,9 @@ import styles from './BasicLayout.less';
 
 import rectLogo from '../assets/logo-long.svg';
 import circleLogo from '../assets/logo-circle.svg';
-import { Unlock } from '@/components';
-import { getItem } from '@/utils/utils';
 
 const { Footer } = Layout;
-
+const { Text } = Typography;
 export interface BasicLayoutProps extends ProLayoutProps {
   breadcrumbNameMap: {
     [path: string]: MenuDataItem;
@@ -30,11 +31,6 @@ export interface BasicLayoutProps extends ProLayoutProps {
   locked: boolean;
   dispatch: Dispatch;
 }
-export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
-  breadcrumbNameMap: {
-    [path: string]: MenuDataItem;
-  };
-};
 
 /**
  * use Authorized check all menu item
@@ -47,8 +43,23 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
 
 export const footerRender: BasicLayoutProps['footerRender'] = () => (
   <Footer className={styles.footer}>
-    <div> 2019 © MyRChainWallet - {formatMessage({ id: 'component.footer.rights' })}</div>
-    <div>{formatMessage({ id: 'component.footer.about-us' })}</div>
+    <div>
+      <Text type={'secondary'}>
+        2019-{moment().year()} © MyRChainWallet - {formatMessage({ id: 'component.footer.rights' })}
+      </Text>
+    </div>
+    <Row type={'flex'} gutter={8}>
+      <Col>
+        <a target={'_blank'} href={'https://rchain.coop/'}>
+          <Text type={'secondary'}>{formatMessage({ id: 'component.footer.rchain' })}</Text>
+        </a>
+      </Col>
+      <Col>
+        <a target={'_blank'} href={'/'}>
+          <Text type={'secondary'}>{formatMessage({ id: 'component.footer.about-us' })}</Text>
+        </a>
+      </Col>
+    </Row>
   </Footer>
 );
 
@@ -56,15 +67,21 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const { dispatch, collapsed, children, settings, locked } = props;
 
   const checkLocked = () => {
+    const autoLogin = getItem('autoLogin');
+
     const lastLogin = localStorage.getItem('lastLogin') as string;
     const dueTime = 30 * 60 * 1000; // lock after 30 mins
     const duration = new Date().valueOf() - Number(lastLogin);
 
     if (duration > dueTime) {
-      dispatch({
-        type: 'global/save',
-        payload: { locked: true },
-      });
+      if (autoLogin) {
+        dispatch({
+          type: 'global/save',
+          payload: { locked: true },
+        });
+      } else {
+        dispatch({ type: 'user/logout' });
+      }
     }
   };
 
@@ -106,7 +123,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
             if (menuItemProps.isUrl) {
               return defaultDom;
             }
-            return <Link to={menuItemProps.path}>{defaultDom}</Link>;
+            return <Link to={menuItemProps.path || '/'}>{defaultDom}</Link>;
           }}
           breadcrumbRender={(routers = []) => [
             {

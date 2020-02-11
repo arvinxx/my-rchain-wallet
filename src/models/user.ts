@@ -1,25 +1,28 @@
-import { Effect } from 'dva';
-
-import { Reducer } from './connect';
+import { Reducer, Effect, DvaModel } from './connect';
 
 import { queryCurrent, query as queryUsers, updateUserList } from '@/services/user';
 import { IAccount } from '@/services/account';
 import { accountLogin } from '@/services/login';
+import { getPageQuery } from '@/utils/utils';
+import { routerRedux } from 'dva/router';
+import { stringify } from 'querystring';
 export interface CurrentUser extends IAccount {}
 export interface UserModelState {
   currentUser: IAccount;
   userList?: IAccount[];
 }
 
-export interface UserModelStore {
-  state: UserModelState;
+export interface UserModelStore extends DvaModel<UserModelState> {
   reducers: {
-    save: Reducer<UserModelState>;
-    changeName: Reducer<UserModelState>;
-    updateCurrent: Reducer<UserModelState>;
-    fetchCurrent: Reducer<UserModelState>;
-    fetchAll: Reducer<UserModelState>;
-    register: Reducer<UserModelState>;
+    save: Reducer;
+    changeName: Reducer;
+    updateCurrent: Reducer;
+    fetchCurrent: Reducer;
+    fetchAll: Reducer;
+    register: Reducer;
+  };
+  effects: {
+    logout: Effect;
   };
 }
 
@@ -98,6 +101,22 @@ const UserModel: UserModelStore = {
       const { uid } = payload;
       accountLogin(uid);
       return state;
+    },
+  },
+  effects: {
+    *logout(_, { put }) {
+      const { redirect } = getPageQuery();
+      // redirect
+      if (window.location.pathname !== '/user/login' && !redirect) {
+        yield put(
+          routerRedux.replace({
+            pathname: '/user/login',
+            search: stringify({
+              redirect: window.location.href,
+            }),
+          }),
+        );
+      }
     },
   },
 };
