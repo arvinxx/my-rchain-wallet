@@ -26,6 +26,8 @@ export const getMsgFromRNode = (url: string, rnodeUrl: string): void => {
     }
     const item = getItem('checkBalanceContact');
     const { deployId } = item;
+
+    // 如果发现有部署合约
     if (
       deployId &&
       payload &&
@@ -36,7 +38,6 @@ export const getMsgFromRNode = (url: string, rnodeUrl: string): void => {
       const { blockinfo } = await getBlock(rnodeUrl, hash);
       const blockNumber = blockinfo && blockinfo.blockinfo.blocknumber;
       if (blockinfo && blockinfo.blockinfo.seqnum) {
-        console.log('deploy successfully!');
         setItem('checkBalanceContact', {
           ...item,
           blockNumber: blockNumber,

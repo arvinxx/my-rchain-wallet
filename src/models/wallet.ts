@@ -156,6 +156,7 @@ const WalletModel: WalletModelStore = {
           payload: {
             deployStatus: 'success',
             revBalance: balance / 1e9,
+            waitingBlockNumber: 0,
           },
         });
       }
