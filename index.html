@@ -1,143 +1,62 @@
-<!DOCTYPE html><html lang="en"><head><link rel="stylesheet" href="/umi.d2b43040.css"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0"><title>My RChain Wallet</title><link rel="icon" href="/favicon.png" type="image/x-icon"><script>window.routerBase = "/";</script><script src="https://unpkg.com/react@16.12.0/umd/react.profiling.min.js" crossorigin="true"></script><script src="https://unpkg.com/react@16.12.0/umd/react.production.min.js" crossorigin="true"></script><script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.production.min.js" crossorigin="true"></script></head><body><noscript>Out-of-the-box mid-stage front/design solution!</noscript><div id="root"><style>.page-loading-warp {
-          padding: 120px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
+<!DOCTYPE html><html lang="en"><head><link rel="stylesheet" href="/umi.d2b43040.css"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0"><title>My RChain Wallet</title><link rel="icon" href="/favicon.png" type="image/x-icon"><script>window.routerBase = "/";</script><script src="https://unpkg.com/react@16.12.0/umd/react.profiling.min.js" crossorigin="true"></script><script src="https://unpkg.com/react@16.12.0/umd/react.production.min.js" crossorigin="true"></script><script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.production.min.js" crossorigin="true"></script></head><body><noscript>Out-of-the-box mid-stage front/design solution!</noscript><div id="root"><style>@-webkit-keyframes pulse {
+          0% {
+            opacity: 1;
+          }
+          100% {
+            opacity: 0;
+          }
         }
-        .ant-spin {
-          -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+        @keyframes pulse {
+          0% {
+            opacity: 1;
+          }
+          100% {
+            opacity: 0;
+          }
+        }
+        body {
           margin: 0;
-          padding: 0;
-          color: rgba(0, 0, 0, 0.65);
-          font-size: 14px;
-          font-variant: tabular-nums;
-          line-height: 1.5;
-          list-style: none;
-          -webkit-font-feature-settings: 'tnum';
-          font-feature-settings: 'tnum';
+          background-color: #f3f4f6;
+        }
+
+        .ctnr {
+          display: -webkit-box;
+          display: flex;
           position: absolute;
-          display: none;
-          color: #A90433;
-          text-align: center;
-          vertical-align: middle;
-          opacity: 0;
-          -webkit-transition: -webkit-transform 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);
-          transition: -webkit-transform 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);
-          transition: transform 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);
-          transition: transform 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86),
-            -webkit-transform 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);
-        }
-
-        .ant-spin-spinning {
-          position: static;
-          display: inline-block;
-          opacity: 1;
-        }
-
-        .ant-spin-dot {
-          position: relative;
-          display: inline-block;
-          font-size: 20px;
-          width: 20px;
-          height: 20px;
-        }
-
-        .ant-spin-dot-item {
-          position: absolute;
-          display: block;
-          width: 9px;
-          height: 9px;
-          background-color: #A90433;
-          border-radius: 100%;
-          -webkit-transform: scale(0.75);
-          -ms-transform: scale(0.75);
-          transform: scale(0.75);
-          -webkit-transform-origin: 50% 50%;
-          -ms-transform-origin: 50% 50%;
-          transform-origin: 50% 50%;
-          opacity: 0.3;
-          -webkit-animation: antSpinMove 1s infinite linear alternate;
-          animation: antSpinMove 1s infinite linear alternate;
-        }
-
-        .ant-spin-dot-item:nth-child(1) {
-          top: 0;
-          left: 0;
-        }
-
-        .ant-spin-dot-item:nth-child(2) {
           top: 0;
           right: 0;
-          -webkit-animation-delay: 0.4s;
-          animation-delay: 0.4s;
-        }
-
-        .ant-spin-dot-item:nth-child(3) {
-          right: 0;
-          bottom: 0;
-          -webkit-animation-delay: 0.8s;
-          animation-delay: 0.8s;
-        }
-
-        .ant-spin-dot-item:nth-child(4) {
           bottom: 0;
           left: 0;
-          -webkit-animation-delay: 1.2s;
-          animation-delay: 1.2s;
+          background-color: #f3f4f6;
         }
 
-        .ant-spin-dot-spin {
-          -webkit-transform: rotate(45deg);
-          -ms-transform: rotate(45deg);
-          transform: rotate(45deg);
-          -webkit-animation: antRotate 1.2s infinite linear;
-          animation: antRotate 1.2s infinite linear;
+        .ldr {
+          display: -webkit-box;
+          display: flex;
+          -webkit-box-orient: horizontal;
+          -webkit-box-direction: normal;
+          flex-direction: row;
+          flex-wrap: wrap;
+          justify-content: space-around;
+          -webkit-box-align: center;
+          align-items: center;
+          margin: auto;
+          width: 36px;
+          height: 36px;
         }
 
-        .ant-spin-lg .ant-spin-dot {
-          font-size: 32px;
-          width: 32px;
-          height: 32px;
+        .ldr-blk {
+          height: 35%;
+          width: 35%;
+          -webkit-animation: pulse 0.75s ease-in infinite alternate;
+          animation: pulse 0.75s ease-in infinite alternate;
+          background-color: #a90433;
         }
 
-        .ant-spin-lg .ant-spin-dot i {
-          width: 14px;
-          height: 14px;
-        }
-
-        @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-          .ant-spin-blur {
-            background: #fff;
-            opacity: 0.5;
-          }
-        }
-
-        @-webkit-keyframes antSpinMove {
-          to {
-            opacity: 1;
-          }
-        }
-
-        @keyframes antSpinMove {
-          to {
-            opacity: 1;
-          }
-        }
-
-        @-webkit-keyframes antRotate {
-          to {
-            -webkit-transform: rotate(405deg);
-            transform: rotate(405deg);
-          }
-        }
-
-        @keyframes antRotate {
-          to {
-            -webkit-transform: rotate(405deg);
-            transform: rotate(405deg);
-          }
-        }</style><div class="page-loading-warp"><div class="ant-spin ant-spin-lg ant-spin-spinning"><span class="ant-spin-dot ant-spin-dot-spin"><i class="ant-spin-dot-item"></i><i class="ant-spin-dot-item"></i><i class="ant-spin-dot-item"></i><i class="ant-spin-dot-item"></i></span></div></div></div><script src="/umi.93bb6038.js"></script><script>(function(){ 
+        .an_delay {
+          -webkit-animation-delay: 0.75s;
+          animation-delay: 0.75s;
+        }</style><section id="el-loading" class="ctnr"><div class="ldr"><div class="ldr-blk"></div><div class="ldr-blk an_delay"></div><div class="ldr-blk an_delay"></div><div class="ldr-blk"></div></div><script></script></section></div><script src="/umi.b5ea1c8d.js"></script><script>(function(){ 
         if (!location.port) {
           (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
