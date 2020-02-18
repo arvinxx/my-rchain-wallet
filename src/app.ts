@@ -19,7 +19,7 @@ if (!device) {
 }
 mixpanel.init(
   process.env.NODE_ENV === 'development'
-    ? '97dfca5378a4329fafbdd455e04f8fb3'
+    ? '4771b865f831aef3b956830cb0a862e3'
     : '22d6bf31b037baadb74830f3e3e5b59d',
 );
 mixpanel.identify(device);
