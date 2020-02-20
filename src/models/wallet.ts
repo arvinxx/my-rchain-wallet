@@ -81,7 +81,7 @@ const WalletModel: WalletModelStore = {
         transferToken,
         fromAddr,
         toAddr,
-        amount * 1e9,
+        amount * 1e8,
         privateKey.replace(/^0x/, ''),
         http,
       );
