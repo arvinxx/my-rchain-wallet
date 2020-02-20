@@ -1,3 +1,3 @@
 export * from './bond';
-export * from './check-balance';
+export * from './check';
 export * from './transfer-funds';

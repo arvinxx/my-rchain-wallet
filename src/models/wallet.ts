@@ -5,6 +5,7 @@ import { getItem, setItem, stringToUint8Array, Uint8ArrayToString } from '@/util
 import { IConnection } from '@/models/global';
 import { getMsgFromRNode, IPayload } from '@/services/websocket';
 import { message } from 'antd';
+import { checkBalance } from '@/services/checkBalance';
 
 export type TDeployStatus = 'success' | 'processing' | 'default' | 'error' | 'warning';
 
@@ -18,8 +19,6 @@ export interface WalletModelState {
 export interface WalletModelStore extends DvaModel<WalletModelState> {
   effects: {
     checkBalance: Effect;
-    getBalance: Effect;
-    deployCheckBalance: Effect;
     transfer: Effect;
   };
   reducers: {
@@ -53,111 +52,22 @@ const WalletModel: WalletModelStore = {
 
   effects: {
     *checkBalance(_, { put, select }) {
-      const { network } = yield select(state => state.global);
-      const {
-        currentUser: { uid },
-      } = yield select(state => state.user);
-      const contact = getItem('checkBalanceContact');
-
-      if (
-        // 如果没有合约
-        !contact ||
-        // 或者切换网络
-        contact.network !== network ||
-        // 或不是同一个用户
-        contact.uid !== uid ||
-        // 或不是成功状态
-        contact.status !== 'success'
-      ) {
-        // 部署合约
-        console.log('deploy check balance contact...');
-        yield put({
-          type: 'deployCheckBalance',
-        });
-        yield put({
-          type: 'save',
-          payload: { waitingBlockNumber: 0 },
-        });
-        return;
-      }
-      const { sig } = contact;
-      const checkBalanceSig = stringToUint8Array(sig);
-      yield put({
-        type: 'save',
-        payload: { checkBalanceSig, deployStatus: contact.status },
-      });
-      yield put({
-        type: 'getBalance',
-      });
-    },
-    *deployCheckBalance(_, { put, call, select }) {
-      const currentUser: CurrentUser = yield select(state => state.user.currentUser);
-      const { http, network, grpc } = yield select(state => state.global);
-
-      const { address, privateKey, uid } = currentUser;
-      yield put({
-        type: 'save',
-        payload: { deployStatus: 'default' },
-      });
+      const { address } = yield select(state => state.user.currentUser);
       try {
-        const { sig, deployId } = yield call(
-          deployCheckBalance,
-          address,
-          // need replace 0x !!!!
-          privateKey.replace('0x', ''),
-          http,
-        );
-        setItem('checkBalanceContact', {
-          deployId,
-          sig: Uint8ArrayToString(sig),
-          network,
-          uid,
-          status: 'processing',
-        });
-        yield put({
-          type: 'save',
-          payload: { deployStatus: 'processing' },
-        });
-        /**
-         * 开始构建 WebSocket
-         */
-        getMsgFromRNode(`${grpc}/ws/events`, http);
-      } catch (e) {
-        console.error(e);
-        if (
-          e.toString() ===
-          'Error: Service error: Error while creating block: Must wait for more blocks from other validators'
-        ) {
-          message.error('network is error');
-        } else {
-          yield put({
-            type: 'save',
-            payload: { deployStatus: 'error' },
-          });
-        }
-      }
-    },
-    *getBalance(_, { put, call, select }) {
-      const http: string = yield select(state => state.global.http);
-
-      const { sig: string } = getItem('checkBalanceContact');
-      const sig = stringToUint8Array(string);
-
-      const depth = yield getBlockDepth(http);
-      if (depth > 500) {
-        yield put({
-          type: 'deployCheckBalance',
-        });
-      } else {
-        const balance = yield call(getRevBalance, sig, http);
-
+        const { expr } = yield checkBalance(address);
+        const balance = expr[0]!.ExprInt!.data;
         yield put({
           type: 'save',
           payload: {
             deployStatus: 'success',
-            revBalance: balance / 1e9,
+            revBalance: balance / 1e8,
             waitingBlockNumber: 0,
           },
+        });
+      } catch (e) {
+        yield put({
+          type: 'save',
+          payload: { deployStatus: 'error' },
         });
       }
     },
