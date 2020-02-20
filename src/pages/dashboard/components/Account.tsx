@@ -15,7 +15,7 @@ import {
 import { formatMessage, FormattedMessage } from 'umi-plugin-locale';
 import { showHiddenAddress } from '@/utils/blockchain';
 import { CurrentUser } from '@/models/user';
-import { TDeployStatus } from '@/models/wallet';
+import { CheckingStatus } from '@/models/wallet';
 import { copyToClipboard } from '@/utils/utils';
 import { router } from 'umi';
 import { DispatchProps } from '@/models/connect';
@@ -27,7 +27,7 @@ const { Text } = Typography;
 interface IAccountProps extends DispatchProps {
   currentUser: CurrentUser;
   loading: boolean;
-  deployStatus: TDeployStatus;
+  deployStatus: CheckingStatus;
   balance: number;
   blockNumber: number;
   open: () => void;
@@ -108,7 +108,7 @@ const Account: FC<IAccountProps> = ({
                       className={styles.reload}
                       onClick={() => {
                         dispatch({
-                          type: 'wallet/deployCheckBalance',
+                          type: 'wallet/checkBalance',
                         });
                       }}
                     />
@@ -133,7 +133,7 @@ const Account: FC<IAccountProps> = ({
                           className={styles.reload}
                           onClick={() => {
                             dispatch({
-                              type: 'wallet/deployCheckBalance',
+                              type: 'wallet/checkBalance',
                             });
                           }}
                         />
@@ -152,17 +152,6 @@ const Account: FC<IAccountProps> = ({
 
               <Text type={'secondary'}>
                 {formatMessage({ id: `dashboard.account.balance.${deployStatus}` })}
-
-                {deployStatus === 'processing' ? (
-                  <>
-                    {formatMessage(
-                      { id: `dashboard.account.balance.processing.block` },
-                      {
-                        number: blockNumber,
-                      },
-                    )}
-                  </>
-                ) : null}
               </Text>
             </div>
           </div>

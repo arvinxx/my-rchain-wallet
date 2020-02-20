@@ -159,15 +159,15 @@ export default class CreateAccount extends Component<ICreateAccountProps, ICreat
     const { address, ethAddr } = account;
     const avatar = generateAvatar(address);
     const finalAccount = { ...account, avatar, uid };
-    mixpanel.people.set({
-      $created: new Date(),
-      $last_login: new Date(),
-      userId: uid,
-      username,
-      address,
-      ethAddr,
-      deviceId: localStorage.getItem('deviceId'),
-    });
+    // mixpanel.people.set({
+    //   $created: new Date(),
+    //   $last_login: new Date(),
+    //   userId: uid,
+    //   username,
+    //   address,
+    //   ethAddr,
+    //   deviceId: localStorage.getItem('deviceId'),
+    // });
     setEncryptedItem('userList', userList.concat(finalAccount));
     next();
   };

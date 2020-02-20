@@ -6,22 +6,20 @@ import {
   Input,
   Slider,
   InputNumber,
-  Modal,
   Divider,
   Avatar,
   Button,
   Icon,
-  Spin,
 } from 'antd';
 import styles from './style.less';
-import mixpanel from 'mixpanel-browser';
+import MA from '@/services/track';
 import { IconFont, BaseLoading } from '@/components';
 import Confirm from './components/Confirm';
 
 import { formatMessage, FormattedMessage } from 'umi-plugin-locale';
 
 import { connect } from 'dva';
-import { ConnectState, DispatchProps, UserModelState, LoginModelState } from '@/models/connect';
+import { ConnectState, DispatchProps, UserModelState, WalletModelState } from '@/models/connect';
 import { showHiddenAddress } from '@/utils/blockchain';
 
 const { Text, Title } = Typography;
@@ -40,7 +38,7 @@ export interface ITransfer {
 
 interface IAccountDetailProps extends DispatchProps {
   user: UserModelState;
-  wallet: LoginModelState;
+  wallet: WalletModelState;
   checkBalance: boolean;
 }
 
@@ -67,13 +65,13 @@ export default class Dashboard extends Component<IAccountDetailProps> {
     this.setState({
       visible: false,
     });
-    mixpanel.track('关闭用户详情窗口');
+    MA.track('关闭用户详情窗口');
   };
   showModal = () => {
     this.setState({
       visible: true,
     });
-    mixpanel.track('点击发送按钮');
+    MA.track('点击发送按钮');
   };
   handleAmount = (amount: number | undefined) => {
     this.setState({

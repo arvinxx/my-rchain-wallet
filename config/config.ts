@@ -7,7 +7,7 @@ import routes from './routes';
 import slash from 'slash2';
 import webpackPlugin from './plugin.config';
 
-const { pwa, primaryColor } = defaultSettings;
+const { pwa } = defaultSettings;
 
 const { MY_RCHAIN_WALLET_ONLINE } = process.env;
 const isOnline = MY_RCHAIN_WALLET_ONLINE === 'site';
@@ -32,6 +32,7 @@ const plugins: IPlugin[] = [
         webpackChunkName: true,
         level: 1,
       },
+      chunks: ['antdesigns', 'vendors', 'default.umi', 'umi'],
       pwa: pwa
         ? {
             workboxPluginMode: 'InjectManifest',
@@ -52,14 +53,6 @@ const plugins: IPlugin[] = [
     'umi-plugin-ga',
     {
       code: 'UA-148135393-1',
-    },
-  ],
-  [
-    'umi-plugin-auto-externals',
-    {
-      packages: ['react-dom'],
-      urlTemplate: 'https://unpkg.com/{{ library }}@{{ version }}/{{ path }}',
-      checkOnline: false,
     },
   ],
 ];

@@ -1,5 +1,5 @@
 import { checkBalance_rho, transferFunds_rho } from './rho';
-import { getDataForDeploy, sendDeploy } from './deploy';
+import {  sendDeploy } from './deploy';
 
 /**
  * Check Balance Function
@@ -16,12 +16,6 @@ export const deployCheckBalance = async (address: string, privateKey: string, ur
   const deployId = match && match[1] && match[1].replace(/\s/, '');
 
   return { deployId, sig };
-};
-/**
- * get Balance Function
- */
-export const getRevBalance = async (sig: Uint8Array, url: string) => {
-  return await getDataForDeploy(url, sig);
 };
 
 /**

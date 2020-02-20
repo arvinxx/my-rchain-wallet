@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import styles from './style.less';
-import mixpanel from 'mixpanel-browser';
+import MA from '@/services/track';
 import { useSelector, useDispatch } from 'dva';
 
 import Account from './components/Account';
@@ -36,12 +36,12 @@ const Dashboard: FC = () => {
   const close = () => {
     handleVisible(false);
 
-    mixpanel.track('关闭用户详情窗口');
+    MA.track('关闭用户详情窗口');
   };
   const open = () => {
     handleVisible(true);
 
-    mixpanel.track('打开用户详情窗口');
+    MA.track('打开用户详情窗口');
   };
 
   const { currentUser } = user;

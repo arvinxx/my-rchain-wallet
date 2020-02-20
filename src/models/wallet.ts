@@ -1,18 +1,15 @@
 import { Reducer, Effect, UserModelState, DvaModel } from './connect';
 import { CurrentUser } from '@/models/user';
-import { deployCheckBalance, getBlockDepth, getRevBalance, transferToken } from '@/utils/rnode';
-import { getItem, setItem, stringToUint8Array, Uint8ArrayToString } from '@/utils/utils';
-import { IConnection } from '@/models/global';
-import { getMsgFromRNode, IPayload } from '@/services/websocket';
-import { message } from 'antd';
+import { deployCheckBalance, getBlockDepth, transferToken } from '@/utils/rnode';
+
 import { checkBalance } from '@/services/checkBalance';
 
-export type TDeployStatus = 'success' | 'processing' | 'default' | 'error' | 'warning';
+export type CheckingStatus = 'success' | 'default' | 'error' | 'warning';
 
 export interface WalletModelState {
   revBalance: number;
   fee: number;
-  deployStatus: TDeployStatus;
+  deployStatus: CheckingStatus;
   waitingBlockNumber: number;
 }
 
@@ -53,6 +50,10 @@ const WalletModel: WalletModelStore = {
   effects: {
     *checkBalance(_, { put, select }) {
       const { address } = yield select(state => state.user.currentUser);
+      yield put({
+        type: 'save',
+        payload: { deployStatus: 'default' },
+      });
       try {
         const { expr } = yield checkBalance(address);
         const balance = expr[0]!.ExprInt!.data;

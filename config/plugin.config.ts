@@ -1,8 +1,3 @@
-// Change theme plugin
-// eslint-disable-next-line eslint-comments/abdeils - enable - pair;
-/* eslint-disable import/no-extraneous-dependencies */
-import ThemeColorReplacer from 'webpack-theme-color-replacer';
-import generate from '@ant-design/colors/lib/generate';
 import path from 'path';
 
 function getModulePackageName(module: { context: string }) {
@@ -23,108 +18,42 @@ function getModulePackageName(module: { context: string }) {
   }
   return packageName;
 }
-
 export default (config: any) => {
-  // preview.pro.ant.design only do not use in your production;
-  if (process.env.MY_RCHAIN_WALLET_ONLINE === 'site' || process.env.NODE_ENV !== 'production') {
-    config.plugin('webpack-theme-color-replacer').use(ThemeColorReplacer, [
-      {
-        fileName: 'css/theme-colors-[contenthash:8].css',
-        matchColors: getAntdSerials('#1890ff'), // 主色系列
-        // 改变样式选择器，解决样式覆盖问题
-        changeSelector(selector: string): string {
-          switch (selector) {
-            case '.ant-calendar-today .ant-calendar-date':
-              return ':not(.ant-calendar-selected-date)' + selector;
-            case '.ant-btn:focus,.ant-btn:hover':
-              return '.ant-btn:focus:not(.ant-btn-primary),.ant-btn:hover:not(.ant-btn-primary)';
-            case '.ant-btn.active,.ant-btn:active':
-              return '.ant-btn.active:not(.ant-btn-primary),.ant-btn:active:not(.ant-btn-primary)';
-            default:
-              return selector;
-          }
-        },
-        // isJsUgly: true,
+  // share the same chunks across different modules
+  config.optimization.runtimeChunk(false).splitChunks({
+    chunks: 'all',
+    automaticNameDelimiter: '.',
+    name: true,
+    maxInitialRequests: Infinity,
+    minSize: 0,
+    cacheGroups: {
+      vendors: {
+        name: 'vendors',
+        chunks: 'all',
+        test: /[\\/]node_modules[\\/](react|react-dom|react-router|react-router-dom|lodash|lodash-decorators|redux-saga|re-select|dva|moment|bip39|google-protobuf|mixpanel-browser)[\\/]/,
+        priority: -10,
       },
-    ]);
-  }
-
-  // optimize chunks
-  config.optimization
-    // share the same chunks across different modules
-    .runtimeChunk(false)
-    .splitChunks({
-      chunks: 'async',
-      name: 'vendors',
-      maxInitialRequests: Infinity,
-      minSize: 0,
-      cacheGroups: {
-        vendors: {
-          test: (module: { context: string }) => {
-            const packageName = getModulePackageName(module) || '';
-            if (packageName) {
-              return [
-                'bizcharts',
-                'gg-editor',
-                'g6',
-                '@antv',
-                'gg-editor-core',
-                'bizcharts-plugin-slider',
-              ].includes(packageName);
-            }
-            return false;
-          },
-          name(module: { context: string }) {
-            const packageName = getModulePackageName(module);
-            if (packageName) {
-              if (['bizcharts', '@antv_data-set'].indexOf(packageName) >= 0) {
-                return 'viz'; // visualization package
-              }
-            }
-            return 'misc';
-          },
-        },
-        bip: {
-          name: 'bip39',
-          test: (module: { context: string }) => {
-            const packageName = getModulePackageName(module) || '';
-            if (packageName) {
-              return ['bip39', 'react-dom'].includes(packageName);
-            }
-            return false;
-          },
-        },
-        rgpc: {
-          name: 'rgpc',
-          test: (module: { context: string }) => {
-            const packageName = getModulePackageName(module) || '';
-            if (packageName) {
-              return ['grpc-web', 'google-protobuf', 'rnode-grpc-gen'].includes(packageName);
-            }
-            return false;
-          },
-        },
-        antd: {
-          name: 'antd',
-          test: (module: { context: string }) => {
-            const packageName = getModulePackageName(module) || '';
-            if (packageName) {
-              return ['antd', '@ant-design'].includes(packageName);
-            }
-            return false;
-          },
-        },
+      antdesigns: {
+        name: 'antdesigns',
+        chunks: 'all',
+        test: /[\\/]node_modules[\\/](@ant-design|antd)[\\/]/,
+        priority: -11,
       },
-    });
-};
-
-const getAntdSerials = (color: string) => {
-  const lightNum = 9;
-  const devide10 = 10;
-  // 淡化（即less的tint）
-  const lightens = new Array(lightNum).fill(undefined).map((_, i: number) => {
-    return ThemeColorReplacer.varyColor.lighten(color, i / devide10);
+      default: {
+        minChunks: 1,
+        priority: -20,
+        reuseExistingChunk: true,
+      },
+    },
   });
-  const colorPalettes = generate(color);
-  return lightens.concat(colorPalettes);
+
+  //css的修改
+  config.plugin('extract-css').use(require('mini-css-extract-plugin'), [
+    {
+      filename: `[name].css`,
+      chunkFilename: `[name].[contenthash:8].chunk.css`,
+    },
+  ]);
+  //js的修改
+  config.output.filename('[name].js');
 };
