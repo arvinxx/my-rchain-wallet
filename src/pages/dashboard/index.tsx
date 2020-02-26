@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
 import styles from './style.less';
-import MA from '@/services/track';
 import { useSelector, useDispatch } from 'dva';
 
 import Account from './components/Account';
@@ -20,13 +19,11 @@ export interface ITransaction {
 const Dashboard: FC = () => {
   const [visible, handleVisible] = useState(),
     dispatch = useDispatch(),
-    { user, wallet } = useSelector<ConnectState, ConnectState>(state => state),
+    { user } = useSelector<ConnectState, ConnectState>(state => state),
     getBalance = useSelector<ConnectState, boolean>(
       state => state.loading.effects['wallet/getBalance'],
-    ),
-    checkBalance = useSelector<ConnectState, boolean>(
-      state => state.loading.effects['wallet/checkBalance'],
     );
+
   useEffect(() => {
     dispatch({
       type: 'wallet/checkBalance',
@@ -35,17 +32,13 @@ const Dashboard: FC = () => {
 
   const close = () => {
     handleVisible(false);
-
-    MA.track('关闭用户详情窗口');
   };
   const open = () => {
     handleVisible(true);
-
-    MA.track('打开用户详情窗口');
   };
 
   const { currentUser } = user;
-  const { revBalance, deployStatus, waitingBlockNumber } = wallet;
+
   const tokenList = [
     { name: 'RChain', img: 'http://pics.arvinx.com/2019-11-05-150211.jpg' },
     { name: 'ETH', img: 'http://pics.arvinx.com/2019-11-05-150237.jpg' },
@@ -111,26 +104,18 @@ const Dashboard: FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.left}>
-        <Account
-          open={open}
-          blockNumber={waitingBlockNumber}
-          currentUser={currentUser}
-          balance={revBalance}
-          dispatch={dispatch}
-          deployStatus={deployStatus}
-          loading={getBalance}
-        />
+        <Account open={open} loading={getBalance} />
         <AccountDetail
           dispatch={dispatch}
           close={close}
           currentUser={currentUser}
           visible={visible}
         />
-        <Token tokenList={tokenList} selectedToken={'RChain'} />
+        {/*<Token tokenList={tokenList} selectedToken={'RChain'} />*/}
       </div>
-      <div className={styles.right}>
-        <Transaction transaction={transaction} token={'REV'} loading={checkBalance} />
-      </div>
+      {/*<div className={styles.right}>*/}
+      {/*  <Transaction transaction={transaction} token={'REV'} loading={checkBalance} />*/}
+      {/*</div>*/}
     </div>
   );
 };

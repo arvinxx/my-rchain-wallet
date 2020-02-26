@@ -47,17 +47,17 @@ const routes: IRoute[] = [
             icon: 'dashboard',
             component: '../pages/dashboard',
           },
-          {
-            path: '/transfer',
-            name: 'transfer',
-            icon: 'transaction',
-            component: '../pages/transfer',
-          },
-          {
-            path: '/transaction',
-            name: 'transaction',
-            icon: 'profile',
-          },
+          // {
+          //   path: '/transfer',
+          //   name: 'transfer',
+          //   icon: 'transaction',
+          //   component: '../pages/transfer',
+          // },
+          // {
+          //   path: '/transaction',
+          //   name: 'transaction',
+          //   icon: 'profile',
+          // },
           {
             path: '/account',
             name: 'account',

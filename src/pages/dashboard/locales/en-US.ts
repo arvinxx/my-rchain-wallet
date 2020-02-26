@@ -1,16 +1,12 @@
-import React from 'react';
-
 export default {
   'dashboard.account.title': 'Account',
   'dashboard.account.button.send': 'SEND',
   'dashboard.account.button.receive': 'RECEIVE',
   'dashboard.account.balance': 'Total Balance',
-  'dashboard.account.balance.deploy': 'Redeploy check balance contract',
-  'dashboard.account.balance.default': 'start to deploy...',
-  'dashboard.account.balance.processing': 'Waiting to propose...',
-  'dashboard.account.balance.processing.block': '({number} Added)',
-  'dashboard.account.balance.success': 'Deployed successfully',
-  'dashboard.account.balance.error': 'deploy failed.Please try it again.',
+  'dashboard.account.balance.deploy': 'Check balance again',
+  'dashboard.account.balance.default': 'start to query...',
+  'dashboard.account.balance.success': 'Query successfully',
+  'dashboard.account.balance.error': 'Query failed.Please try it again.',
   'dashboard.account.view': 'view',
   'dashboard.account.copy.success': 'Address copied successfully',
   'dashboard.account.address.tip': 'Copy to clipboard',

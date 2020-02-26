@@ -65,13 +65,11 @@ export default class Dashboard extends Component<IAccountDetailProps> {
     this.setState({
       visible: false,
     });
-    MA.track('关闭用户详情窗口');
   };
   showModal = () => {
     this.setState({
       visible: true,
     });
-    MA.track('点击发送按钮');
   };
   handleAmount = (amount: number | undefined) => {
     this.setState({

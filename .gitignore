@@ -18,5 +18,3 @@
 .umi-production
 .idea
 rnode-grpc-gen
-data/*
-!data/genesis

@@ -30,7 +30,7 @@ export default (config: any) => {
       vendors: {
         name: 'vendors',
         chunks: 'all',
-        test: /[\\/]node_modules[\\/](react|react-dom|react-router|react-router-dom|lodash|lodash-decorators|redux-saga|re-select|dva|moment|bip39|google-protobuf|mixpanel-browser)[\\/]/,
+        test: /[\\/]node_modules[\\/](react|react-dom|react-router|react-router-dom|lodash|lodash-decorators|redux-saga|re-select|dva|moment|bip39|google-protobuf)[\\/]/,
         priority: -10,
       },
       antdesigns: {

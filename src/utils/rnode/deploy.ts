@@ -1,83 +1,23 @@
-import grpcWeb from 'grpc-web';
-import protoSchema from '@rnode/js/pbjs_generated.json';
+import { doDeploy, getBlocks } from '@/services/rnode';
 
-// Import generated protobuf types (in global scope)
-import '@rnode/js/DeployServiceV1_pb';
-import '@rnode/js/ProposeServiceV1_pb';
+export const sendDeploy = async (url: string, code: string): Promise<{ result?: string }> => {
+  const blocks = await getBlocks(1);
 
-import { DeployDataProto, rnodeDeploy, rnodePropose, signDeploy } from '@tgrospic/rnode-grpc-js';
-import { getBlockDepth } from './block';
+  console.log(blocks);
+  const { blockNumber } = blocks[0];
 
-import { getItem } from '@/utils/utils';
-
-export const rnode = (rnodeUrl: string) => {
-  // Instantiate http clients
-  const options = { grpcLib: grpcWeb, host: rnodeUrl, protoSchema };
-
-  // Get RNode service methods
-  const { doDeploy, listenForDataAtName, getBlocks, getBlock, showMainChain } = rnodeDeploy(
-    options,
-  );
-
-  const { propose } = rnodePropose(options);
-  return { DoDeploy: doDeploy, propose, listenForDataAtName, getBlocks, getBlock, showMainChain };
-};
-
-export const sendDeploy = async (
-  rnodeUrl: string,
-  code: string,
-  privateKey: string,
-): Promise<{ result?: string; deploy: DeployDataProto }> => {
-  const { DoDeploy, propose, getBlocks } = rnode(rnodeUrl);
-
-  const blocks = await getBlocks({ depth: 1 });
-
-  const { blockinfo } = blocks[0];
-  const validafterblocknumber = (blockinfo && blockinfo.blocknumber) || 0;
-
-  // Deploy signing key
-  const key = privateKey;
   // Create deploy
   const deployData = {
     term: code,
-    phlolimit: 100e4,
-    phloprice: 1,
-    validafterblocknumber,
+    phloLimit: 100e4,
+    phloPrice: 1,
+    validAfterBlockNumber: blockNumber,
   };
 
-  //Sign deploy
-  const deploy = signDeploy(key, deployData);
-
   // Send deploy
-  const { result } = await DoDeploy(deploy);
-  // Try to propose but don't throw on error
-  try {
-    await propose();
-  } catch (error) {
-    console.warn(error);
-  }
+  const res = await doDeploy(deployData);
+  console.log(res);
+
   // Deploy response
-  return { result, deploy };
-};
-
-export const getDataForDeploy = async (rnodeUrl: string, deployId: Uint8Array) => {
-  const { listenForDataAtName, showMainChain, getBlocks } = rnode(rnodeUrl);
-
-  const depth = await getBlockDepth(rnodeUrl);
-
-  const {
-    // @ts-ignore
-    payload: { blockinfoList },
-  } = await listenForDataAtName({
-    depth,
-    name: { unforgeablesList: [{ gDeployIdBody: { sig: deployId } }] },
-  });
-
-  // Get data as number
-  return blockinfoList.length && blockinfoList[0].postblockdataList[0].exprsList[0].gInt;
-};
-
-export const getBlock = async (rnodeUrl: string, hash: string) => {
-  const { getBlock } = rnode(rnodeUrl);
-  return getBlock({ hash });
+  // return { result };
 };

@@ -13,14 +13,14 @@ export interface NoticeItem extends NoticeIconData {
 
 export type TNode = {
   name: string;
-  http: string;
-  grpc: string;
+  observer: string;
+  validator: string;
 };
 export interface INetwork {
   name: string;
-  http?: string;
-  grpc?: string;
-  nodes?: TNode[];
+  observer?: string;
+  validator?: string;
+  readOnly: boolean;
 }
 export interface GlobalModelState {
   collapsed: boolean;
@@ -30,13 +30,13 @@ export interface GlobalModelState {
   exports: boolean;
   network: string;
   node: string;
-  http: string;
-  grpc: string;
+  observer: string;
+  validator: string;
   networkList: INetwork[];
 }
 export interface IConnection {
-  http: string;
-  grpc: string;
+  observer: string;
+  validator: string;
   network: string;
 }
 
@@ -57,46 +57,29 @@ const GlobalModel: GlobalModelStore = {
     locked: false,
     lockTime: 30,
     exports: false,
-    analytics: true,
-    network: 'testnet',
+    analytics: false,
+    network: 'mainnet',
     node: 'node0',
-    http: 'https://testnet-0.grpc.rchain.isotypic.com',
-    grpc: 'wss://testnet.myrchainwallet.com',
+    observer: 'https://observer.myrchainwallet.com',
+    validator: 'https://validator.myrchainwallet.com',
     networkList: [
       {
+        name: 'mainnet',
+        observer: 'https://observer.myrchainwallet.com',
+        validator: 'https://validator.myrchainwallet.com',
+        readOnly: true,
+      },
+      {
         name: 'testnet',
-        nodes: [
-          {
-            name: 'node0',
-            http: 'https://testnet-0.grpc.rchain.isotypic.com',
-            grpc: 'wss://testnet.myrchainwallet.com',
-          },
-          {
-            name: 'node1',
-            http: 'https://testnet-1.grpc.rchain.isotypic.com',
-            grpc: 'wss://testnet.myrchainwallet.com',
-          },
-          {
-            name: 'node2',
-            http: 'https://testnet-2.grpc.rchain.isotypic.com',
-            grpc: 'wss://testnet.myrchainwallet.com',
-          },
-          {
-            name: 'node3',
-            http: 'https://testnet-3.grpc.rchain.isotypic.com',
-            grpc: 'wss://testnet.myrchainwallet.com',
-          },
-          {
-            name: 'node4',
-            http: 'https://testnet-4.grpc.rchain.isotypic.com',
-            grpc: 'wss://testnet.myrchainwallet.com',
-          },
-        ],
+        observer: 'https://observer.testnet.myrhcainwallet.com',
+        validator: 'https://validator.testnet.myrhcainwallet.com',
+        readOnly: true,
       },
       {
         name: 'localhost',
-        http: 'http://localhost:54401',
-        grpc: 'ws://localhost:50403',
+        observer: 'http://localhost:40403',
+        validator: 'http://localhost:40401',
+        readOnly: false,
       },
     ],
   },
@@ -118,36 +101,27 @@ const GlobalModel: GlobalModelStore = {
       };
     },
     handleNetwork(state, { payload }) {
-      const { network, http, grpc } = payload;
-      setItem('connection', { network, grpc, http });
+      const { network, observer, validator } = payload;
+      setItem('connection', { network, observer, validator });
       return {
         ...state,
         network,
-        http,
-        grpc,
+        observer,
+        validator,
       };
     },
   },
   effects: {
     *changeNetwork({ payload: network }, { put, select }) {
-      const { networkList, node } = yield select(state => state.global);
+      const { networkList } = yield select(state => state.global);
 
-      if (network === 'testnet') {
-        const { nodes } = networkList[0];
-        const index = nodes.findIndex((item: TNode) => item.name === node);
-        const { http, grpc } = nodes[index];
-        yield put({
-          type: 'handleNetwork',
-          payload: { http, grpc, network },
-        });
-      } else {
-        const index = networkList.findIndex((item: TNode) => item.name === network);
-        const { http, grpc } = networkList[index];
-        yield put({
-          type: 'handleNetwork',
-          payload: { http, grpc, network },
-        });
-      }
+      const index = networkList.findIndex((item: TNode) => item.name === network);
+      const { observer, validator } = networkList[index];
+      yield put({
+        type: 'handleNetwork',
+        payload: { observer, validator, network },
+      });
+
       yield put({ type: 'wallet/checkBalance' });
     },
   },

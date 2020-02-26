@@ -1,8 +1,8 @@
 import { Reducer, Effect, UserModelState, DvaModel } from './connect';
 import { CurrentUser } from '@/models/user';
-import { deployCheckBalance, getBlockDepth, transferToken } from '@/utils/rnode';
+import { transferToken } from '@/utils/rnode';
 
-import { checkBalance } from '@/services/checkBalance';
+import { checkBalance } from '@/services/rnode';
 
 export type CheckingStatus = 'success' | 'default' | 'error' | 'warning';
 
@@ -76,16 +76,8 @@ const WalletModel: WalletModelStore = {
     *transfer({ payload }, { put, call, select }) {
       const { amount, toAddr } = payload;
       const currentUser: CurrentUser = yield select(state => state.user.currentUser);
-      const http: string = yield select(state => state.global.http);
-      const { address: fromAddr, privateKey } = currentUser;
-      yield call(
-        transferToken,
-        fromAddr,
-        toAddr,
-        amount * 1e8,
-        privateKey.replace(/^0x/, ''),
-        http,
-      );
+      const { address: fromAddr } = currentUser;
+      yield call(transferToken, fromAddr, toAddr, amount * 1e8);
       yield put({
         type: 'deployCheckBalance',
       });

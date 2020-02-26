@@ -21,19 +21,12 @@ interface INetworkProps {
 const Network: FC<INetworkProps> = ({ network, node, networkList }) => {
   const dispatch = useDispatch();
   const onRadioChange = (e: RadioChangeEvent) => {
+    console.log(e);
     dispatch({
       type: 'global/changeNetwork',
       payload: e.target.value,
     });
   };
-  const onSelectChange = (value: string) => {
-    dispatch({
-      type: 'global/save',
-      payload: { node: value },
-    });
-  };
-
-  const [testnet, ...networks] = networkList;
 
   const NetworkForm: FC<WrappedFormInternalProps> = ({ form }) => {
     const { getFieldDecorator, validateFields, resetFields } = form;
@@ -48,44 +41,42 @@ const Network: FC<INetworkProps> = ({ network, node, networkList }) => {
       resetFields();
     };
 
-    let selected = networkList.find(n => n.name === network);
+    const selected = networkList.find(n => n.name === network);
 
-    // 如果是测试网节点
-    if (selected && selected.nodes) {
-      selected = selected.nodes.find(n => n.name === node);
-    }
-
-    const readOnly = ['node0', 'node1', 'node2', 'node3', 'node4'].indexOf(selected!.name) > -1;
+    const disabled = selected!.readOnly;
     return (
       <Form onSubmit={handleSubmit} onReset={handleReset} className={styles.form}>
         <Item label={formatMessage({ id: 'account.components.network.form.name' })}>
           {getFieldDecorator('name', { initialValue: selected!.name })(
-            <Input
-              disabled={readOnly || selected!.name === 'localhost'}
-              className={styles.formInput}
-            />,
+            <Input disabled={disabled} className={styles.formInput} />,
           )}
         </Item>
-        <Item label={formatMessage({ id: 'account.components.network.form.http' })}>
-          {getFieldDecorator('http', { initialValue: selected!.http })(
-            <Input disabled={readOnly} className={styles.formInput} />,
+        <Item label={formatMessage({ id: 'account.components.network.form.observer' })}>
+          {getFieldDecorator('observer', { initialValue: selected!.observer })(
+            <Input disabled={disabled} className={styles.formInput} />,
           )}
         </Item>
-        <Item label={formatMessage({ id: 'account.components.network.form.grpc' })}>
-          {getFieldDecorator('grpc', { initialValue: selected!.grpc })(
-            <Input disabled={readOnly} className={styles.formInput} />,
+        <Item label={formatMessage({ id: 'account.components.network.form.validator' })}>
+          {getFieldDecorator('validator', { initialValue: selected!.validator })(
+            <Input disabled={disabled} className={styles.formInput} />,
           )}
         </Item>
         <Item className={styles.formAction}>
           <Row type={'flex'} justify={'space-between'} gutter={12}>
             <Col span={12}>
-              <Button htmlType={'reset'} block className={styles.formButton}>
-                重置
+              <Button htmlType={'reset'} disabled={disabled} block className={styles.formButton}>
+                <FormattedMessage id={'account.components.network.form.reset'} />
               </Button>
             </Col>
             <Col span={12}>
-              <Button type={'primary'} htmlType={'submit'} block className={styles.formButton}>
-                保存
+              <Button
+                type={'primary'}
+                disabled={disabled}
+                htmlType={'submit'}
+                block
+                className={styles.formButton}
+              >
+                <FormattedMessage id={'account.components.network.form.save'} />
               </Button>
             </Col>
           </Row>
@@ -109,30 +100,14 @@ const Network: FC<INetworkProps> = ({ network, node, networkList }) => {
       </div>
 
       <div className={styles.block}>
-        <Row type={'flex'} justify={'space-between'}>
-          <Col>
+        <Row type={'flex'} gutter={24}>
+          <Col span={4}>
             <Title level={4}>
               <FormattedMessage id={'account.components.network.list.title'} />
             </Title>
             <div>
               <Radio.Group onChange={onRadioChange} value={network}>
-                <Radio value={testnet.name} className={styles.radio}>
-                  <FormattedMessage id={`account.components.network.title.${testnet.name}`} />
-                  <Select
-                    defaultValue={testnet.nodes && testnet.nodes[0].name}
-                    value={node}
-                    onChange={onSelectChange}
-                    style={{ marginLeft: 8 }}
-                  >
-                    {testnet.nodes &&
-                      testnet.nodes.map((node, index) => (
-                        <Option key={index} value={node.name}>
-                          {node.name}
-                        </Option>
-                      ))}
-                  </Select>
-                </Radio>
-                {networks.map((item, index) => (
+                {networkList.map((item, index) => (
                   <Radio key={index} className={styles.radio} value={item.name}>
                     <FormattedMessage id={`account.components.network.title.${item.name}`} />
                   </Radio>
@@ -143,7 +118,7 @@ const Network: FC<INetworkProps> = ({ network, node, networkList }) => {
               <FormattedMessage id={'account.components.network.list.add-network'} />
             </Button>
           </Col>
-          <Col span={12}>
+          <Col span={10} style={{ marginLeft: 80 }}>
             <Title level={4}>
               <FormattedMessage id={'account.components.network.form.title'} />
             </Title>

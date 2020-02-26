@@ -5,8 +5,6 @@ export default {
   'dashboard.account.balance': '总余额',
   'dashboard.account.balance.deploy': '重新查询余额',
   'dashboard.account.balance.default': '开始查询余额...',
-  'dashboard.account.balance.processing': '正在查询...',
-  'dashboard.account.balance.processing.block': '(已出{number}块)',
   'dashboard.account.balance.success': '查询成功',
   'dashboard.account.balance.error': '查询失败,请稍后重试',
   'dashboard.account.copy.success': '地址复制成功',

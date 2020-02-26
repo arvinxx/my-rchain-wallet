@@ -1,5 +1,4 @@
 import { getItem, setItem, Uint8ArrayToString } from '@/utils/utils';
-import { getBlock } from '@/utils/rnode/deploy';
 
 export interface IPayload {
   'block-hash': string;
@@ -35,17 +34,17 @@ export const getMsgFromRNode = (url: string, rnodeUrl: string): void => {
       payload['deploy-ids'].indexOf(deployId) > -1
     ) {
       const hash = payload['block-hash'];
-      const { blockinfo } = await getBlock(rnodeUrl, hash);
-      const blockNumber = blockinfo && blockinfo.blockinfo.blocknumber;
-      if (blockinfo && blockinfo.blockinfo.seqnum) {
-        setItem('checkBalanceContact', {
-          ...item,
-          blockNumber: blockNumber,
-          status: 'success',
-        });
-        global.g_app._store.dispatch({ type: 'wallet/getBalance' });
-        connection.close();
-      }
+      // const { blockinfo } = await getBlock(rnodeUrl, hash);
+      // const blockNumber = blockinfo && blockinfo.blockinfo.blocknumber;
+      // if (blockinfo && blockinfo.blockinfo.seqnum) {
+      //   setItem('checkBalanceContact', {
+      //     ...item,
+      //     blockNumber: blockNumber,
+      //     status: 'success',
+      //   });
+      //   global.g_app._store.dispatch({ type: 'wallet/getBalance' });
+      //   connection.close();
+      // }
     }
   };
 

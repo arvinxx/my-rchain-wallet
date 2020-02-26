@@ -15,36 +15,32 @@ import {
 import { formatMessage, FormattedMessage } from 'umi-plugin-locale';
 import { showHiddenAddress } from '@/utils/blockchain';
 import { CurrentUser } from '@/models/user';
-import { CheckingStatus } from '@/models/wallet';
+import { CheckingStatus, WalletModelState } from '@/models/wallet';
 import { copyToClipboard } from '@/utils/utils';
 import { router } from 'umi';
-import { DispatchProps } from '@/models/connect';
-import { connect } from 'dva';
+import { ConnectState, DispatchProps } from '@/models/connect';
+import { useDispatch, useSelector } from 'dva';
 import styles from './Account.less';
 
 const { Text } = Typography;
 
-interface IAccountProps extends DispatchProps {
-  currentUser: CurrentUser;
+interface IAccountProps {
   loading: boolean;
-  deployStatus: CheckingStatus;
-  balance: number;
-  blockNumber: number;
   open: () => void;
 }
 
-const Account: FC<IAccountProps> = ({
-  currentUser,
-  open,
-  balance,
-  dispatch,
-  blockNumber,
-  loading,
-  deployStatus,
-}) => {
+const Account: FC<IAccountProps> = ({ open, loading }) => {
+  const currentUser = useSelector<ConnectState, CurrentUser>(state => state.user.currentUser);
   if (!currentUser || !currentUser.avatar) {
     return <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />;
   }
+
+  const dispatch = useDispatch();
+  const { revBalance: balance, deployStatus: checkStatus } = useSelector<
+    ConnectState,
+    WalletModelState
+  >(state => state.wallet);
+
   const { username, address, avatar } = currentUser;
 
   const copy = () => {
@@ -52,8 +48,8 @@ const Account: FC<IAccountProps> = ({
     copyToClipboard(address);
     message.success(formatMessage({ id: 'dashboard.account.copy.success' }), 0.5);
   };
+
   const navigate = (type: string) => () => {
-    console.log(type);
     router.push('transfer');
   };
 
@@ -96,7 +92,7 @@ const Account: FC<IAccountProps> = ({
         </div>
         <div className={styles.operation}>
           <div className={styles.money}>
-            {deployStatus === 'error' ? (
+            {checkStatus === 'error' ? (
               <>
                 <div style={{ marginTop: 16, marginBottom: 16 }}>
                   <Tooltip title={formatMessage({ id: 'dashboard.account.balance.deploy' })}>
@@ -115,7 +111,7 @@ const Account: FC<IAccountProps> = ({
                   </Tooltip>
                 </div>
               </>
-            ) : deployStatus !== 'success' || loading ? (
+            ) : checkStatus !== 'success' || loading ? (
               <>
                 <div style={{ marginTop: 16, marginBottom: 16 }}>
                   <Spin />
@@ -141,17 +137,16 @@ const Account: FC<IAccountProps> = ({
                     </>
                   }
                   className={styles.balance}
-                  value={balance}
+                  value={balance.toFixed(4)}
                   suffix="REV"
                 />
                 {/*<Text type={'secondary'}>$ {balance * 7} USD</Text>*/}
               </>
             )}
             <div>
-              <Badge count={5} status={deployStatus} />
-
+              <Badge count={5} status={checkStatus} />
               <Text type={'secondary'}>
-                {formatMessage({ id: `dashboard.account.balance.${deployStatus}` })}
+                {formatMessage({ id: `dashboard.account.balance.${checkStatus}` })}
               </Text>
             </div>
           </div>

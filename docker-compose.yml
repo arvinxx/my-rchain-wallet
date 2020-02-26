@@ -1,7 +1,14 @@
 version: '3.4'
 
 x-rnode: &default-rnode
-  image: $RNODE_IMAGE
+  image: rchain/rnode:latest
+  user: root
+  restart: always
+  networks:
+    - rchain-net
+
+x-wait-rnode: &wait-rnode
+  image: arvinx/wait-rnode:latest
   user: root
   restart: always
   networks:
@@ -10,31 +17,64 @@ x-rnode: &default-rnode
 services:
   boot:
     <<: *default-rnode
-    container_name: rnode
-    command: run -s --validator-private-key $VALIDATOR_PRIVATE_BOOT --allow-private-addresses --host $MY_NET_IP -p 50400 -n --synchrony-constraint-threshold 0
+    container_name: rnode.boot
+    command: run -s --validator-private-key=$BOOT_VALIDATOR_PRIVATE --host $BOOT_HOST --allow-private-addresses -n --synchrony-constraint-threshold 0 --wallets-file /var/lib/rnode/wallets.txt --bonds-file /var/lib/rnode/bonds.txt --deploy-timestamp 1 --required-sigs 2 --duration 1min --interval 10sec
     ports:
-      - $MY_NET_IP:50400:50400
-      - $MY_NET_IP:50401:40401
-      - $MY_NET_IP:50402:40402
-      - $MY_NET_IP:50403:40403
-      - $MY_NET_IP:50404:40404
+      - 40401:40401
     volumes:
-      - ./data/boot:/var/lib/rnode
+      - ./data/wallets.txt:/var/lib/rnode/wallets.txt
+      - ./data/bonds.txt:/var/lib/rnode/bonds.txt
+      - ./data/node.certificate.pem:/var/lib/rnode/node.certificate.pem
+      - ./data/node.key.pem:/var/lib/rnode/node.key.pem
 
-  envoy:
-    container_name: envoy
-    image: envoyproxy/envoy:latest
-    restart: always
-    command: -c /etc/envoy/envoy.yaml -l trace
+  validator1:
+    <<: *wait-rnode
+    container_name: rnode.validator1
+    entrypoint: ['/bin/bash']
+    command:
+      [
+        '/wait.sh',
+        'rnode.boot',
+        '40404',
+        '--',
+        '/opt/docker/bin/rnode run -b rnode://5b0390a7c34319310de2432cc2c9dc433043783e@$BOOT_HOST?protocol=40400&discovery=40404 --validator-private-key=$VALIDATOR_1_PRIVATE --host $VALIDATOR_1 --allow-private-addresses -n --synchrony-constraint-threshold 0 --genesis-validator --deploy-timestamp 1 --required-sigs 2 --wallets-file /var/lib/rnode/wallets.txt --bonds-file /var/lib/rnode/bonds.txt',
+      ]
     volumes:
-      # Envoy configuration
-      - ./envoy.yaml:/etc/envoy/envoy.yaml
+      - ./data/wallets.txt:/var/lib/rnode/wallets.txt
+      - ./data/bonds.txt:/var/lib/rnode/bonds.txt
+
+  validator2:
+    <<: *wait-rnode
+    container_name: rnode.validator2
+    entrypoint: ['/bin/bash']
+    command:
+      [
+        '/wait.sh',
+        'rnode.boot',
+        '40404',
+        '--',
+        '/opt/docker/bin/rnode run -b rnode://5b0390a7c34319310de2432cc2c9dc433043783e@$BOOT_HOST?protocol=40400&discovery=40404 --validator-private-key=$VALIDATOR_2_PRIVATE --host rnode.validator2 --allow-private-addresses -n --synchrony-constraint-threshold 0 --genesis-validator --deploy-timestamp 1 --required-sigs 2 --wallets-file /var/lib/rnode/wallets.txt --bonds-file /var/lib/rnode/bonds.txt',
+      ]
+    volumes:
+      - ./data/wallets.txt:/var/lib/rnode/wallets.txt
+      - ./data/bonds.txt:/var/lib/rnode/bonds.txt
+  observer:
+    <<: *wait-rnode
+    container_name: rnode.observer
+    entrypoint: ['/bin/bash']
+    command:
+      [
+        '/wait.sh',
+        'rnode.boot',
+        '40404',
+        '--',
+        '/opt/docker/bin/rnode run -b rnode://5b0390a7c34319310de2432cc2c9dc433043783e@$BOOT_HOST?protocol=40400&discovery=40404 --host rnode.observer --allow-private-addresses -n --synchrony-constraint-threshold 0 --deploy-timestamp 1 --required-sigs 2 --wallets-file /var/lib/rnode/wallets.txt --bonds-file /var/lib/rnode/bonds.txt',
+      ]
     ports:
-      - $MY_NET_IP:44401:44401
-      - $MY_NET_IP:54401:54401
-      - $MY_NET_IP:9901:9901
-    networks:
-      - rchain-net
+      - 40403:40403
+    volumes:
+      - ./data/wallets.txt:/var/lib/rnode/wallets.txt
+      - ./data/bonds.txt:/var/lib/rnode/bonds.txt
 
 networks:
   rchain-net:

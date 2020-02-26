@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Select, Typography } from 'antd';
+import { Radio, Select, Typography } from 'antd';
 import { useDispatch, useSelector } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { formatMessage, FormattedMessage } from 'umi-plugin-locale';
@@ -33,7 +33,7 @@ const GlobalHeaderRight: FC = () => {
       <Select value={network} className={styles.network} onChange={changeNetwork}>
         {networkList.map((net, index) => (
           <Option key={index} value={net.name}>
-            {net.name}
+            <FormattedMessage id={`account.components.network.title.${net.name}`} />
           </Option>
         ))}
       </Select>
@@ -81,9 +81,6 @@ const GlobalHeaderRight: FC = () => {
       {/*  </a>*/}
       {/*</Tooltip>*/}
       <div>
-        <Text type={'secondary'} style={{ marginRight: 4 }}>
-          <FormattedMessage id={`component.globalHeader.network.desc`} />
-        </Text>
         <NetMenuItem />
       </div>
       <Avatar />
