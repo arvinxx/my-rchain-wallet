@@ -1,3 +1,9 @@
-FROM rchain/rnode:latest
-RUN apt update && apt install -y netcat
-COPY scripts/wait.sh /wait.sh
+FROM nginx:stable-alpine
+
+RUN rm /etc/nginx/conf.d/default.conf
+
+ADD nginx.conf /etc/nginx/conf.d/
+
+COPY dist  /usr/share/nginx/html/
+
+EXPOSE 80

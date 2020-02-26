@@ -12,7 +12,6 @@ import {
   Icon,
 } from 'antd';
 import styles from './style.less';
-import MA from '@/services/track';
 import { IconFont, BaseLoading } from '@/components';
 import Confirm from './components/Confirm';
 
