@@ -39,6 +39,10 @@
   align-items: center;
   border-radius: 4px;
 }
+.avatar {
+  background: white;
+  border: 1px solid @layout-body-background;
+}
 
 .user {
   margin-left: 16px;
@@ -65,13 +69,15 @@
   background: white;
 }
 .input {
+  height: 48px;
   :global {
     .ant-input {
       font-size: 16px;
       padding: 24px 30px;
     }
-    .ant-input:not(:first-child) {
-      padding-left: 60px;
+    .ant-input-prefix {
+      display: flex;
+      align-items: center;
     }
   }
 }

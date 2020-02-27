@@ -1,9 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Button, Select, Divider, Typography, Avatar, Checkbox } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
+import Icon from '@ant-design/icons';
+
 import { router, Link } from 'umi';
 import { useSelector, useDispatch } from 'dva';
-import { InputBlock } from '@/components';
+import { AvatarSvg, InputBlock } from '@/components';
 import { ConnectState } from '@/models/connect';
 import { showHiddenAddress } from '@/utils/blockchain';
 import { ReactComponent as NewAccount } from '@/assets/img/new_account.svg';
@@ -83,11 +85,14 @@ const Login: FC = () => {
             className={styles.account}
           >
             {userList.map(user => {
-              const { address, username, avatar } = user;
+              const { address, username, uid } = user;
               return (
                 <Option value={username} key={address}>
                   <div className={styles.option}>
-                    <Avatar src={avatar} className={styles.avatar} />
+                    <Avatar
+                      icon={<AvatarSvg string={uid + address + username} size={32} />}
+                      className={styles.avatar}
+                    />
 
                     <div className={styles.text}>
                       <div>{username}</div>

@@ -9,10 +9,10 @@
     "esModuleInterop": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "strict": true,
+    "allowJs": true,
     "paths": {
       "@/*": ["src/*"],
-      "@rnode/*": ["rnode-grpc-gen/*"]
+      "grpc/*": ["rnode-grpc-gen/js/*"]
     },
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true

@@ -1,10 +1,10 @@
-import React, { ChangeEvent, Component, CSSProperties, StyleHTMLAttributes } from 'react';
+import React, { ChangeEvent, Component, CSSProperties } from 'react';
 import styles from './style.less';
-import { Input, Icon, Typography } from 'antd';
+import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
+import { Input, Typography } from 'antd';
 import { formatMessage } from 'umi-plugin-react/locale';
 
 const { Text } = Typography;
-
 interface IInputBlockProps {
   type: 'username' | 'password' | 'confirm' | any;
   value: string;
@@ -62,8 +62,8 @@ export default class InputBlock extends Component<IInputBlockProps> {
             type === 'username' ? (
               undefined
             ) : (
-              <div style={{ cursor: 'pointer' }} onClick={this.handleVisible}>
-                <Icon type={`eye${visible ? '-invisible' : ''}`} />
+              <div className={styles.pwd} onClick={this.handleVisible}>
+                {visible ? <EyeInvisibleOutlined /> : <EyeOutlined />}
               </div>
             )
           }

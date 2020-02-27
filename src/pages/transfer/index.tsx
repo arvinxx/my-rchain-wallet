@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { FC, useEffect, useState } from 'react';
+import { CaretDownOutlined } from '@ant-design/icons';
 import {
   Card,
   Typography,
@@ -9,15 +10,14 @@ import {
   Divider,
   Avatar,
   Button,
-  Icon,
 } from 'antd';
 import styles from './style.less';
-import { IconFont, BaseLoading } from '@/components';
+import { IconFont, BaseLoading, AvatarSvg } from '@/components';
 import Confirm from './components/Confirm';
 
 import { formatMessage, FormattedMessage } from 'umi-plugin-locale';
 
-import { connect } from 'dva';
+import { useDispatch, useSelector } from 'dva';
 import { ConnectState, DispatchProps, UserModelState, WalletModelState } from '@/models/connect';
 import { showHiddenAddress } from '@/utils/blockchain';
 
@@ -46,212 +46,196 @@ interface IAccountDetailProps extends DispatchProps {
   wallet,
   checkBalance: loading.effects['wallet/checkBalance'],
 }))
-export default class Dashboard extends Component<IAccountDetailProps> {
-  state = {
-    visible: false,
-    amount: 10,
-    toAddr: '',
-    note: '',
-  };
+const Transfer: FC<IAccountDetailProps> = () => {
+  const dispatch = useDispatch();
+  const { user, wallet } = useSelector<ConnectState, ConnectState>(state => state);
+  const balanceLoading = useSelector<ConnectState, boolean>(
+    state => state.loading.effects['wallet/checkBalance'],
+  );
+  const [visible, handleVisible] = useState<boolean>(false);
+  const [amount, handleAmount] = useState<number>(0.01);
+  const [toAddr, handleToAddr] = useState<string>(
+    '11112dFk8NKkEyBdopURE1GhqjgwJSaaTMTWd31knXTfxxAjuJhgF9',
+  );
+  const [note, handleNote] = useState<string>('');
 
-  componentDidMount(): void {
-    this.props.dispatch({
+  useEffect(() => {
+    dispatch({
       type: 'wallet/checkBalance',
     });
-  }
+  }, []);
 
-  close = () => {
-    this.setState({
-      visible: false,
+  const showModal = () => {
+    dispatch({
+      type: 'wallet/transfer',
+      payload: { amount, toAddr },
     });
+    // handleVisible(true);
   };
-  showModal = () => {
-    this.setState({
-      visible: true,
-    });
-  };
-  handleAmount = (amount: number | undefined) => {
-    this.setState({
-      amount,
-    });
-  };
-  handleToAddr = e => {
-    this.setState({
-      toAddr: e.target.value,
-    });
-  };
-  handleNote = e => {
-    this.setState({
-      note: e.target.value,
-    });
-  };
-  setMax = () => {
-    const { revBalance } = this.props.wallet;
 
-    this.setState({
-      number: revBalance,
-    });
+  const setMax = () => {
+    const { revBalance, fee } = wallet;
+    handleAmount(revBalance - fee);
   };
-  reset = () => {
-    this.setState({
-      number: 0,
-      sendAddress: '',
-    });
+  const reset = () => {
+    handleAmount(0);
+    handleToAddr('');
   };
-  send = () => {
-    const { amount, toAddr } = this.state;
-    this.props.dispatch({
+
+  const send = () => {
+    dispatch({
       type: 'wallet/transfer',
       payload: { amount, toAddr },
     });
   };
-  hide = () => {
-    this.setState({
-      visible: false,
-    });
+  const hide = () => {
+    handleVisible(false);
   };
-  render() {
-    const { user, dispatch, wallet, checkBalance: balanceLoading } = this.props;
-    const { visible, amount, toAddr, note } = this.state;
-    const { currentUser } = user;
-    const { revBalance, fee, deployStatus } = wallet;
-    const { address, avatar, username, pwd } = currentUser;
 
-    return (
-      <div className={styles.container}>
-        <Confirm
-          visible={visible}
-          hide={this.hide}
-          pwd={pwd}
-          send={this.send}
-          note={note}
-          type={'payment'}
-          address={address}
-          toAddr={toAddr}
-          amount={amount}
-          fee={fee}
-          dispatch={dispatch}
-        />
-        <Card className={styles.transfer} bordered={false}>
-          <Title level={3}>
-            <FormattedMessage id={'transfer.title'} />
-          </Title>
-          <div>
-            <div className={styles.title}>
-              <Text type={'secondary'}>
-                <FormattedMessage id={'transfer.send-number.title'} />
-              </Text>
+  const { currentUser } = user;
+  const { revBalance, fee, checkStatus } = wallet;
+  const { address, username, pwd } = currentUser;
+
+  return (
+    <div className={styles.container}>
+      <Confirm
+        visible={visible}
+        hide={hide}
+        pwd={pwd}
+        send={send}
+        note={note}
+        type={'payment'}
+        address={address}
+        toAddr={toAddr}
+        amount={amount}
+        fee={fee}
+        dispatch={dispatch}
+      />
+      <Card className={styles.transfer} bordered={false}>
+        <Title level={3}>
+          <FormattedMessage id={'transfer.title'} />
+        </Title>
+        <div>
+          <div className={styles.title}>
+            <Text type={'secondary'}>
+              <FormattedMessage id={'transfer.send-number.title'} />
+            </Text>
+          </div>
+          <div className={styles.numberWrapper} style={{ display: 'flex' }}>
+            <InputNumber
+              className={styles.number}
+              onChange={handleAmount}
+              value={amount}
+              size={'large'}
+            />
+            <Button type={'link'} onClick={setMax}>
+              <FormattedMessage id={'transfer.send-number.max'} />
+            </Button>
+          </div>
+        </div>
+        <div>
+          <div className={styles.title}>
+            <Text type={'secondary'}>
+              <FormattedMessage id={'transfer.send-address.title'} />
+            </Text>
+          </div>
+          <div className={styles.send}>
+            <Avatar icon={<AvatarSvg size={28} />} className={styles.avatar} />
+            <div className={styles.user}>
+              <div>
+                <Text style={{ fontSize: 20, marginBottom: 8 }}>{username}</Text>
+              </div>
+              <div>
+                <Text type={'secondary'}>{showHiddenAddress(address)}</Text>
+              </div>
             </div>
-            <div className={styles.numberWrapper} style={{ display: 'flex' }}>
-              <InputNumber
-                className={styles.number}
-                onChange={this.handleAmount}
-                value={amount}
-                size={'large'}
+            <div className={styles.balance}>
+              <BaseLoading loading={checkStatus !== 'success'}>
+                <Statistic title={'REV'} precision={4} value={revBalance} />
+              </BaseLoading>
+            </div>
+          </div>
+        </div>
+        <Divider>
+          <CaretDownOutlined className={styles.down} />
+        </Divider>
+        <div>
+          <div className={styles.title}>
+            <Text type={'secondary'}>
+              <FormattedMessage id={'transfer.receive-address.title'} />
+            </Text>
+          </div>
+          <Input
+            className={styles.input}
+            size={'large'}
+            prefix={<IconFont type="mrw-address" className={styles.icon} />}
+            value={toAddr}
+            onChange={e => {
+              handleToAddr(e.target.value);
+            }}
+            placeholder={formatMessage({
+              id: 'transfer.receive-address.placeholder',
+            })}
+          />
+        </div>
+        <div className={styles.feeCard}>
+          <div className={styles.fee}>
+            <Text type={'secondary'}>
+              <FormattedMessage
+                id={'transfer.fee.time'}
+                values={{
+                  confirm: 12,
+                  time: 0.13213,
+                }}
               />
-              <Button type={'link'} onClick={this.setMax}>
-                <FormattedMessage id={'transfer.send-number.max'} />
-              </Button>
-            </div>
+            </Text>
+            <Text type={'secondary'}>
+              <FormattedMessage id={'transfer.fee.title'} />：<Text>{fee.toFixed(8)} REV</Text>
+            </Text>
           </div>
-          <div>
-            <div className={styles.title}>
-              <Text type={'secondary'}>
-                <FormattedMessage id={'transfer.send-address.title'} />
-              </Text>
-            </div>
-            <div className={styles.send}>
-              <Avatar src={avatar} className={styles.avatar} />
-              <div className={styles.user}>
-                <div>
-                  <Text style={{ fontSize: 20, marginBottom: 8 }}>{username}</Text>
-                </div>
-                <div>
-                  <Text type={'secondary'}>{showHiddenAddress(address)}</Text>
-                </div>
-              </div>
-              <div className={styles.balance}>
-                <BaseLoading loading={deployStatus !== 'success'}>
-                  <Statistic title={'REV'} precision={4} value={revBalance} />
-                </BaseLoading>
-              </div>
-            </div>
+          <Slider className={styles.slider} defaultValue={10} marks={marks} />
+        </div>
+        <div>
+          <div className={styles.title}>
+            <Text type={'secondary'}>
+              <FormattedMessage id={'transfer.note.title'} />
+            </Text>
           </div>
-          <Divider>
-            <Icon type="caret-down" className={styles.down} />
-          </Divider>
-          <div>
-            <div className={styles.title}>
-              <Text type={'secondary'}>
-                <FormattedMessage id={'transfer.receive-address.title'} />
-              </Text>
-            </div>
-            <Input
-              className={styles.input}
-              prefix={<IconFont type="mrw-address" className={styles.icon} />}
-              value={toAddr}
-              onChange={this.handleToAddr}
-              placeholder={formatMessage({
-                id: 'transfer.receive-address.placeholder',
-              })}
-            />
-          </div>
-          <div className={styles.feeCard}>
-            <div className={styles.fee}>
-              <Text type={'secondary'}>
-                <FormattedMessage
-                  id={'transfer.fee.time'}
-                  values={{
-                    confirm: 12,
-                    time: 0.13213,
-                  }}
-                />
-              </Text>
-              <Text type={'secondary'}>
-                <FormattedMessage id={'transfer.fee.title'} />：<Text>{fee.toFixed(8)} REV</Text>
-              </Text>
-            </div>
-            <Slider className={styles.slider} defaultValue={10} marks={marks} />
-          </div>
-          <div>
-            <div className={styles.title}>
-              <Text type={'secondary'}>
-                <FormattedMessage id={'transfer.note.title'} />
-              </Text>
-            </div>
-            <Input
-              className={styles.input}
-              value={note}
-              onChange={this.handleNote}
-              prefix={<IconFont type="mrw-note" className={styles.icon} />}
-              placeholder={formatMessage({
-                id: 'transfer.note.placeholder',
-              })}
-            />
-          </div>
+          <Input
+            className={styles.input}
+            value={note}
+            onChange={e => {
+              handleNote(e.target.value);
+            }}
+            prefix={<IconFont type="mrw-note" className={styles.icon} />}
+            placeholder={formatMessage({
+              id: 'transfer.note.placeholder',
+            })}
+          />
+        </div>
 
-          <div className={styles.action}>
-            <Button
-              block
-              type={'default'}
-              className={styles.button}
-              onClick={this.reset}
-              style={{ marginRight: 32 }}
-            >
-              <FormattedMessage id={'transfer.button.reset'} />
-            </Button>
-            <Button
-              block
-              type={'primary'}
-              disabled={!(!balanceLoading && amount && toAddr)}
-              className={styles.button}
-              onClick={this.showModal}
-            >
-              <FormattedMessage id={'transfer.button.confirm'} />
-            </Button>
-          </div>
-        </Card>
-      </div>
-    );
-  }
-}
+        <div className={styles.action}>
+          <Button
+            block
+            type={'default'}
+            className={styles.button}
+            onClick={reset}
+            style={{ marginRight: 32 }}
+          >
+            <FormattedMessage id={'transfer.button.reset'} />
+          </Button>
+          <Button
+            block
+            type={'primary'}
+            disabled={!(!balanceLoading && amount && toAddr)}
+            className={styles.button}
+            onClick={showModal}
+          >
+            <FormattedMessage id={'transfer.button.confirm'} />
+          </Button>
+        </div>
+      </Card>
+    </div>
+  );
+};
+export default Transfer;

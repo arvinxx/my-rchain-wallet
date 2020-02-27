@@ -10,7 +10,7 @@ import webpackPlugin from './plugin.config';
 const { pwa } = defaultSettings;
 
 const { MY_RCHAIN_WALLET_ONLINE } = process.env;
-const isOnline = MY_RCHAIN_WALLET_ONLINE === 'site';
+const isDev = process.env.NODE_ENV === 'development';
 const plugins: IPlugin[] = [
   [
     'umi-plugin-react',
@@ -49,10 +49,11 @@ const plugins: IPlugin[] = [
       // },
     },
   ],
+  ['umi-plugin-antd-icon-config', {}],
   [
     'umi-plugin-ga',
     {
-      code: 'UA-148135393-1',
+      code: isDev ? 'UA-148135393-2' : 'UA-148135393-1',
     },
   ],
 ];
@@ -63,7 +64,7 @@ export default {
   targets: {
     ie: 11,
   },
-  devtool: isOnline ? 'source-map' : false,
+  devtool: isDev ? false : 'source-map',
   // umi routes: https://umijs.org/zh/guide/router.html
   routes,
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
@@ -74,10 +75,7 @@ export default {
   // },
   alias: {
     theme: resolve(__dirname, '../src/theme'), // less 全局样式文件
-    '@ant-design/icons/lib/dist$': resolve(__dirname, '../src/icons.ts'),
-  },
-  externals: {
-    'mixpanel-browser': 'window.mixpanel',
+    '@grpc': resolve(__dirname, '../rnode-grpc-gen/js'),
   },
   treeShaking: true,
   define: {

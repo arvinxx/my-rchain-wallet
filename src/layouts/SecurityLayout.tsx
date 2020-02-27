@@ -6,12 +6,16 @@ import { ConnectState } from '@/models/connect';
 
 import PageLoading from '@/components/PageLoading';
 import { checkOverTime, getItem } from '@/utils/utils';
+import { rnodeWebSocket } from '@/services/websocket';
+import { IConnection } from '@/models/global';
 
 const SecurityLayout: FC = ({ children }) => {
   const [isReady, handleIsReady] = useState(false);
 
   useEffect(() => {
     handleIsReady(true);
+    const { observer } = getItem<IConnection>('connection');
+    rnodeWebSocket(observer);
   }, []);
 
   const loading = useSelector<ConnectState, boolean | undefined>(

@@ -1,19 +1,10 @@
 import React, { Component } from 'react';
-import {
-  Modal,
-  Avatar,
-  Input,
-  Icon,
-  Button,
-  Card,
-  Alert,
-  Typography,
-  Divider,
-  message,
-} from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { ExclamationCircleFilled } from '@ant-design/icons';
+import { Modal, Avatar, Input, Button, Card, Alert, Typography, Divider, message } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-locale';
 import QRCode from 'qrcode.react';
-import { CheckPassword } from '@/components';
+import { AvatarSvg, CheckPassword } from '@/components';
 
 import styles from './AccountDetail.less';
 import { CurrentUser } from '@/models/user';
@@ -148,11 +139,11 @@ export default class AccountDetail extends Component<IAccountDetailProps> {
     if (!currentUser) {
       return null;
     }
-    const { avatar, username, address, pwd, privateKey } = currentUser;
+    const { username, address, pwd, privateKey } = currentUser;
     return (
       <Modal onCancel={this.close} centered visible={visible} footer={null} width={400}>
         <div className={styles.container}>
-          <Avatar size={'large'} className={styles.avatar} src={avatar} />
+          <Avatar size={'large'} className={styles.avatar} icon={<AvatarSvg size={50} />} />
           <div className={styles.title}>
             {editable ? (
               <>
@@ -163,14 +154,14 @@ export default class AccountDetail extends Component<IAccountDetailProps> {
                   onAbort={this.abort}
                   onChange={this.onChange}
                 />
-                <Icon type={'close'} onClick={this.abort} className={styles.abort} />
-                <Icon type={'check'} onClick={this.ok} className={styles.ok} />
+                <LegacyIcon type={'close'} onClick={this.abort} className={styles.abort} />
+                <LegacyIcon type={'check'} onClick={this.ok} className={styles.ok} />
               </>
             ) : (
               <>
                 <Title level={4}>{username}</Title>
                 {exports ? null : (
-                  <Icon type={'edit'} onClick={this.edit} className={styles.icon} />
+                  <LegacyIcon type={'edit'} onClick={this.edit} className={styles.icon} />
                 )}
               </>
             )}
@@ -205,7 +196,7 @@ export default class AccountDetail extends Component<IAccountDetailProps> {
                 type={'error'}
                 showIcon
                 banner
-                icon={<Icon type="exclamation-circle" theme="filled" />}
+                icon={<ExclamationCircleFilled />}
                 message={<FormattedMessage id={'dashboard.account-detail.export.alert.title'} />}
                 description={<FormattedMessage id={'dashboard.account-detail.export.alert.desc'} />}
                 style={{ marginBottom: 36 }}
@@ -215,11 +206,11 @@ export default class AccountDetail extends Component<IAccountDetailProps> {
                   <Card
                     actions={[
                       <Button size={'small'} type={'link'} onClick={this.copy}>
-                        <Icon type={'copy'} />
+                        <LegacyIcon type={'copy'} />
                         <FormattedMessage id={'dashboard.account-detail.export.copy'} />
                       </Button>,
                       <Button size={'small'} type={'link'} onClick={this.exportToTXT}>
-                        <Icon type={'download'} />
+                        <LegacyIcon type={'download'} />
                         <FormattedMessage id={'dashboard.account-detail.export.txt'} />
                       </Button>,
                     ]}

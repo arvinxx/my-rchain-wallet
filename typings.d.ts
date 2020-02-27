@@ -1,6 +1,7 @@
 declare module 'slash2';
 declare module 'antd-theme-webpack-plugin';
 
+declare module '*.json';
 declare module '*.css';
 declare module '*.less';
 declare module '*.scss';
@@ -19,7 +20,6 @@ declare module '@antv/data-set';
 declare module 'nzh/cn';
 declare module 'webpack-theme-color-replacer';
 declare module 'webpack-theme-color-replacer/client';
-declare module 'identicon.js';
 
 // google analytics interface
 interface GAFieldsObject {

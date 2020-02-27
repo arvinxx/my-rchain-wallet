@@ -1,6 +1,5 @@
 import {
   getKeyPairFromMnemonic,
-  getMnemonic,
   getTwoTypeAddrFromPublicKey,
   getPublicKeyFromPrivateKey,
   getRevAddressFromPublicKey,
@@ -14,7 +13,7 @@ export interface IAccount {
   uid: string;
   username: string;
   mnemonic?: string;
-  avatar: string;
+  publicKey: string;
   balanceId: string;
   userid: string;
   transferId: string;
@@ -26,12 +25,12 @@ export const getAccountFromPrivateKey = (privateKey: string) => {
     return;
   }
   const { revAddr, ethAddr } = res;
-  return { address: revAddr, ethAddr };
+  return { address: revAddr, ethAddr, publicKey };
 };
 
 export const getAccountFromMnemonic = (mnemonic: string) => {
   const keyPair = getKeyPairFromMnemonic(mnemonic);
   const { privateKey, publicAddress } = keyPair;
   const revAddr = getRevAddressFromPublicKey(publicAddress);
-  return { privateKey, revAddr, ethAddr: publicAddress };
+  return { privateKey, revAddr, ethAddr: publicAddress, publicKey: publicAddress };
 };

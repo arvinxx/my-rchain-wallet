@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { formatMessage, FormattedMessage } from 'umi-plugin-locale';
 import moment from 'moment';
 
-import { Button, Alert, Typography, List, Modal, Icon } from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+
+import { Button, Alert, Typography, List, Modal } from 'antd';
 import { Link } from 'umi';
 import { CheckPassword } from '@/components';
 import numeral from 'numeral';
@@ -114,7 +116,7 @@ export default class Confirm extends Component<IConfirmProps, IConfirmState> {
         {status !== 'check' ? (
           <div>
             <div className={styles.iconWrapper}>
-              <Icon
+              <LegacyIcon
                 type={status === 'done' ? 'check' : 'arrow-up'}
                 className={`${styles.icon} ${status === 'done' ? styles.success : ''}`}
               />

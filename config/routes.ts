@@ -45,14 +45,14 @@ const routes: IRoute[] = [
             path: '/dashboard',
             name: 'dashboard',
             icon: 'dashboard',
-            component: '../pages/dashboard',
+            component: './dashboard',
           },
-          // {
-          //   path: '/transfer',
-          //   name: 'transfer',
-          //   icon: 'transaction',
-          //   component: '../pages/transfer',
-          // },
+          {
+            path: '/transfer',
+            name: 'transfer',
+            icon: 'transaction',
+            component: './transfer',
+          },
           // {
           //   path: '/transaction',
           //   name: 'transaction',
@@ -62,7 +62,7 @@ const routes: IRoute[] = [
             path: '/account',
             name: 'account',
             icon: 'user',
-            component: '../pages/account',
+            component: './account',
           },
           {
             component: './404',

@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import styles from './Token.less';
 import { formatMessage, FormattedMessage } from 'umi-plugin-locale';
 
-import { Avatar, Card, Typography, Icon, Button, Tag } from 'antd';
+import { MoreOutlined } from '@ant-design/icons';
+
+import { Avatar, Card, Typography, Button, Tag } from 'antd';
 type TokenData = {
   name: string;
   img: string;
@@ -37,7 +39,7 @@ export default class Token extends Component<ITokenProps> {
               <Avatar src={img} className={styles.logo} />
               <div className={styles.name}>{name}</div>
               <div className={styles.action}>
-                <Icon type="more" />
+                <MoreOutlined />
               </div>
             </div>
           );

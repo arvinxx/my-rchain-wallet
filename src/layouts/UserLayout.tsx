@@ -1,7 +1,8 @@
 import { MenuDataItem, getMenuData, getPageTitle, DefaultFooter } from '@ant-design/pro-layout';
 import DocumentTitle from 'react-document-title';
 import Link from 'umi/link';
-import { Icon, Popconfirm } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
+import { Popconfirm } from 'antd';
 
 import React, { FC } from 'react';
 import { useSelector, useDispatch } from 'dva';
@@ -46,7 +47,7 @@ const UserLayout: FC<UserLayoutProps> = props => {
               placement={'bottomLeft'}
               onConfirm={clean}
             >
-              <Icon type="delete" className={styles.clean} />
+              <DeleteOutlined className={styles.clean} />
             </Popconfirm>
             <SelectLang />
           </div>

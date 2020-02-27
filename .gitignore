@@ -19,3 +19,4 @@
 .idea
 rnode-grpc-gen
 /scripts/deployToCN.sh
+/data/testnet/*

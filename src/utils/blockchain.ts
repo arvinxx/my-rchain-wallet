@@ -10,7 +10,7 @@ import {
 import hdkey from 'ethereumjs-wallet/hdkey';
 import { fromPrivateKey } from 'ethereumjs-wallet';
 
-import { getAddrFromEth, getAddrFromPublicKey } from '@/utils/rnode';
+import { getAddrFromEth, getAddrFromPublicKey } from './address';
 
 /**
  * generate Mnemonic Phrase

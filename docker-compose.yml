@@ -3,14 +3,14 @@ version: '3.4'
 x-rnode: &default-rnode
   image: rchain/rnode:latest
   user: root
-  restart: always
+  restart: unless-stopped
   networks:
     - rchain-net
 
 x-wait-rnode: &wait-rnode
   image: arvinx/wait-rnode:latest
   user: root
-  restart: always
+  restart: unless-stopped
   networks:
     - rchain-net
 
@@ -19,13 +19,19 @@ services:
     <<: *default-rnode
     container_name: rnode.boot
     command: run -s --validator-private-key=$BOOT_VALIDATOR_PRIVATE --host $BOOT_HOST --allow-private-addresses -n --synchrony-constraint-threshold 0 --wallets-file /var/lib/rnode/wallets.txt --bonds-file /var/lib/rnode/bonds.txt --deploy-timestamp 1 --required-sigs 2 --duration 1min --interval 10sec
-    ports:
-      - 40401:40401
     volumes:
+      - ./data/testnet/boot:/var/lib/rnode
       - ./data/wallets.txt:/var/lib/rnode/wallets.txt
       - ./data/bonds.txt:/var/lib/rnode/bonds.txt
       - ./data/node.certificate.pem:/var/lib/rnode/node.certificate.pem
       - ./data/node.key.pem:/var/lib/rnode/node.key.pem
+    ports:
+      - 40401:40403
+    networks:
+      rchain-net:
+      grpc:
+        aliases:
+          - boot
 
   validator1:
     <<: *wait-rnode
@@ -40,6 +46,7 @@ services:
         '/opt/docker/bin/rnode run -b rnode://5b0390a7c34319310de2432cc2c9dc433043783e@$BOOT_HOST?protocol=40400&discovery=40404 --validator-private-key=$VALIDATOR_1_PRIVATE --host $VALIDATOR_1 --allow-private-addresses -n --synchrony-constraint-threshold 0 --genesis-validator --deploy-timestamp 1 --required-sigs 2 --wallets-file /var/lib/rnode/wallets.txt --bonds-file /var/lib/rnode/bonds.txt',
       ]
     volumes:
+      - ./data/testnet/validator1:/var/lib/rnode
       - ./data/wallets.txt:/var/lib/rnode/wallets.txt
       - ./data/bonds.txt:/var/lib/rnode/bonds.txt
 
@@ -56,8 +63,10 @@ services:
         '/opt/docker/bin/rnode run -b rnode://5b0390a7c34319310de2432cc2c9dc433043783e@$BOOT_HOST?protocol=40400&discovery=40404 --validator-private-key=$VALIDATOR_2_PRIVATE --host rnode.validator2 --allow-private-addresses -n --synchrony-constraint-threshold 0 --genesis-validator --deploy-timestamp 1 --required-sigs 2 --wallets-file /var/lib/rnode/wallets.txt --bonds-file /var/lib/rnode/bonds.txt',
       ]
     volumes:
+      - ./data/testnet/validator2:/var/lib/rnode
       - ./data/wallets.txt:/var/lib/rnode/wallets.txt
       - ./data/bonds.txt:/var/lib/rnode/bonds.txt
+
   observer:
     <<: *wait-rnode
     container_name: rnode.observer
@@ -73,8 +82,29 @@ services:
     ports:
       - 40403:40403
     volumes:
+      - ./data/testnet/observer:/var/lib/rnode
       - ./data/wallets.txt:/var/lib/rnode/wallets.txt
       - ./data/bonds.txt:/var/lib/rnode/bonds.txt
 
+#  grpc-proxy:
+#    container_name: rnode.grpc-proxy
+#    image: envoyproxy/envoy:v1.11.2
+#    restart: unless-stopped
+#    command: -c /etc/envoy/envoy.yaml -l trace
+#    volumes:
+#      # Envoy configuration
+#      - ./data/envoy.yaml:/etc/envoy/envoy.yaml
+#    depends_on:
+#      - boot
+#    ports:
+#      - 40401:44401
+#      # if proxy failed open below port to test envoy's status
+#      # - 9901:9901
+#    networks:
+#      grpc:
+#        aliases:
+#          - enovy
+
 networks:
   rchain-net:
+  grpc:

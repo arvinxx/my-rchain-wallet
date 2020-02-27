@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import styles from './Export.less';
 import { PhraseBox, CheckPassword } from '@/components';
-import { Button, message, Typography, Modal, Card, Icon, Alert } from 'antd';
+import { ExclamationCircleFilled } from '@ant-design/icons';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Button, message, Typography, Modal, Card, Alert } from 'antd';
 import { formatMessage, FormattedMessage } from 'umi-plugin-locale';
 
 import { copyToClipboard, getDecryptedItem } from '@/utils/utils';
@@ -105,7 +107,7 @@ export default class Export extends Component<IExportProps> {
                 type={'error'}
                 showIcon
                 banner
-                icon={<Icon type="exclamation-circle" theme="filled" />}
+                icon={<ExclamationCircleFilled />}
                 message={<FormattedMessage id={'account.components.export.alert.title'} />}
                 description={<FormattedMessage id={'account.components.export.alert.desc'} />}
                 className={styles.alert}
@@ -119,11 +121,11 @@ export default class Export extends Component<IExportProps> {
                 <Card
                   actions={[
                     <Button size={'large'} type={'link'} onClick={this.copy}>
-                      <Icon type={'copy'} />
+                      <LegacyIcon type={'copy'} />
                       <FormattedMessage id={'account.components.export.copy'} />
                     </Button>,
                     <Button size={'large'} type={'link'} onClick={this.exportToCSV}>
-                      <Icon type={'download'} />
+                      <LegacyIcon type={'download'} />
                       <FormattedMessage id={'account.components.export.csv'} />
                     </Button>,
                   ]}

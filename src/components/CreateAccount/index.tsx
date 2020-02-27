@@ -50,6 +50,7 @@ export default class CreateAccount extends Component<ICreateAccountProps, ICreat
     checked: false,
   };
   onChange = (e, type: Type) => {
+    // @ts-ignore
     this.setState({ [type]: e.target.value });
   };
   checkUser = () => {
@@ -107,7 +108,7 @@ export default class CreateAccount extends Component<ICreateAccountProps, ICreat
     let account: Partial<IAccount> = {};
     if (type === 'signup') {
       const mnemonic = getMnemonic();
-      const { ethAddr, revAddr, privateKey } = getAccountFromMnemonic(mnemonic);
+      const { ethAddr, revAddr, privateKey, publicKey } = getAccountFromMnemonic(mnemonic);
 
       account = {
         username,
@@ -116,6 +117,7 @@ export default class CreateAccount extends Component<ICreateAccountProps, ICreat
         ethAddr,
         privateKey,
         mnemonic,
+        publicKey,
       };
 
       setEncryptedItem('mnemonic', mnemonic.split(' '));
@@ -127,13 +129,14 @@ export default class CreateAccount extends Component<ICreateAccountProps, ICreat
         const privateKey = getDecryptedItem('privateKey');
         const res = getAccountFromPrivateKey(privateKey);
         if (res) {
-          const { address, ethAddr } = res;
+          const { address, ethAddr, publicKey } = res;
           account = {
             username,
             pwd: password,
             address,
             ethAddr,
             privateKey,
+            publicKey,
           };
         }
         localStorage.removeItem('privateKey');
@@ -156,18 +159,7 @@ export default class CreateAccount extends Component<ICreateAccountProps, ICreat
     const userList = getDecryptedItem('userList') || [];
     const uid = getUID();
     accountLogin(uid);
-    const { address, ethAddr } = account;
-    const avatar = generateAvatar(address);
-    const finalAccount = { ...account, avatar, uid };
-    // mixpanel.people.set({
-    //   $created: new Date(),
-    //   $last_login: new Date(),
-    //   userId: uid,
-    //   username,
-    //   address,
-    //   ethAddr,
-    //   deviceId: localStorage.getItem('deviceId'),
-    // });
+    const finalAccount = { ...account, uid };
     setEncryptedItem('userList', userList.concat(finalAccount));
     next();
   };

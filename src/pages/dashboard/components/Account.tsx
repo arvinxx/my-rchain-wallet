@@ -1,4 +1,5 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
+import Icon, { CopyFilled, ReloadOutlined } from '@ant-design/icons';
 import {
   Badge,
   Card,
@@ -7,7 +8,6 @@ import {
   Button,
   Statistic,
   Tooltip,
-  Icon,
   Avatar,
   message,
   Spin,
@@ -15,10 +15,11 @@ import {
 import { formatMessage, FormattedMessage } from 'umi-plugin-locale';
 import { showHiddenAddress } from '@/utils/blockchain';
 import { CurrentUser } from '@/models/user';
-import { CheckingStatus, WalletModelState } from '@/models/wallet';
+import { WalletModelState } from '@/models/wallet';
 import { copyToClipboard } from '@/utils/utils';
 import { router } from 'umi';
-import { ConnectState, DispatchProps } from '@/models/connect';
+import { AvatarSvg } from '@/components';
+import { ConnectState } from '@/models/connect';
 import { useDispatch, useSelector } from 'dva';
 import styles from './Account.less';
 
@@ -30,18 +31,13 @@ interface IAccountProps {
 }
 
 const Account: FC<IAccountProps> = ({ open, loading }) => {
-  const currentUser = useSelector<ConnectState, CurrentUser>(state => state.user.currentUser);
-  if (!currentUser || !currentUser.avatar) {
-    return <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />;
-  }
-
   const dispatch = useDispatch();
-  const { revBalance: balance, deployStatus: checkStatus } = useSelector<
-    ConnectState,
-    WalletModelState
-  >(state => state.wallet);
+  const { revBalance, checkStatus } = useSelector<ConnectState, WalletModelState>(
+    state => state.wallet,
+  );
+  const currentUser = useSelector<ConnectState, CurrentUser>(state => state.user.currentUser);
 
-  const { username, address, avatar } = currentUser;
+  const { username, address } = currentUser;
 
   const copy = () => {
     const { address } = currentUser;
@@ -66,7 +62,10 @@ const Account: FC<IAccountProps> = ({ open, loading }) => {
     >
       <div className={styles.account}>
         <div className={styles.user}>
-          <Avatar src={avatar} className={styles.avatar} />
+          <Avatar
+            icon={<AvatarSvg key={username + address} size={50} />}
+            className={styles.avatar}
+          />
           <Text style={{ fontSize: 16, marginTop: 8 }}>{username}</Text>
           <Tooltip
             placement={'bottom'}
@@ -78,12 +77,7 @@ const Account: FC<IAccountProps> = ({ open, loading }) => {
               style={{ marginTop: 4, marginBottom: 16 }}
             >
               <Text type={'secondary'}>{showHiddenAddress(address)}</Text>
-              <Icon
-                type={'copy'}
-                theme={'filled'}
-                style={{ marginLeft: 4 }}
-                className={styles.icon}
-              />
+              <CopyFilled style={{ marginLeft: 4 }} className={styles.icon} />
             </div>
           </Tooltip>
           <Tag onClick={open} className={styles.view}>
@@ -96,8 +90,7 @@ const Account: FC<IAccountProps> = ({ open, loading }) => {
               <>
                 <div style={{ marginTop: 16, marginBottom: 16 }}>
                   <Tooltip title={formatMessage({ id: 'dashboard.account.balance.deploy' })}>
-                    <Icon
-                      type={'reload'}
+                    <ReloadOutlined
                       style={{
                         fontSize: 20,
                       }}
@@ -124,8 +117,7 @@ const Account: FC<IAccountProps> = ({ open, loading }) => {
                     <>
                       {formatMessage({ id: 'dashboard.account.balance' })}
                       <Tooltip title={formatMessage({ id: 'dashboard.account.balance.deploy' })}>
-                        <Icon
-                          type={'reload'}
+                        <ReloadOutlined
                           className={styles.reload}
                           onClick={() => {
                             dispatch({
@@ -137,7 +129,8 @@ const Account: FC<IAccountProps> = ({ open, loading }) => {
                     </>
                   }
                   className={styles.balance}
-                  value={balance.toFixed(4)}
+                  precision={4}
+                  value={revBalance === 0 ? 0 : revBalance}
                   suffix="REV"
                 />
                 {/*<Text type={'secondary'}>$ {balance * 7} USD</Text>*/}

@@ -1,6 +1,7 @@
 import { parse } from 'querystring';
 import { decrypt, encrypt } from './crypto';
-import identicon from 'identicon.js';
+import jdenticon from 'jdenticon';
+import crypto from 'crypto';
 
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
 const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
@@ -25,21 +26,20 @@ type ILocalData =
   | 'restore'
   | 'lastLogin'
   | 'connection'
-  | 'checkBalanceContact'
+  | 'deployId'
   | 'autoLogin';
 
 type IEncryptedData = 'userList' | 'mnemonic' | 'privateKey';
 
-export const generateAvatar = (string: string = '') => {
-  const data = new identicon(string);
-  return `data:image/png;base64,${data}`;
+export const generateAvatar = (key: string, size) => {
+  return jdenticon.toSvg(key, size);
 };
 
 export const setItem = (key: ILocalData, value: any) => {
   localStorage.setItem(key, JSON.stringify(value));
 };
 
-export const getItem = (key: ILocalData) => {
+export const getItem = <T = any>(key: ILocalData): T => {
   const res = localStorage.getItem(key);
   if (res) {
     return JSON.parse(res);

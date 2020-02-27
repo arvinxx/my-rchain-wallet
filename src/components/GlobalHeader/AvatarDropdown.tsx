@@ -1,4 +1,5 @@
-import { Avatar, Icon, Menu, Spin } from 'antd';
+import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { Avatar, Menu, Spin } from 'antd';
 import { ClickParam } from 'antd/es/menu';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import React from 'react';
@@ -9,6 +10,7 @@ import { ConnectState } from '@/models/connect';
 import { CurrentUser } from '@/models/user';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
+import { AvatarSvg } from '@/components';
 
 export interface GlobalHeaderRightProps {
   currentUser?: CurrentUser;
@@ -32,26 +34,26 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
     if (!currentUser) {
       return <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />;
     }
-    const { username, avatar } = currentUser;
+    const { username, address } = currentUser;
 
     const menuHeaderDropdown = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
         {menu && (
           <Menu.Item key="center">
-            <Icon type="user" />
+            <UserOutlined />
             <FormattedMessage id="menu.account.center" />
           </Menu.Item>
         )}
         {menu && (
           <Menu.Item key="settings">
-            <Icon type="setting" />
+            <SettingOutlined />
             <FormattedMessage id="menu.account.settings" />
           </Menu.Item>
         )}
         {menu && <Menu.Divider />}
 
         <Menu.Item key="logout">
-          <Icon type="logout" />
+          <LogoutOutlined />
           <FormattedMessage id="menu.account.logout" />
         </Menu.Item>
       </Menu>
@@ -60,7 +62,12 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
     return username ? (
       <HeaderDropdown overlay={menuHeaderDropdown}>
         <span className={`${styles.action} ${styles.account}`}>
-          <Avatar size="small" className={styles.avatar} src={avatar} alt="avatar" />
+          <Avatar
+            size="small"
+            className={styles.avatar}
+            icon={<AvatarSvg size={24} />}
+            alt="avatar"
+          />
           <span className={styles.name}>{username}</span>
         </span>
       </HeaderDropdown>

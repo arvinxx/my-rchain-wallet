@@ -1,12 +1,11 @@
-import React, { FC, FormEventHandler } from 'react';
-import { Button, Select, Radio, Typography, Row, Col, Form, Input } from 'antd';
+import React, { FC } from 'react';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Select, Radio, Typography, Row, Col, Input, Form } from 'antd';
 import { formatMessage, FormattedMessage } from 'umi-plugin-locale';
 import { INetwork } from '@/models/global';
 import { RadioChangeEvent } from 'antd/lib/radio';
 import { useDispatch } from 'dva';
-
 import styles from './Network.less';
-import { WrappedFormInternalProps } from 'antd/es/form/Form';
 
 const { Title, Text } = Typography;
 const { Item } = Form;
@@ -21,71 +20,23 @@ interface INetworkProps {
 const Network: FC<INetworkProps> = ({ network, node, networkList }) => {
   const dispatch = useDispatch();
   const onRadioChange = (e: RadioChangeEvent) => {
-    console.log(e);
     dispatch({
       type: 'global/changeNetwork',
       payload: e.target.value,
     });
   };
 
-  const NetworkForm: FC<WrappedFormInternalProps> = ({ form }) => {
-    const { getFieldDecorator, validateFields, resetFields } = form;
-    const handleSubmit = () => {
-      validateFields((err, values) => {
-        if (!err) {
-          console.log('Received values of form: ', values);
-        }
-      });
-    };
-    const handleReset = () => {
-      resetFields();
-    };
+  const handleSubmit = values => {};
+  const handleReset = () => {};
 
-    const selected = networkList.find(n => n.name === network);
+  const selected = networkList.find(n => n.name === network);
 
-    const disabled = selected!.readOnly;
-    return (
-      <Form onSubmit={handleSubmit} onReset={handleReset} className={styles.form}>
-        <Item label={formatMessage({ id: 'account.components.network.form.name' })}>
-          {getFieldDecorator('name', { initialValue: selected!.name })(
-            <Input disabled={disabled} className={styles.formInput} />,
-          )}
-        </Item>
-        <Item label={formatMessage({ id: 'account.components.network.form.observer' })}>
-          {getFieldDecorator('observer', { initialValue: selected!.observer })(
-            <Input disabled={disabled} className={styles.formInput} />,
-          )}
-        </Item>
-        <Item label={formatMessage({ id: 'account.components.network.form.validator' })}>
-          {getFieldDecorator('validator', { initialValue: selected!.validator })(
-            <Input disabled={disabled} className={styles.formInput} />,
-          )}
-        </Item>
-        <Item className={styles.formAction}>
-          <Row type={'flex'} justify={'space-between'} gutter={12}>
-            <Col span={12}>
-              <Button htmlType={'reset'} disabled={disabled} block className={styles.formButton}>
-                <FormattedMessage id={'account.components.network.form.reset'} />
-              </Button>
-            </Col>
-            <Col span={12}>
-              <Button
-                type={'primary'}
-                disabled={disabled}
-                htmlType={'submit'}
-                block
-                className={styles.formButton}
-              >
-                <FormattedMessage id={'account.components.network.form.save'} />
-              </Button>
-            </Col>
-          </Row>
-        </Item>
-      </Form>
-    );
+  const disabled = selected!.readOnly;
+  const formItemLayout = {
+    labelCol: { span: 24 },
+    wrapperCol: { span: 24 },
   };
 
-  const WrappedNetworkForm = Form.create({ name: 'network' })(NetworkForm);
   return (
     <div className={styles.container}>
       <div className={styles.block}>
@@ -100,7 +51,7 @@ const Network: FC<INetworkProps> = ({ network, node, networkList }) => {
       </div>
 
       <div className={styles.block}>
-        <Row type={'flex'} gutter={24}>
+        <Row gutter={24}>
           <Col span={4}>
             <Title level={4}>
               <FormattedMessage id={'account.components.network.list.title'} />
@@ -122,7 +73,68 @@ const Network: FC<INetworkProps> = ({ network, node, networkList }) => {
             <Title level={4}>
               <FormattedMessage id={'account.components.network.form.title'} />
             </Title>
-            <WrappedNetworkForm />
+            <Form
+              {...formItemLayout}
+              onFinish={handleSubmit}
+              onReset={handleReset}
+              className={styles.form}
+              initialValues={{
+                name: selected!.name,
+                observer: selected!.observer,
+                validator: selected!.validator,
+              }}
+            >
+              <Item
+                name={'name'}
+                label={formatMessage({ id: 'account.components.network.form.name' })}
+              >
+                <Input
+                  disabled={disabled || selected!.name === 'localhost'}
+                  className={styles.formInput}
+                />
+              </Item>
+              <Item
+                name={'observer'}
+                label={formatMessage({ id: 'account.components.network.form.observer' })}
+              >
+                <Input
+                  disabled={disabled}
+                  defaultValue={selected!.observer}
+                  className={styles.formInput}
+                />
+              </Item>
+              <Item
+                name={'validator'}
+                label={formatMessage({ id: 'account.components.network.form.validator' })}
+              >
+                <Input disabled={disabled} className={styles.formInput} />
+              </Item>
+              <Item className={styles.formAction}>
+                <Row justify={'space-between'} gutter={12}>
+                  <Col span={12}>
+                    <Button
+                      htmlType={'reset'}
+                      disabled={disabled}
+                      block
+                      className={styles.formButton}
+                    >
+                      <FormattedMessage id={'account.components.network.form.reset'} />
+                    </Button>
+                  </Col>
+                  <Col span={12}>
+                    <Button
+                      type={'primary'}
+                      disabled={disabled}
+                      htmlType={'submit'}
+                      block
+                      className={styles.formButton}
+                    >
+                      <FormattedMessage id={'account.components.network.form.save'} />
+                    </Button>
+                  </Col>
+                </Row>
+              </Item>
+            </Form>
           </Col>
         </Row>
       </div>

@@ -8,8 +8,17 @@ export interface IPayload {
   creator: string;
   'seq-num': number;
 }
-export const getMsgFromRNode = (url: string, rnodeUrl: string): void => {
-  const connection = new WebSocket(url);
+let connection: WebSocket = undefined;
+
+/**
+ * Get rnode WebSocket Instance
+ * @param observer string Observer rnode url
+ */
+export const rnodeWebSocket = (observer: string): WebSocket => {
+  if (!!connection) {
+    return connection;
+  }
+  connection = new WebSocket(observer.replace('http', 'ws') + '/ws/events');
   connection.onopen = _ => {
     console.log(`rnode Socket connected!`);
   };
@@ -20,12 +29,8 @@ export const getMsgFromRNode = (url: string, rnodeUrl: string): void => {
   connection.onmessage = async ({ data }: any) => {
     const { event, payload } = JSON.parse(data);
     console.log(event, payload);
-    if (event === 'block-added') {
-      global.g_app._store.dispatch({ type: 'wallet/addBlockNumber' });
-    }
-    const item = getItem('checkBalanceContact');
-    const { deployId } = item;
 
+    const deployId = getItem('deployId');
     // 如果发现有部署合约
     if (
       deployId &&
@@ -33,22 +38,12 @@ export const getMsgFromRNode = (url: string, rnodeUrl: string): void => {
       payload['deploy-ids'] &&
       payload['deploy-ids'].indexOf(deployId) > -1
     ) {
-      const hash = payload['block-hash'];
-      // const { blockinfo } = await getBlock(rnodeUrl, hash);
-      // const blockNumber = blockinfo && blockinfo.blockinfo.blocknumber;
-      // if (blockinfo && blockinfo.blockinfo.seqnum) {
-      //   setItem('checkBalanceContact', {
-      //     ...item,
-      //     blockNumber: blockNumber,
-      //     status: 'success',
-      //   });
-      //   global.g_app._store.dispatch({ type: 'wallet/getBalance' });
-      //   connection.close();
-      // }
+      global.g_app._store.dispatch({ type: 'wallet/checkBalance' });
     }
   };
 
   connection.onerror = e => {
     console.log(`RNODE error`, e);
   };
+  return connection;
 };
