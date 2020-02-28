@@ -54,6 +54,10 @@ const WalletModel: WalletModelStore = {
     },
     setTransferContract(state, { payload }) {
       const { transferContract } = state;
+      setItem<TransferContract>('transferContract', {
+        ...transferContract,
+        ...payload,
+      });
       return {
         ...state,
         transferContract: { ...transferContract, ...payload },
@@ -109,32 +113,32 @@ const WalletModel: WalletModelStore = {
 
         if (!!result) {
           // deploy successfully
-          setItem<TransferContract>('transferContract', {
-            deployId,
-            transferStatus: 'processing',
-            blockHash: '',
-            blockStatus: 'none',
-          });
           yield put({
             type: 'setTransferContract',
             payload: {
               transferStatus: 'processing',
               deployId,
+              blockHash: '',
+              blockStatus: 'none',
             },
           });
           // start to listen transfer contract deploy status
           yield put({ type: 'checkTransferStatus' });
         } else {
           // deploy failed
-          setItem('transferContract', { deployId: '', transferStatus: 'error' });
-          yield put({ type: 'setTransferContract', payload: { transferStatus: 'error' } });
+          yield put({
+            type: 'setTransferContract',
+            payload: { deployId: '', transferStatus: 'error' },
+          });
         }
       } catch (e) {
-        setItem('transferContract', { deployId: '', transferStatus: 'error' });
-        yield put({ type: 'setTransferContract', payload: { transferStatus: 'error' } });
+        yield put({
+          type: 'setTransferContract',
+          payload: { deployId: '', transferStatus: 'error' },
+        });
       }
     },
-    *checkTransferStatus(_, { call, select, put }) {
+    *checkTransferStatus(_, { call, put }) {
       while (true) {
         const transferContract = getItem<TransferContract>('transferContract');
         const { transferStatus, deployId, blockHash, blockStatus } = transferContract;
@@ -180,25 +184,29 @@ const WalletModel: WalletModelStore = {
               // if there is no systemDeployError
               // mean deploy result success.
               if (systemDeployError === '' && cost !== 0) {
-                setItem<TransferContract>('transferContract', {
-                  ...transferContract,
-                  transferStatus: 'success',
-                  blockStatus: 'finalised',
-                });
                 // and then check balance
+                yield put({
+                  type: 'setTransferContract',
+                  payload: {
+                    transferStatus: 'success',
+                    blockStatus: 'finalised',
+                  },
+                });
                 yield put({ type: 'checkBalance' });
               } else {
                 message.error(systemDeployError);
-                setItem<TransferContract>('transferContract', {
-                  ...transferContract,
-                  transferStatus: 'error',
-                  blockStatus: 'finalised',
+                yield put({
+                  type: 'setTransferContract',
+                  payload: {
+                    transferStatus: 'error',
+                    blockStatus: 'finalised',
+                  },
                 });
               }
             }
           }
         }
-        yield sleep(10000);
+        yield sleep(30000);
       }
     },
   },

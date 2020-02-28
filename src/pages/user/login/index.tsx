@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Button, Select, Divider, Typography, Avatar, Checkbox } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
-import Icon from '@ant-design/icons';
 
 import { router, Link } from 'umi';
 import { useSelector, useDispatch } from 'dva';

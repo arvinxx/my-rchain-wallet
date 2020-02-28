@@ -48,7 +48,7 @@ export const footerRender: BasicLayoutProps['footerRender'] = () => (
         2019-{moment().year()} © MyRChainWallet - {formatMessage({ id: 'component.footer.rights' })}
       </Text>
     </div>
-    <Row type={'flex'} gutter={8}>
+    <Row gutter={8}>
       <Col>
         <a target={'_blank'} href={'https://rchain.coop/'}>
           <Text type={'secondary'}>{formatMessage({ id: 'component.footer.rchain' })}</Text>

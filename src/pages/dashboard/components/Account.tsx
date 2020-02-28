@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import Icon, { CopyFilled, ReloadOutlined } from '@ant-design/icons';
+import { CopyFilled, ReloadOutlined } from '@ant-design/icons';
 import {
   Badge,
   Card,
