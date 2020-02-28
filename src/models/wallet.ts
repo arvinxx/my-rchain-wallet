@@ -192,6 +192,7 @@ const WalletModel: WalletModelStore = {
                     blockStatus: 'finalised',
                   },
                 });
+                localStorage.removeItem('transferContract');
                 yield put({ type: 'checkBalance' });
               } else {
                 message.error(systemDeployError);

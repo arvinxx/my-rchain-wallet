@@ -48,7 +48,7 @@ const Account: FC<IAccountProps> = ({ open, loading }) => {
   const navigate = (type: string) => () => {
     router.push('transfer');
   };
-  const { transferStatus } = transferContract;
+  const transferStatus = transferContract!.transferStatus;
 
   return (
     <Card
