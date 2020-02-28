@@ -106,8 +106,10 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     dispatch({
       type: 'user/fetchCurrent',
     });
-
     dispatch({ type: 'global/initNetwork' });
+    dispatch({
+      type: 'wallet/checkBalance',
+    });
   }, []);
 
   return (

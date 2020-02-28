@@ -32,7 +32,7 @@ interface IAccountProps {
 
 const Account: FC<IAccountProps> = ({ open, loading }) => {
   const dispatch = useDispatch();
-  const { revBalance, checkStatus } = useSelector<ConnectState, WalletModelState>(
+  const { revBalance, checkStatus, transferContract } = useSelector<ConnectState, WalletModelState>(
     state => state.wallet,
   );
   const currentUser = useSelector<ConnectState, CurrentUser>(state => state.user.currentUser);
@@ -48,6 +48,7 @@ const Account: FC<IAccountProps> = ({ open, loading }) => {
   const navigate = (type: string) => () => {
     router.push('transfer');
   };
+  const { transferStatus } = transferContract;
 
   return (
     <Card
@@ -142,6 +143,14 @@ const Account: FC<IAccountProps> = ({ open, loading }) => {
                 {formatMessage({ id: `dashboard.account.balance.${checkStatus}` })}
               </Text>
             </div>
+            {transferStatus === 'processing' ? (
+              <div>
+                <Badge count={5} status={'processing'} />
+                <Text type={'secondary'}>
+                  {formatMessage({ id: 'dashboard.account.transfer.processing' })}
+                </Text>
+              </div>
+            ) : null}
           </div>
           <div className={styles.button}>
             <Button type={'primary'} className={styles.receive}>

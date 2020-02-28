@@ -14,8 +14,8 @@ const SecurityLayout: FC = ({ children }) => {
 
   useEffect(() => {
     handleIsReady(true);
-    const { observer } = getItem<IConnection>('connection');
-    rnodeWebSocket(observer);
+    // const { observer } = getItem<IConnection>('connection');
+    // rnodeWebSocket(observer);
   }, []);
 
   const loading = useSelector<ConnectState, boolean | undefined>(

@@ -4,8 +4,6 @@ import { useSelector, useDispatch } from 'dva';
 
 import Account from './components/Account';
 import AccountDetail from './components/AccountDetail';
-import Token from './components/Token';
-import Transaction from './components/Transaction';
 import { ConnectState } from '@/models/connect';
 
 export interface ITransaction {
@@ -26,7 +24,7 @@ const Dashboard: FC = () => {
 
   useEffect(() => {
     dispatch({
-      type: 'wallet/checkBalance',
+      type: 'wallet/initContract',
     });
   }, []);
 

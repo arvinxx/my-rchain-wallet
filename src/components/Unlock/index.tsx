@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
-import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { LockOutlined, ArrowRightOutlined } from '@ant-design/icons';
+
 import { Modal, Input, Typography, Button } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import { useSelector, useDispatch } from 'dva';
@@ -55,13 +56,13 @@ const Unlock: FC = ({ children }) => {
             <FormattedMessage id={'component.unlock.desc'} />
           </Text>
           <Input
-            prefix={<LegacyIcon type={'lock'} className={styles.icon} />}
+            prefix={<LockOutlined className={styles.icon} />}
             value={password}
             onPressEnter={check}
             suffix={
               <Button
                 size={'small'}
-                icon={<LegacyIcon type={'arrow-right'} />}
+                icon={<ArrowRightOutlined />}
                 type={'primary'}
                 className={styles.button}
                 onClick={check}

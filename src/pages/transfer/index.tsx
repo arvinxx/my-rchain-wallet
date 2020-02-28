@@ -27,50 +27,19 @@ const marks = {
   100: formatMessage({ id: 'transfer.fee.fast' }),
 };
 
-export interface ITransfer {
-  type: string;
-  timestamp: number;
-  title: string;
-  number: number;
-  status: string;
-}
-
-interface IAccountDetailProps extends DispatchProps {
-  user: UserModelState;
-  wallet: WalletModelState;
-  checkBalance: boolean;
-}
-
-@connect(({ user, wallet, loading }: ConnectState) => ({
-  user,
-  wallet,
-  checkBalance: loading.effects['wallet/checkBalance'],
-}))
-const Transfer: FC<IAccountDetailProps> = () => {
+const Transfer: FC = () => {
   const dispatch = useDispatch();
   const { user, wallet } = useSelector<ConnectState, ConnectState>(state => state);
   const balanceLoading = useSelector<ConnectState, boolean>(
     state => state.loading.effects['wallet/checkBalance'],
   );
   const [visible, handleVisible] = useState<boolean>(false);
-  const [amount, handleAmount] = useState<number>(0.01);
-  const [toAddr, handleToAddr] = useState<string>(
-    '11112dFk8NKkEyBdopURE1GhqjgwJSaaTMTWd31knXTfxxAjuJhgF9',
-  );
+  const [amount, handleAmount] = useState<number>(0);
+  const [toAddr, handleToAddr] = useState<string>('');
   const [note, handleNote] = useState<string>('');
 
-  useEffect(() => {
-    dispatch({
-      type: 'wallet/checkBalance',
-    });
-  }, []);
-
   const showModal = () => {
-    dispatch({
-      type: 'wallet/transfer',
-      payload: { amount, toAddr },
-    });
-    // handleVisible(true);
+    handleVisible(true);
   };
 
   const setMax = () => {
@@ -109,7 +78,6 @@ const Transfer: FC<IAccountDetailProps> = () => {
         toAddr={toAddr}
         amount={amount}
         fee={fee}
-        dispatch={dispatch}
       />
       <Card className={styles.transfer} bordered={false}>
         <Title level={3}>
@@ -126,6 +94,7 @@ const Transfer: FC<IAccountDetailProps> = () => {
               className={styles.number}
               onChange={handleAmount}
               value={amount}
+              min={0}
               size={'large'}
             />
             <Button type={'link'} onClick={setMax}>
@@ -181,19 +150,21 @@ const Transfer: FC<IAccountDetailProps> = () => {
         <div className={styles.feeCard}>
           <div className={styles.fee}>
             <Text type={'secondary'}>
-              <FormattedMessage
-                id={'transfer.fee.time'}
-                values={{
-                  confirm: 12,
-                  time: 0.13213,
-                }}
-              />
+              <FormattedMessage id={'transfer.fee.title'} />
+              {/*<FormattedMessage*/}
+              {/*  id={'transfer.fee.time'}*/}
+              {/*  values={{*/}
+              {/*    confirm: 12,*/}
+              {/*    time: 0.13213,*/}
+              {/*  }}*/}
+              {/*/>*/}
             </Text>
             <Text type={'secondary'}>
-              <FormattedMessage id={'transfer.fee.title'} />：<Text>{fee.toFixed(8)} REV</Text>
+              {/*<FormattedMessage id={'transfer.fee.title'} />：*/}
+              <Text>{fee} REV</Text>
             </Text>
           </div>
-          <Slider className={styles.slider} defaultValue={10} marks={marks} />
+          {/*<Slider className={styles.slider} defaultValue={10} marks={marks} />*/}
         </div>
         <div>
           <div className={styles.title}>

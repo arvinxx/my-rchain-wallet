@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
-import { Icon as LegacyIcon } from '@ant-design/compatible';
-import { ExclamationCircleFilled } from '@ant-design/icons';
+import {
+  ExclamationCircleFilled,
+  CloseOutlined,
+  CheckOutlined,
+  EditOutlined,
+  CopyOutlined,
+  DownloadOutlined,
+} from '@ant-design/icons';
 import { Modal, Avatar, Input, Button, Card, Alert, Typography, Divider, message } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-locale';
 import QRCode from 'qrcode.react';
@@ -154,15 +160,13 @@ export default class AccountDetail extends Component<IAccountDetailProps> {
                   onAbort={this.abort}
                   onChange={this.onChange}
                 />
-                <LegacyIcon type={'close'} onClick={this.abort} className={styles.abort} />
-                <LegacyIcon type={'check'} onClick={this.ok} className={styles.ok} />
+                <CloseOutlined onClick={this.abort} className={styles.abort} />
+                <CheckOutlined onClick={this.ok} className={styles.ok} />
               </>
             ) : (
               <>
                 <Title level={4}>{username}</Title>
-                {exports ? null : (
-                  <LegacyIcon type={'edit'} onClick={this.edit} className={styles.icon} />
-                )}
+                {exports ? null : <EditOutlined onClick={this.edit} className={styles.icon} />}
               </>
             )}
           </div>
@@ -206,11 +210,11 @@ export default class AccountDetail extends Component<IAccountDetailProps> {
                   <Card
                     actions={[
                       <Button size={'small'} type={'link'} onClick={this.copy}>
-                        <LegacyIcon type={'copy'} />
+                        <CopyOutlined />
                         <FormattedMessage id={'dashboard.account-detail.export.copy'} />
                       </Button>,
                       <Button size={'small'} type={'link'} onClick={this.exportToTXT}>
-                        <LegacyIcon type={'download'} />
+                        <DownloadOutlined />
                         <FormattedMessage id={'dashboard.account-detail.export.txt'} />
                       </Button>,
                     ]}

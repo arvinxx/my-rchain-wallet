@@ -26,7 +26,7 @@ type ILocalData =
   | 'restore'
   | 'lastLogin'
   | 'connection'
-  | 'deployId'
+  | 'transferContract'
   | 'autoLogin';
 
 type IEncryptedData = 'userList' | 'mnemonic' | 'privateKey';
@@ -35,7 +35,7 @@ export const generateAvatar = (key: string, size) => {
   return jdenticon.toSvg(key, size);
 };
 
-export const setItem = (key: ILocalData, value: any) => {
+export const setItem = <T = any>(key: ILocalData, value: T) => {
   localStorage.setItem(key, JSON.stringify(value));
 };
 
@@ -104,4 +104,12 @@ export const checkOverTime = (lockTime: number) => {
   const duration = new Date().valueOf() - Number(lastLogin);
 
   return duration > dueTime;
+};
+
+/**
+ * 睡眠一会
+ * @param ms 毫秒
+ */
+export const sleep = ms => {
+  return new Promise(resolve => setTimeout(resolve, ms));
 };

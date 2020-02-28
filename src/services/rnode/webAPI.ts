@@ -33,6 +33,10 @@ export const doDeploy = (data: DeployRequest) => {
 };
 
 export const getDeployInfo = (deployId: string) => {
-  const { validator } = getItem('connection') as IConnection;
-  return request(validator + '/api/deploy/' + deployId);
+  const { observer } = getItem('connection') as IConnection;
+  return request(observer + '/api/deploy/' + deployId);
+};
+export const getBlockInfo = (blockHash: string) => {
+  const { observer } = getItem('connection') as IConnection;
+  return request(observer + '/api/block/' + blockHash);
 };

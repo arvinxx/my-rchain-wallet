@@ -1,6 +1,7 @@
 import { getItem, setItem, Uint8ArrayToString } from '@/utils/utils';
+import { TransferContract } from '@/models/wallet';
 
-export interface IPayload {
+export interface Payload {
   'block-hash': string;
   'parent-hashes': string[];
   'justification-hashes': string[][];
@@ -30,7 +31,9 @@ export const rnodeWebSocket = (observer: string): WebSocket => {
     const { event, payload } = JSON.parse(data);
     console.log(event, payload);
 
-    const deployId = getItem('deployId');
+    const transferContract = getItem<TransferContract>('transferContract');
+    if (!transferContract) return;
+    const { deployId } = transferContract;
     // 如果发现有部署合约
     if (
       deployId &&

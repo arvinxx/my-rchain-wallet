@@ -24,5 +24,6 @@ export const transferToken = async (
   const webDeployData = getWebDeployData(deploy);
 
   // Send deploy and get response
-  return await doDeploy(webDeployData);
+  const result = await doDeploy(webDeployData);
+  return { result, deployId: webDeployData.signature };
 };

@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import styles from './Export.less';
 import { PhraseBox, CheckPassword } from '@/components';
-import { ExclamationCircleFilled } from '@ant-design/icons';
-import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { ExclamationCircleFilled, CopyOutlined, DownloadOutlined } from '@ant-design/icons';
 import { Button, message, Typography, Modal, Card, Alert } from 'antd';
 import { formatMessage, FormattedMessage } from 'umi-plugin-locale';
 
 import { copyToClipboard, getDecryptedItem } from '@/utils/utils';
 import { connect } from 'dva';
-import { ConnectProps, ConnectState, DispatchProps, UserModelState } from '@/models/connect';
+import { DispatchProps } from '@/models/connect';
 
 const { Title, Text } = Typography;
 
@@ -26,11 +25,6 @@ export default class Export extends Component<IExportProps> {
     this.props.dispatch({
       type: 'global/save',
       payload: { exports: false },
-      meta: {
-        mixpanel: {
-          event: '关闭导出助记词窗口',
-        },
-      },
     });
   };
 
@@ -38,14 +32,6 @@ export default class Export extends Component<IExportProps> {
     const { mnemonic } = this.props;
 
     const flag = copyToClipboard(mnemonic);
-    this.props.dispatch({
-      type: 'analytics',
-      meta: {
-        mixpanel: {
-          event: '复制助记词',
-        },
-      },
-    });
     if (flag) {
       message.success(formatMessage({ id: 'component.phrase-box.copy.success' }), 0.3);
     } else {
@@ -61,14 +47,6 @@ export default class Export extends Component<IExportProps> {
       a.download = 'phrase.csv';
       a.href = URL.createObjectURL(blob);
       a.click();
-      this.props.dispatch({
-        type: 'analytics',
-        meta: {
-          mixpanel: {
-            event: '导出CSV',
-          },
-        },
-      });
     } else {
       message.error(formatMessage({ id: 'component.phrase-box.export.error' }));
     }
@@ -121,11 +99,11 @@ export default class Export extends Component<IExportProps> {
                 <Card
                   actions={[
                     <Button size={'large'} type={'link'} onClick={this.copy}>
-                      <LegacyIcon type={'copy'} />
+                      <CopyOutlined />
                       <FormattedMessage id={'account.components.export.copy'} />
                     </Button>,
                     <Button size={'large'} type={'link'} onClick={this.exportToCSV}>
-                      <LegacyIcon type={'download'} />
+                      <DownloadOutlined />
                       <FormattedMessage id={'account.components.export.csv'} />
                     </Button>,
                   ]}

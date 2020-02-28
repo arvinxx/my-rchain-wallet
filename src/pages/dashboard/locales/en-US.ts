@@ -7,6 +7,7 @@ export default {
   'dashboard.account.balance.default': 'start to query...',
   'dashboard.account.balance.success': 'Query successfully',
   'dashboard.account.balance.error': 'Query failed.Please try it again.',
+  'dashboard.account.transfer.processing': 'transfer is processing...',
   'dashboard.account.view': 'view',
   'dashboard.account.copy.success': 'Address copied successfully',
   'dashboard.account.address.tip': 'Copy to clipboard',

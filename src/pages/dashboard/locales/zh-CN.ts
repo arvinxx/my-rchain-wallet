@@ -8,6 +8,7 @@ export default {
   'dashboard.account.balance.success': '查询成功',
   'dashboard.account.balance.error': '查询失败,请稍后重试',
   'dashboard.account.copy.success': '地址复制成功',
+  'dashboard.account.transfer.processing': '转账进行中...',
   'dashboard.account.view': '详情',
   'dashboard.account.address.tip': '复制到剪贴板',
   'dashboard.account-detail.button.export': '导出私钥',
