@@ -30,4 +30,6 @@ export default {
   'component.check-password.password': 'Please type in your password',
   'component.check-password.password.error': 'Password is valid, please try it again.',
   'component.check-password.next': 'Next',
+  'component.wechat-alert.text':
+    'Due to some security reasons, MRW is forbidden to use in wechat browser. Please use chrome and other browsers.',
 };

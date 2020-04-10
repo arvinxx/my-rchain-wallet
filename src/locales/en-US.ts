@@ -14,8 +14,6 @@ export default {
   'layout.user.link.terms': 'Terms',
   'layout.user.clean':
     'Will delete all user information in the browser!Please confirm that all data have been backed up!',
-  'layout.wechat':
-    'Due to some security reasons, MRW is forbidden to use in wechat browser. Please use chrome and other browsers.',
   'app.preview.down.block': 'Download this page to your local project',
   'app.welcome.link.fetch-blocks': 'Get all block',
   'app.welcome.link.block-list': 'Quickly build standard, pages based on `block` development',

@@ -29,4 +29,6 @@ export default {
   'component.check-password.password': '请输入密码',
   'component.check-password.password.error': '密码输入有误，请重试',
   'component.check-password.next': '下一步',
+  'component.wechat-alert.text':
+    '由于安全原因, MRW 禁止在微信浏览器中使用，请使用 Chrome 等其他浏览器。',
 };

@@ -13,7 +13,6 @@ export default {
   'layout.user.link.privacy': '隐私',
   'layout.user.link.terms': '条款',
   'layout.user.clean': '将删除本浏览器中所有的用户信息！请确认已经备份所有资料！',
-  'layout.wechat': '由于一些安全原因, MRW 禁止在微信浏览器中使用，请使用 Chrome 等其他浏览器。',
   'app.preview.down.block': '下载此页面到本地项目',
   'app.welcome.link.fetch-blocks': '获取全部区块',
   'app.welcome.link.block-list': '基于 block 开发，快速构建标准页面',

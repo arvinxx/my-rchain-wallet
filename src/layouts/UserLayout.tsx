@@ -13,6 +13,7 @@ import { ConnectState, Route } from '@/models/connect';
 import logo from '../assets/logo-long.svg';
 import styles from './UserLayout.less';
 import moment from 'moment';
+import { WechatAlert } from '@/components';
 
 export interface UserLayoutProps extends Route {
   breadcrumbNameMap: { [path: string]: MenuDataItem };
@@ -41,6 +42,7 @@ const UserLayout: FC<UserLayoutProps> = props => {
       })}
       children={
         <div className={styles.container}>
+          <WechatAlert />
           <div className={styles.lang}>
             <Popconfirm
               title={formatMessage({ id: 'layout.user.clean' })}

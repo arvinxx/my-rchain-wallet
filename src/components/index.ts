@@ -6,3 +6,4 @@ export { default as PhraseBox } from './PhraseBox';
 export { default as CheckPassword } from './CheckPassword';
 export { default as BaseLoading } from './BaseLoading';
 export { default as AvatarSvg } from './AvatarSvg';
+export { default as WechatAlert } from './WechatAlert';
