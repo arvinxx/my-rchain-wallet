@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ProLayout, {
   MenuDataItem,
   BasicLayoutProps as ProLayoutProps,
@@ -7,7 +7,7 @@ import ProLayout, {
 import Link from 'umi/link';
 import { Dispatch } from 'redux';
 import { connect } from 'dva';
-import { Layout, Row, Col, Typography } from 'antd';
+import { Layout, Row, Col, Typography, Modal } from 'antd';
 import { Unlock } from '@/components';
 import { getItem } from '@/utils/utils';
 import moment from 'moment';
@@ -66,6 +66,7 @@ export const footerRender: BasicLayoutProps['footerRender'] = () => (
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const { dispatch, collapsed, children, settings, locked } = props;
 
+  const [isWechat, setIsWechat] = useState(false);
   const checkLocked = () => {
     const autoLogin = getItem('autoLogin');
 
@@ -102,6 +103,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   };
 
   useEffect(() => {
+    const isInWeChat = /(micromessenger|webbrowser)/.test(navigator.userAgent.toLocaleLowerCase());
+    setIsWechat(isInWeChat);
     checkLocked();
     dispatch({
       type: 'user/fetchCurrent',
@@ -114,6 +117,9 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
 
   return (
     <div className={`${styles.layout} ${locked ? styles.blur : ''}`}>
+      <Modal visible={isWechat} centered footer={false} width={350} closable={false}>
+        {formatMessage({ id: 'layout.wechat' })}
+      </Modal>
       <Unlock>
         <ProLayout
           logo={circleLogo}
