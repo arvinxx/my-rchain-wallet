@@ -55,5 +55,5 @@ export default (config: any) => {
     },
   ]);
   //js的修改
-  config.output.filename('[name].js');
+  config.output.filename('[name].[contenthash:8].js');
 };

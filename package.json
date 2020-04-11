@@ -10,9 +10,7 @@
     "build:wait-rnode": "./scripts/wait-rnode.sh",
     "analyze": "cross-env ANALYZE=1 umi build",
     "release": "cp CNAME ./dist/ && gh-pages -d dist",
-    "release:cn": "./scripts/deployToCN.sh",
     "deploy": "cross-env npm run build && npm run release",
-    "deploy:cn": "cross-env npm run build && npm run release:cn",
     "rnode-generate": "rnode-grpc --rnode-version v0.9.22",
     "postinstall": "npm run rnode-generate",
     "testnet": " docker-compose up -d"

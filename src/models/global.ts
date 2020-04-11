@@ -61,12 +61,12 @@ const GlobalModel: GlobalModelStore = {
     network: 'mainnet',
     node: 'node0',
     observer: 'https://observer.services.mainnet.rchain.coop',
-    validator: 'https://node0.root-shard.mainnet.rchain.coop/',
+    validator: 'https://node0.root-shard.mainnet.rchain.coop',
     networkList: [
       {
         name: 'mainnet',
         observer: 'https://observer.services.mainnet.rchain.coop',
-        validator: 'https://node0.root-shard.mainnet.rchain.coop/',
+        validator: 'https://node0.root-shard.mainnet.rchain.coop',
         readOnly: true,
       },
       {
