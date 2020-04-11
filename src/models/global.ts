@@ -60,19 +60,19 @@ const GlobalModel: GlobalModelStore = {
     analytics: false,
     network: 'mainnet',
     node: 'node0',
-    observer: 'https://observer.myrchainwallet.com',
-    validator: 'https://validator.myrchainwallet.com',
+    observer: 'https://observer.services.mainnet.rchain.coop',
+    validator: 'https://node0.root-shard.mainnet.rchain.coop/',
     networkList: [
       {
         name: 'mainnet',
-        observer: 'https://observer.myrchainwallet.com',
-        validator: 'https://validator.myrchainwallet.com',
+        observer: 'https://observer.services.mainnet.rchain.coop',
+        validator: 'https://node0.root-shard.mainnet.rchain.coop/',
         readOnly: true,
       },
       {
         name: 'testnet',
-        observer: 'https://observer.testnet.myrhcainwallet.com',
-        validator: 'https://validator.testnet.myrhcainwallet.com',
+        observer: 'https://observer.testnet.rchain.coop',
+        validator: 'https://testnet-0.grpc.rchain.isotypic.com',
         readOnly: true,
       },
       {
