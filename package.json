@@ -1,17 +1,18 @@
 {
   "name": "my-rchain-wallet",
   "author": "Avin Xu",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "scripts": {
     "start": "umi dev",
-    "build": "umi build",
     "test": "umi test",
+    "build": "umi build",
+    "build:wait-rnode": "./scripts/wait-rnode.sh",
+    "analyze": "cross-env ANALYZE=1 umi build",
     "release": "cp CNAME ./dist/ && gh-pages -d dist",
     "release:cn": "./scripts/deployToCN.sh",
     "deploy": "cross-env npm run build && npm run release",
-    "analyze": "cross-env ANALYZE=1 umi build",
-    "build:wait-rnode": "./scripts/wait-rnode.sh",
+    "deploy:cn": "cross-env npm run build && npm run release:cn",
     "rnode-generate": "rnode-grpc --rnode-version v0.9.22",
     "postinstall": "npm run rnode-generate",
     "testnet": " docker-compose up -d"

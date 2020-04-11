@@ -64,7 +64,7 @@ export default {
   targets: {
     ie: 11,
   },
-  devtool: isDev ? false : 'source-map',
+  devtool: isDev ? 'cheap-module-eval-source-map' : 'cheap-module-source-map',
   // umi routes: https://umijs.org/zh/guide/router.html
   routes,
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
